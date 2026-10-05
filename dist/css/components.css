@@ -164,3 +164,16 @@ html.is-quiet dialog.sheet, html.motion-reduced dialog.sheet { transition-durati
 
 /* Phrase quote — words, help sheet, deck back */
 .quote-mark { width: 40px; height: 40px; color: var(--terracotta); opacity: .6; }
+
+/* ---------- Mini breathing circle 3–6 (emergency stop, «очень тяжело») ---------- */
+.mini-breath { display: flex; align-items: center; gap: 20px; margin-top: 22px; }
+.mini-breath__circle {
+  position: relative; flex-shrink: 0; width: 96px; height: 96px; border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--lamp) 55%, transparent) 0 38%, color-mix(in srgb, var(--lamp) 18%, transparent) 39% 100%);
+  transform: scale(.55); transition: transform 3s var(--ease-breath);
+}
+.mini-breath__circle.is-in { transform: scale(1); transition-duration: 3s; }
+.mini-breath__circle.is-out { transform: scale(.55); transition-duration: 6s; }
+.mini-breath.is-static .mini-breath__circle { transform: scale(.8); transition: none; }
+.mini-breath__text { font-family: var(--serif); font-size: clamp(26px, 2vw + 16px, 34px); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.mini-breath__cap { font-size: var(--text-small); color: var(--muted); margin-bottom: 2px; }

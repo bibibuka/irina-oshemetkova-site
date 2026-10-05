@@ -1,0 +1,46 @@
+/* «С чем ко мне приходят» — doors instead of identical cards. */
+.dveri__head { display: grid; gap: 20px; max-width: 46rem; margin-bottom: clamp(36px, 5vw, 64px); }
+.doors__row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; align-items: end; }
+.door {
+  display: grid; justify-items: center; gap: 6px; padding: 0 4px 14px; text-align: center; color: var(--ink);
+  border-bottom: 1px solid var(--line); transition: color var(--t-fast);
+}
+.door__frame {
+  position: relative; display: grid; place-items: center; width: min(100%, 132px); aspect-ratio: 3 / 4; margin-bottom: 8px;
+  border: 1px solid var(--line-strong); border-radius: 999px 999px 6px 6px; background: var(--surface);
+  transition: background-color var(--t-mid) var(--ease-out), border-color var(--t-fast), transform var(--t-mid) var(--ease-settle);
+}
+.door__frame::after { /* light leaking from a door that is ajar */
+  content: ''; position: absolute; inset: 10px; border-radius: 999px 999px 4px 4px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--sky) 90%, transparent), transparent);
+  opacity: 0; transition: opacity var(--t-mid) var(--ease-out);
+}
+.door__frame .icon { position: relative; z-index: 1; width: 30px; height: 30px; color: var(--sage-500); }
+.door__label { font-family: var(--serif); font-size: clamp(21px, 1vw + 14px, 26px); line-height: 1.15; }
+.door__sub { font-size: var(--text-micro); color: var(--muted); }
+.door:hover .door__frame { border-color: var(--sage-500); transform: translateY(-3px); }
+.door[aria-selected='true'] { border-bottom: 2px solid var(--green); }
+.door[aria-selected='true'] .door__frame { background: var(--green); border-color: var(--green); }
+.door[aria-selected='true'] .door__frame::after { opacity: .28; }
+.door[aria-selected='true'] .door__frame .icon { color: var(--on-green); }
+html[data-theme='night'] .door[aria-selected='true'] .door__frame::after { opacity: .12; }
+
+.door-panel { display: grid; gap: 28px; padding-top: clamp(32px, 4vw, 56px); max-width: 64rem; }
+.door-panel + .door-panel { margin-top: 24px; }
+html.js .door-panel + .door-panel { margin-top: 0; }
+.door-panel h3 { font-size: clamp(30px, 2.6vw + 12px, 46px); max-width: 20em; }
+.door-panel__cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); }
+.door-panel__cap { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--terracotta-ink); margin-bottom: 12px; }
+.door-panel ul { display: grid; gap: 10px; }
+.door-panel li { position: relative; padding-left: 26px; line-height: 1.55; }
+.door-panel__feel li::before { content: ''; position: absolute; left: 4px; top: .62em; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--terracotta); }
+.door-panel__work li::before { content: ''; position: absolute; left: 2px; top: .78em; width: 12px; height: 1px; background: var(--sage-500); }
+.door-panel .btn { justify-self: start; }
+
+@media (max-width: 860px) {
+  .doors__row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 4px; margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scrollbar-width: none; }
+  .doors__row::-webkit-scrollbar { display: none; }
+  .door { flex: 0 0 132px; scroll-snap-align: start; }
+  .door__frame { width: 92px; }
+  .door-panel__cols { grid-template-columns: 1fr; }
+}
