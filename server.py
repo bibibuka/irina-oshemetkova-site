@@ -7,6 +7,13 @@ import argparse
 ROOT = Path(__file__).resolve().parent / "dist"
 
 class WebsiteHandler(SimpleHTTPRequestHandler):
+    extensions_map = {
+        **SimpleHTTPRequestHandler.extensions_map,
+        ".js": "text/javascript",
+        ".webmanifest": "application/manifest+json",
+        ".woff2": "font/woff2",
+    }
+
     def end_headers(self):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")

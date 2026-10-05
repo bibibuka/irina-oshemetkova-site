@@ -2,7 +2,7 @@
 // top as «Ночная смена» with human clocks («Начало четвёртого»). The sleep noise is
 // generated in the browser as a WAV blob and played through <audio loop>, so it keeps
 // playing with the screen locked and gets lock-screen controls (Media Session).
-import { $, $$, h, focusQuietly } from '../core/dom.js';
+import { $, $$, h, icon, focusQuietly } from '../core/dom.js';
 import { prefs } from '../core/prefs.js';
 import { store } from '../core/store.js';
 import { registerAction, runAction, goTo } from '../core/actions.js';
@@ -275,6 +275,33 @@ function restore() {
   if (level) level.click();
 }
 
+/* ---------- «Ночник на экран Домой» (opt-in offline) ---------- */
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); installPrompt = event; });
+
+function initInstall() {
+  const foot = $('.nochnik__foot', el.section);
+  if (!foot) return;
+  const status = h('p', { class: 'nochnik__install-status', role: 'status' });
+  const button = h('button', { type: 'button', class: 'link link--light' }, icon('download'), 'Ночник на экран «Домой» — откроется и без интернета');
+  button.addEventListener('click', () => {
+    // The prompt needs the tap itself, so it goes first; the offline copy is registered after.
+    const prompted = installPrompt;
+    if (prompted) { prompted.prompt(); installPrompt = null; }
+    if ('serviceWorker' in navigator && window.isSecureContext) navigator.serviceWorker.register('sw.js').catch(() => {});
+    if (prompted) { status.textContent = 'Ночник сохранён в этом браузере и откроется даже без интернета.'; return; }
+    const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    status.textContent = `${ios ? 'Нажми «Поделиться» внизу экрана, затем «На экран „Домой“».' : 'В меню браузера выбери «Установить приложение» или «Добавить на главный экран».'} Ночник сохранён в этом браузере и откроется даже без интернета.`;
+  });
+  foot.append(h('div', { class: 'nochnik__install' }, button, status));
+  // «Стереть всё» also removes the offline copy.
+  document.addEventListener('store:change', (event) => {
+    if (event.detail?.key !== '*') return;
+    navigator.serviceWorker?.getRegistrations?.().then((list) => list.forEach((registration) => registration.unregister())).catch(() => {});
+    window.caches?.keys().then((keys) => keys.filter((key) => key.startsWith('nochnik')).forEach((key) => caches.delete(key))).catch(() => {});
+  });
+}
+
 /* ---------- Init ---------- */
 export function init() {
   el.section = $('#nochnik');
@@ -282,9 +309,11 @@ export function init() {
   original.title = $('[data-night-title]', el.section)?.innerHTML || '';
   original.lead = $('[data-night-lead]', el.section)?.textContent || '';
   place();
+  if (location.hash === '#nochnik') requestAnimationFrame(() => el.section.scrollIntoView({ block: 'start' }));
   startClock();
   bindNoise();
   restore();
+  initInstall();
   document.addEventListener('prefs:apply', place);
   // Switching the page back to day by hand ends the night preview.
   document.addEventListener('theme:change', (event) => { if (event.detail?.theme === 'day' && preview) { preview = false; place(); } });

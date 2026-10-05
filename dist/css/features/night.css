@@ -87,3 +87,6 @@ html.is-quiet .nochnik__glow { animation: none; }
   .noise__orb { width: 84px; }
   .noise__toggle { flex: 1; }
 }
+.nochnik__install { display: grid; gap: 4px; }
+.nochnik__install .icon { width: 18px; height: 18px; }
+.nochnik__install-status { font-size: var(--text-small); color: var(--on-band-muted); min-height: 1.4em; }
