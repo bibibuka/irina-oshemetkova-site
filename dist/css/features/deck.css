@@ -1,0 +1,56 @@
+/* «Колода опор» — a small stack of cards; the top one turns over. */
+.opory__inner { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 8fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+.opory__arch { position: sticky; top: calc(var(--header-h) + 24px); margin: 0; aspect-ratio: 3 / 5; border-radius: var(--arch); overflow: hidden; background: var(--paper-3); }
+.opory__arch img { width: 100%; height: 100%; object-fit: cover; filter: var(--photo-filter); }
+html[data-part='evening'] .opory__arch::after, html[data-theme='night'] .opory__arch::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(231, 167, 127, .18), rgba(23, 29, 25, .25)); }
+.opory__arch { position: sticky; }
+.opory__main { display: grid; gap: 28px; }
+.opory__head { display: grid; gap: 18px; max-width: 40rem; }
+.deck-static { display: grid; gap: 12px; padding-left: 1.2em; font-family: var(--serif); font-size: 24px; }
+
+.deck { display: grid; gap: 22px; justify-items: start; }
+.deck__moods { max-width: 44rem; }
+.deck__stack { position: relative; width: min(340px, 78vw); aspect-ratio: 32 / 44; margin: 14px 0 8px 10px; perspective: 1400px; }
+.deck__under { position: absolute; inset: 0; border-radius: var(--radius-lg); background: var(--green); box-shadow: var(--shadow-sm); }
+.deck__under--1 { transform: rotate(-1.6deg) translate(-3px, 4px); filter: brightness(.94); }
+.deck__under--2 { transform: rotate(1.4deg) translate(4px, 7px); filter: brightness(.88); }
+.deck__under--3 { transform: rotate(-.6deg) translate(-2px, 10px); filter: brightness(.82); }
+html[data-theme='night'] .deck__under { background: #3c5241; }
+.deck-card { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .7s var(--ease-breath); }
+.deck-card__back, .deck-card__face { position: absolute; inset: 0; border-radius: var(--radius-lg); backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: var(--shadow-md); }
+.deck-card__back {
+  display: grid; place-items: center; background-color: #4b624d;
+  background-image:
+    repeating-radial-gradient(circle at 50% 50%, rgba(251, 251, 246, .16) 0 .6px, transparent .6px 9px),
+    repeating-linear-gradient(45deg, rgba(251, 251, 246, .06) 0 .6px, transparent .6px 12px);
+}
+html[data-theme='night'] .deck-card__back { background-color: #3c5241; }
+.deck-card__flower { width: 84px; height: 84px; color: #f1e5d6; stroke-width: 1; opacity: .9; }
+.deck-card__face {
+  display: grid; align-content: center; gap: 18px; padding: 34px 30px; transform: rotateY(180deg);
+  background: #fbf9f3; color: #2f3b31;
+}
+html[data-theme='night'] .deck-card__face { background: #262f29; color: #ece8dd; }
+.deck-card__quote { width: 34px; height: 34px; color: var(--terracotta); opacity: .7; }
+.deck-card__text { font-family: var(--serif); font-size: clamp(26px, 1.6vw + 16px, 36px); line-height: 1.2; }
+.deck-card__mood { font-size: var(--text-micro); letter-spacing: .02em; color: var(--muted); }
+.deck__stack.is-drawn .deck-card { transform: translateY(-14px) rotateY(180deg); }
+.deck__stack.is-turning .deck-card { transform: translateY(-24px) rotateY(0); transition-duration: .36s; }
+html.motion-reduced .deck-card { transition: none; }
+.deck__controls { display: flex; flex-wrap: wrap; gap: 10px; }
+.deck__after { display: grid; gap: 6px; max-width: 40rem; }
+.deck__lock-note { font-size: var(--text-micro); color: var(--muted); }
+.deck__note { min-height: 1.4em; font-size: var(--text-small); color: var(--ink-soft); }
+.deck-saved { display: grid; gap: 12px; width: 100%; max-width: 44rem; padding-top: 18px; border-top: 1px solid var(--line); }
+.deck-saved__title { font-size: 28px; }
+.deck-saved__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.deck-saved__list li { position: relative; padding: 16px 40px 16px 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); font-family: var(--serif); font-size: 19px; line-height: 1.3; }
+.deck-saved__list .icon-btn { position: absolute; top: 4px; right: 0; padding: 8px 10px; }
+
+@media (max-width: 860px) {
+  .opory__inner { grid-template-columns: 1fr; }
+  .opory__arch { position: relative; top: 0; width: min(60%, 260px); aspect-ratio: 4 / 5; }
+  .deck { justify-items: center; }
+  .deck__moods { justify-content: center; }
+  .deck__stack { margin-inline: auto; }
+}
