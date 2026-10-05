@@ -1,0 +1,14 @@
+/* «Как мне удобнее» and «Что знает этот сайт». Plain type, no illustrations. */
+.sheet--settings .sheet__title { margin-bottom: 8px; }
+.settings-group { display: grid; gap: 10px; padding: 22px 0; border-top: 1px solid var(--line); }
+.settings-group:first-of-type { border-top: 0; }
+.settings-group__label { font-size: var(--text-small); font-weight: 600; color: var(--ink-soft); }
+.settings-group__title { font-size: clamp(28px, 2vw + 16px, 36px); outline: none; }
+.settings-group .toggle-row:last-child { border-bottom: 0; }
+.settings-data > p { font-size: var(--text-small); color: var(--ink-soft); line-height: 1.6; }
+.settings-data__actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; }
+.sheet--settings .forget-confirm { background: var(--peach); color: var(--ink); }
+.svet .forget-confirm { color: #e6e4da; }
+.svet .forget-confirm .btn--ghost { --btn-fg: #e6e4da; --btn-bd: rgba(230, 228, 218, .35); }
+.svet .forget-confirm .btn--danger-ghost { --btn-fg: #f0a596; --btn-bd: rgba(240, 165, 150, .5); }
+.sheet--privacy .prose a { color: var(--ink); }

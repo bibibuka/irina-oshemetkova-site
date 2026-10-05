@@ -144,6 +144,7 @@ function start() {
   const tried = store.temp.get('tried') || new Set();
   tried.add('дыхание');
   store.temp.set('tried', tried);
+  document.dispatchEvent(new CustomEvent('practice:done', { detail: { practice: 'breath' } }));
   if (s.eyes) showOverlay('eyes');
   render(position(0));
   s.raf = requestAnimationFrame(frame);

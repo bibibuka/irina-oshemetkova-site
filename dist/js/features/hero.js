@@ -193,4 +193,7 @@ export function init() {
   registerAction('stage', chooseStage);
   initThreshold();
   document.addEventListener('prefs:apply', renderAll);
+  document.addEventListener('store:change', (event) => {
+    if (['stage', '*'].includes(event.detail?.key)) { arrangeFlow(); renderAll(); }
+  });
 }
