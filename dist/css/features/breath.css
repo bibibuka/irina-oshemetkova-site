@@ -81,7 +81,7 @@ html.is-dimmed .site-header, html.is-dimmed .dock { visibility: hidden; }
   .dyhanie__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: 'copy circle' 'side done'; }
 }
 @media (max-width: 767px) {
-  .dyhanie__inner { grid-template-columns: 1fr; grid-template-areas: 'copy' 'circle' 'done' 'side'; }
+  .dyhanie__inner { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'copy' 'circle' 'done' 'side'; }
   .breath__stage { width: min(78vw, 360px); }
   .breath__controls { width: 100%; }
   .breath__controls .btn { flex: 1; }

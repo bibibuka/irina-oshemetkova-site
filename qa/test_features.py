@@ -1,222 +1,404 @@
-"""Browser checks for local support tools. No messages are sent externally."""
+"""Functional checks of every feature on the page. Run with the preview server on:
+
+    python server.py            # in one terminal
+    python qa/test_features.py  # in another
+
+No screenshots. External requests are blocked and reported; nothing may be written to
+localStorage, sessionStorage or cookies until the visitor turns memory on.
+"""
 from __future__ import annotations
 
-import json
 import re
-from pathlib import Path
-from urllib.parse import urlparse
 
-from playwright.sync_api import expect, sync_playwright
+from playwright.sync_api import expect
 
+from _harness import new_context, open_page, session, storage
 
-BASE = "http://localhost:3000"
-REPORT = Path(__file__).with_name("features-report.json")
-checks = []
-errors = []
-requests = []
+EMPTY = {"local": {}, "session": {}, "cookies": ""}
 
+with session("features") as (run, browser):
+    context = new_context(browser, run, reduced_motion="reduce")
+    page = open_page(context, run)
+    html = page.locator("html")
 
-def close_open_dialog(page):
-    while page.locator("dialog[open]").count():
+    def no_storage():
+        assert storage(page) == EMPTY, storage(page)
+
+    print("Hero and stages")
+
+    def hero():
+        expect(page.locator("#okno-title")).to_contain_text("Быть мамой.")
+        expect(page.locator("[data-greeting]")).not_to_be_empty()
+        expect(page.locator("[data-badge-text]")).not_to_be_empty()
+        page.locator("#okno [data-stage='postpartum']").click()
+        expect(page.locator("#okno [data-stage='postpartum']")).to_have_attribute("aria-pressed", "true")
+        expect(page.locator("[data-stage-reply]")).to_contain_text("Начнём с тебя")
+        expect(page.locator("[data-stage-label]")).to_have_text("Малыш родился")
+        order = page.eval_on_selector_all("[data-flow-item]", "els => els.map(e => e.dataset.flowItem)")
+        assert order[:2] == ["shelf", "words"], order
+        assert page.eval_on_selector("[data-shelf-track] [data-shelf-item]", "e => e.dataset.shelfItem") == "stop"
+        expect(page.locator("[data-doors] [aria-selected='true']")).to_have_attribute("data-door", "postpartum")
+        no_storage()
+
+    run.check("Stage choice: reply, chip, section order, shelf order, door — nothing stored", hero, page)
+
+    def threshold():
+        page.locator("#okno [data-stage='loss']").click()
+        expect(page.locator("#sheet-threshold")).to_be_visible()
+        expect(html).to_have_class(re.compile("is-quiet"))
+        expect(page.locator("#okno-title")).to_contain_text("просто быть")
+        page.locator("[data-threshold='read']").click()
+        expect(page.locator("#sheet-threshold")).to_be_hidden()
+        assert page.eval_on_selector("[data-flow] > [data-flow-item]", "e => e.dataset.flowItem") == "breath"
+        expect(page.locator("[data-shelf-item='flashback']")).to_be_visible()
+        expect(page.locator("#w-tab-loss")).to_be_visible()
+        page.locator("#okno [data-stage='loss']").click()
+        page.locator("[data-threshold='support']").click()
+        expect(page.locator("#sheet-help")).to_be_visible()
         page.keyboard.press("Escape")
+        page.locator("#okno [data-stage='none']").click()
+        expect(page.locator("[data-shelf-item='flashback']")).to_be_hidden()
 
+    run.check("Loss: threshold sheet, quiet mode, calm title, loss-only blocks", threshold, page)
 
-def check(name, action, page):
-    try:
-        close_open_dialog(page)
-        action()
-        checks.append({"name": name, "passed": True})
-    except Exception as exc:
-        checks.append({"name": name, "passed": False, "error": str(exc)})
+    def stage_sheet():
+        page.locator(".stage-chip").click()
+        expect(page.locator("#sheet-stage")).to_be_visible()
+        page.locator("#sheet-stage [data-stage='pregnancy']").click()
+        expect(page.locator("#sheet-stage")).to_be_hidden()
+        expect(page.locator("[data-stage-label]")).to_have_text("Жду малыша")
+        expect(page.locator("[data-breath-safety]")).to_contain_text("Ориентируйся на свой комфорт")
+
+    run.check("Stage sheet from the header changes stage and closes", stage_sheet, page)
+
+    print("Check-in")
+
+    def checkin():
+        page.locator(".weather__tile[data-mood='meh']").click()
+        expect(page.locator(".weather__tile[data-mood='meh']")).to_have_attribute("aria-checked", "true")
+        expect(page.locator("[data-louder]")).to_be_visible()
+        expect(page.locator("[data-checkin-answer] .step")).to_have_count(3)
+        page.locator("[data-louder-value='loop']").click()
+        expect(page.locator("[data-checkin-answer]")).to_contain_text("Разобрать мысль")
+        page.locator(".weather__tile[data-mood='very-hard']").click()
+        answer = page.locator("[data-checkin-answer]")
+        expect(answer.locator("a[href='tel:112']").first).to_be_visible()
+        expect(answer).to_contain_text("не экстренная служба")
+        expect(page.locator("[data-louder]")).to_be_hidden()
+        expect(html).to_have_class(re.compile("lamp-on"))
+        expect(html).to_have_class(re.compile("is-quiet"))
+        page.locator(".weather__tile[data-mood='good']").focus()
+        page.keyboard.press("ArrowRight")
+        expect(page.locator(".weather__tile[data-mood='ok']")).to_be_focused()
+        expect(page.locator(".weather__tile[data-mood='ok']")).to_have_attribute("aria-checked", "true")
+        no_storage()
+
+    run.check("Check-in: phrase, ≤3 steps, louder routing, help first for «очень тяжело», arrows", checkin, page)
+
+    print("Breathing")
+
+    def breathing():
+        page.locator("[data-breath-patterns] [data-pattern='478']").click()
+        expect(page.locator("[data-breath-count]")).to_have_text("Вдох 4 — пауза 7 — выдох 8")
+        page.locator("[data-breath-start]").click()
+        expect(page.locator("[data-breath-phase]")).to_contain_text("Вдох")
+        expect(page.locator("[data-breath-count]")).to_have_text("круг 1 из 3")
+        expect(page.locator("[data-breath-stop]")).to_be_visible()
+        page.locator("[data-breath-start]").click()
+        expect(page.locator("[data-breath-phase]")).to_have_text("На паузе")
+        page.locator("[data-breath-stop]").click()
+        expect(page.locator("[data-breath-done]")).to_be_visible()
+        expect(page.locator("[data-breath-done-phrase]")).to_contain_text("остановились")
+        page.locator("[data-breath-done] [data-action='helped']").click()
+        expect(page.locator("[data-helped-note]").first).to_contain_text("включи память")
+        page.locator("[data-breath-patterns] [data-pattern='custom']").click()
+        page.locator("[data-step='in'][data-delta='1']").click()
+        expect(page.locator("[data-custom-in]")).to_have_text("5 с")
+        no_storage()
+
+    run.check("Breathing: rhythms, start, pause, «Достаточно», done panel, own rhythm", breathing, page)
+
+    def breathe_action():
+        page.locator("#sheet-help").evaluate("d => d.close()")
+        page.locator(".site-header .help-link").click()
+        page.locator("#sheet-help [data-action='breathe']").click()
+        expect(page.locator("#sheet-help")).to_be_hidden()
+        expect(page.locator("[data-breath-count]")).to_contain_text("круг 1 из", timeout=4000)
+        page.locator("[data-breath-stop]").click()
+
+    run.check("Breathe action from the help sheet closes it and starts 3–6", breathe_action, page)
+
+    print("Help and emergency stop")
+
+    def help_sheet():
+        page.locator(".site-header .help-link").click()
+        expect(page.locator("#sheet-help")).to_be_visible()
+        expect(page.locator("#help-title")).to_be_focused()
+        expect(page.locator("#sheet-help a.btn--danger[href='tel:112']")).to_be_visible()
+        page.locator("#sheet-help [data-copy-number]").click()
+        expect(page.locator("[data-help-status]")).to_contain_text("8-800-2000-122")
+        page.keyboard.press("Escape")
+        expect(page.locator("#sheet-help")).to_be_hidden()
+        expect(page.locator(".site-header .help-link")).to_be_focused()
+
+    run.check("Help sheet: focus on open, tel links, copy number, Esc returns focus", help_sheet, page)
+
+    def stop():
+        page.locator("[data-shelf-item='stop'] [data-action='stop']").click()
+        expect(page.locator("#sheet-stop")).to_be_visible()
+        expect(page.locator("[data-stop-progress]")).to_have_text("Шаг 1 из 5")
+        expect(page.locator("[data-stop-prev]")).to_be_hidden()
+        for step in range(2, 6):
+            page.locator("[data-stop-next]").click()
+            expect(page.locator("[data-stop-progress]")).to_have_text(f"Шаг {step} из 5")
+            expect(page.locator(f"#stop-{step}")).to_be_focused()
+        page.keyboard.press("ArrowLeft")
+        expect(page.locator("[data-stop-progress]")).to_have_text("Шаг 4 из 5")
+        page.locator("#sheet-stop [data-copy-text]").click()
+        expect(page.locator("[data-stop-status]")).to_contain_text("скопирован")
+        href = page.locator("[data-share-sms]").evaluate("a => { a.addEventListener('click', e => e.preventDefault(), { once: true }); a.click(); return a.href; }")
+        assert href.startswith("sms:?&body=") and "%D0%9C%D0%BD%D0%B5" in href, href
+        page.keyboard.press("ArrowRight"); page.keyboard.press("ArrowRight")
+        expect(page.locator("[data-stop-progress]")).to_have_text("Когда станет тише")
+        expect(page.locator("[data-stop-next]")).to_be_hidden()
+
+    run.check("Emergency stop: five steps, focus per step, arrows, copy, SMS text, final step", stop, page)
+
+    print("Practices")
+
+    def grounding():
+        page.locator("[data-shelf-item='grounding'] .shelf-item__open").click()
+        expect(page.locator("#sheet-room")).to_be_visible()
+        expect(page.locator("[data-room-progress]")).to_have_text("Шаг 1 из 5")
+        expect(page.locator(".ground__dot")).to_have_count(5)
+        page.locator(".ground__dot").first.click()
+        expect(page.locator(".ground__dot").first).to_have_attribute("aria-pressed", "true")
+        page.keyboard.press("ArrowRight")
+        expect(page.locator(".ground__dot")).to_have_count(4)
+        for _ in range(4):
+            page.locator(".room__nav .btn--primary").click()
+        expect(page.locator("[data-room-body]")).to_contain_text("Ты здесь.")
+        page.locator("[data-room-enough]").click()
+        expect(page.locator("#sheet-room")).to_be_hidden()
+
+    run.check("Room 5-4-3-2-1: steps, dots, arrows, finish", grounding, page)
+
+    def feelings():
+        page.locator("[data-shelf-item='feelings'] .shelf-item__open").click()
+        page.locator("[data-zone-chip='chest']").click()
+        page.locator(".room__nav .btn--primary").click()
+        page.locator(".feel-pairs .seg").nth(0).locator("button").nth(0).click()
+        page.locator(".room__nav .btn--primary").click()
+        page.locator(".bubble-chip").nth(1).click()
+        page.locator(".room__nav .btn--primary").click()
+        expect(page.locator(".heard-card")).to_contain_text("Я услышала себя: в груди — тёплое. Оно говорит: «мне тревожно».")
+        page.locator("[data-room-enough]").click()
+
+    run.check("Room «Контакт с чувствами»: body zone, pair, voice, final card", feelings, page)
+
+    def envelope():
+        page.locator("[data-shelf-item='envelope'] .shelf-item__open").click()
+        page.locator(".envelope__field").fill("не успеваю ничего")
+        page.locator(".room__actions .btn--ghost").click()
+        expect(page.locator(".room__note")).to_contain_text("включи память")
+        page.locator(".room__actions .btn--primary").click()
+        expect(page.locator(".room__lead-big")).to_contain_text("Я вижу эти мысли", timeout=4000)
+        page.locator("[data-room-enough]").click()
+        no_storage()
+
+    run.check("Room «Отложить мысли до утра»: no envelope without memory, let go", envelope, page)
+
+    def choose():
+        page.locator("[data-shelf-item='choose'] .shelf-item__open").click()
+        page.wait_for_function("document.getElementById('sheet-room').open || document.querySelector('[data-breath-stop]:not([hidden])')", timeout=5000)
         page.evaluate("document.querySelectorAll('dialog[open]').forEach(d => d.close())")
+        if page.locator("[data-breath-stop]").is_visible():
+            page.locator("[data-breath-stop]").click()
 
+    run.check("«Выбери за меня» opens a practice", choose, page)
 
-def guide_answer(page, value):
-    page.locator(f'#guide-options [data-guide-value="{value}"]').click()
-    page.locator("#guide-next").click()
+    print("Thought record and traps")
 
+    def thought():
+        page.locator("#situation-text").fill("после разговора с мамой")
+        page.locator(".notebook__nav .btn--primary").click()
+        page.locator("#thought-text").fill("Все думают обо мне, что я должна справляться сама")
+        expect(page.locator("#thought-trap")).to_contain_text("Похоже на ловушку", timeout=3000)
+        marks = page.eval_on_selector_all(".thought-field__mirror mark", "ms => ms.map(m => m.textContent)")
+        assert "должна" in marks and "думают обо мне" in marks, marks
+        page.locator(".notebook__nav .btn--primary").click()
+        page.locator(".notebook .chip", has_text="тревога").click()
+        page.locator(".strength__range").fill("9")
+        expect(page.locator(".strength__range")).to_have_attribute("aria-valuetext", "невыносимо")
+        page.locator(".notebook__nav .btn--primary").click()
+        expect(page.locator(".notebook__safety")).to_contain_text("лучше не оставаться одной")
+        page.locator(".notebook__nav .btn--ghost").click()
+        page.locator(".strength__range").fill("6")
+        page.locator(".notebook__nav .btn--primary").click()
+        for _ in range(2):
+            page.locator(".notebook__nav .btn--primary").click()
+        page.locator("[data-thought-page] textarea").fill("Мне можно просить помощи")
+        page.locator(".notebook__nav .btn--primary").click()
+        page.locator(".strength__range").fill("6")
+        page.locator(".notebook__nav .btn--primary").click()
+        expect(page.locator(".notebook__outcome")).to_contain_text("это тоже нормально")
+        expect(page.locator(".notebook__new")).to_have_text("«Мне можно просить помощи»")
+        assert not re.search(r"\b\d+/10\b", page.locator("[data-thought-page]").inner_text())
+        page.locator("text=Разобрать другую мысль").click()
+        expect(page.locator("#situation-text")).to_have_value("")
+        no_storage()
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    context = browser.new_context(viewport={"width": 1440, "height": 1000}, reduced_motion="reduce")
-    context.grant_permissions(["clipboard-read", "clipboard-write"], origin=BASE)
+    run.check("Thought record: trap underline, safety branch, reframe, words not numbers", thought, page)
 
-    def route_request(route):
-        requests.append(route.request.url)
-        if urlparse(route.request.url).hostname in {"localhost", "127.0.0.1"}:
-            route.continue_()
-        else:
-            route.abort()
+    def traps():
+        expect(page.locator(".trap")).to_have_count(12)
+        page.locator(".trap").first.click()
+        expect(page.locator(".trap").first).to_have_attribute("aria-pressed", "true")
+        page.locator("[data-trap-game] .chip").first.click()
+        expect(page.locator(".trap-game__feedback")).not_to_be_empty()
 
-    context.route("**/*", route_request)
-    page = context.new_page()
-    page.on("pageerror", lambda error: errors.append(str(error)))
-    page.goto(BASE)
-    page.wait_for_load_state("networkidle")
-    assert page.locator("#guide-dialog").count(), "New feature markup is not installed yet"
-    initial_requests = len(requests)
-    initial_storage = page.evaluate("({local: {...localStorage}, session: {...sessionStorage}})")
+    run.check("Twelve trap cards turn over; the game answers", traps, page)
 
-    def guide_navigation():
-        page.locator("button[data-guide]").first.click()
-        expect(page.locator("#guide-dialog")).to_be_visible()
-        expect(page.locator("#guide-question")).to_be_focused()
-        expect(page.locator("#guide-next")).to_be_disabled()
-        expect(page.locator("#guide-back")).to_be_disabled()
-        page.locator('[data-guide-value="pregnancy"]').click()
-        expect(page.locator('[data-guide-value="pregnancy"]')).to_have_attribute("aria-pressed", "true")
-        page.locator("#guide-next").click()
-        page.locator('[data-guide-value="calm"]').click()
-        page.locator("#guide-back").click()
-        expect(page.locator('[data-guide-value="pregnancy"]')).to_have_attribute("aria-pressed", "true")
-        page.locator("#guide-next").click()
-        expect(page.locator('[data-guide-value="calm"]')).to_have_attribute("aria-pressed", "true")
-        page.locator("#guide-next").click()
-        guide_answer(page, "few")
-        expect(page.locator("#guide-result")).to_be_visible()
-        expect(page.locator("#guide-result-title")).to_be_focused()
-        expect(page.locator("#guide-result-copy")).to_contain_text("В ожидании ребёнка")
-        expect(page.locator("#guide-result-actions [data-grounding]")).to_be_visible()
-        expect(page.locator("#guide-result-actions [data-booking]")).to_have_attribute("data-topic", "Поддержка в беременности: тревога и опора")
-        page.locator("#guide-restart").click()
-        expect(page.locator("#guide-next")).to_be_disabled()
-        expect(page.locator('#guide-options [aria-pressed="true"]')).to_have_count(0)
-        expect(page.locator("#guide-step")).to_have_text("Шаг 1 из 3")
+    print("Words")
 
-    check("Guide: required answers, backtracking, focus, recommendation, restart", guide_navigation, page)
+    def words():
+        page.locator("#w-tab-partner").click()
+        expect(page.locator("#w-partner")).to_be_visible()
+        expect(page.locator("#w-family")).to_be_hidden()
+        page.locator("#w-partner .phrase").first.get_by_text("Скопировать").click()
+        assert page.evaluate("navigator.clipboard.readText()").startswith("Пожалуйста, возьми коляску")
+        page.locator("#w-tab-advice").click()
+        page.locator("#w-advice .seg--tiny button", has_text="твёрже").click()
+        expect(page.locator("#w-advice .phrase p").first).to_contain_text("Эту тему я закрываю")
+        page.locator("#w-tab-own").click()
+        page.locator(".builder__presets .link", has_text="Советы родных").click()
+        expect(page.locator(".builder__result")).to_contain_text("Когда мне дают советы")
+        page.locator("#w-tab-partner").click()
+        page.locator("#w-partner .phrase").nth(1).get_by_text("Переделать под себя").click()
+        expect(page.locator("#w-own")).to_be_visible()
+        expect(page.locator(".builder__edit")).to_have_value(re.compile("^Я тревожусь"))
 
-    def guide_routes():
-        routes = [
-            ("planning", "connection", "few", "builder", "На пути к материнству"),
-            ("motherhood", "energy", "minute", "practice", "Среди забот о ребёнке"),
-            ("loss", "calm", "few", "grounding", "У горя нет правильного расписания"),
-            ("unsure", "talk", "talk", "booking", "необязательно сразу находить точные слова"),
-        ]
-        for stage, need, time, target, copy in routes:
-            close_open_dialog(page)
-            page.locator("button[data-guide]").first.click()
-            for answer in (stage, need, time):
-                guide_answer(page, answer)
-            expect(page.locator("#guide-result-copy")).to_contain_text(copy)
-            page.locator(f"#guide-result-actions [data-{target}]").click()
-            expect(page.locator(f"#{target}-dialog")).to_be_visible()
-            expect(page.locator("dialog[open]")).to_have_count(1)
-            expect(page.locator("html")).to_have_class(re.compile("dialog-open"))
-            if target == "booking":
-                expect(page.locator("#booking-topic")).to_have_value("Хочу разобраться в своих чувствах: хочется быть услышанной")
-        close_open_dialog(page)
-        expect(page.locator("html")).not_to_have_class(re.compile("dialog-open"))
+    run.check("Words: tabs, copy, softer/firmer, builder presets, rework", words, page)
 
-    check("Guide: all five stages and transitions to existing and new tools", guide_routes, page)
+    print("Deck")
 
-    def grounding_flow():
-        page.locator("button[data-grounding]").first.click()
-        expect(page.locator("#grounding-count")).to_have_text("5")
-        expect(page.locator("#grounding-back")).to_be_disabled()
-        for count in [4, 3, 2, 1]:
-            page.locator("#grounding-next").click()
-            expect(page.locator("#grounding-count")).to_have_text(str(count))
-            expect(page.locator("#grounding-title")).to_be_focused()
-            expect(page.locator(".grounding-dot.active")).to_have_count(1)
-        page.locator("#grounding-back").click()
-        expect(page.locator("#grounding-count")).to_have_text("2")
-        page.locator("#grounding-next").click()
-        page.locator("#grounding-next").click()
-        expect(page.locator("#grounding-title")).to_have_text("Вы здесь")
-        expect(page.locator("#grounding-next")).to_be_hidden()
-        expect(page.locator(".grounding-dot.done")).to_have_count(5)
-        page.locator("#grounding-restart").click()
-        expect(page.locator("#grounding-count")).to_have_text("5")
-        page.locator("#grounding-next").click()
+    def deck():
+        page.locator(".deck__draw").click()
+        expect(page.locator(".deck-card__text")).not_to_be_empty()
+        first = page.locator(".deck-card__text").text_content()
+        page.locator(".deck__draw").click()
+        page.wait_for_timeout(500)
+        assert page.locator(".deck-card__text").text_content() != first
+        page.get_by_text("Оставить себе").click()
+        expect(page.locator(".deck__note")).to_contain_text("включи память")
+        no_storage()
+
+    run.check("Deck: draw, no immediate repeat, keep needs memory", deck, page)
+
+    print("Letter")
+
+    def letter():
+        page.locator("#letter-name").fill("Мария")
+        page.locator("[data-letter-format] [data-value='spb']").click()
+        page.locator("[data-letter-times] [data-value='вечером']").click()
+        expect(page.locator("[data-letter-preview]")).to_contain_text("Ирина, здравствуйте! Меня зовут Мария. Хочу записаться на очную консультацию в Петербурге.")
+        expect(page.locator("[data-letter-preview]")).to_contain_text("Мне обычно удобно вечером.")
+        page.locator("#door-pregnancy [data-action='write']").evaluate("b => b.click()")
+        expect(page.locator("[data-letter-preview]")).to_contain_text("тревога в беременности")
+        assert page.locator("[data-letter-sms]").get_attribute("href").startswith("sms:+79217557171?&body=")
+        assert "subject=" in page.locator("[data-letter-mail]").get_attribute("href")
+        page.locator("#letter-topic").fill("не хочу жить")
+        expect(page.locator(".letter .crisis-hint")).to_be_visible(timeout=3000)
+        page.locator("#letter-topic").fill("")
+        with context.expect_page() as popup:
+            page.locator("[data-letter-telegram]").click()
+        popup.value.close()
+        expect(page.locator("[data-letter-status]")).to_contain_text("Текст скопирован")
+        assert page.evaluate("navigator.clipboard.readText()").startswith("Ирина, здравствуйте!")
+        no_storage()
+
+    run.check("Letter: live preview on «вы», topics from doors, SMS/mail, crisis hint, copy + Telegram", letter, page)
+
+    print("Irina, FAQ, settings and memory")
+
+    def irina():
+        page.locator(".principle").first.click()
+        expect(page.locator(".principle").first).to_have_attribute("aria-pressed", "true")
+        page.locator("[data-doc='1']").click()
+        expect(page.locator("#sheet-doc")).to_be_visible()
+        expect(page.locator("[data-lightbox-count]")).to_have_text("2 из 6")
+        page.keyboard.press("ArrowRight")
+        expect(page.locator("[data-lightbox-count]")).to_have_text("3 из 6")
         page.keyboard.press("Escape")
-        page.locator("button[data-grounding]").first.click()
-        expect(page.locator("#grounding-count")).to_have_text("5")
+        expect(page.locator("[data-doc='2']")).to_be_focused()
 
-    check("Grounding: five steps, back, completion, restart, Escape reset", grounding_flow, page)
+    run.check("Irina: principle flips, lightbox with arrows returns focus to the shown document", irina, page)
 
-    def builder_flow():
-        page.locator("button[data-builder]").first.click()
-        for preset in ["rest", "listen", "chores"]:
-            page.locator(f'[data-request-preset="{preset}"]').click()
-            expect(page.locator(f'[data-request-preset="{preset}"]')).to_have_attribute("aria-pressed", "true")
-        expect(page.locator("#builder-preview")).to_contain_text("взять на себя ужин сегодня?")
-        page.locator("#builder-situation").fill("   я   устала   за день   ")
-        page.locator("#builder-feeling").select_option("одиночество")
-        page.locator("#builder-need").select_option("быть услышанной")
-        page.locator("#builder-request").fill("  послушать   меня?? ")
-        expect(page.locator("#builder-preview")).to_have_text("Когда я устала за день, я чувствую одиночество. Мне важно быть услышанной. Можешь, пожалуйста, послушать меня?")
-        expect(page.locator('[data-request-preset][aria-pressed="true"]')).to_have_count(0)
-        page.locator("#builder-copy").click()
-        expect(page.locator("#builder-copy-status")).to_contain_text("Текст скопирован")
-        assert page.evaluate("navigator.clipboard.readText()") == page.locator("#builder-preview").inner_text()
-        page.locator("#builder-request").fill('<img src=x onerror="window.__bad=true">')
-        expect(page.locator("#builder-preview img")).to_have_count(0)
-        assert not page.evaluate("Boolean(window.__bad)")
-        expect(page.locator("#builder-copy-status")).to_have_text("")
-        page.locator("#builder-reset").click()
-        assert "<img" not in page.locator("#builder-preview").inner_text()
-        expect(page.locator("#builder-situation")).to_be_focused()
-        page.locator("#builder-situation").press("Enter")
-        expect(page.locator("#builder-dialog")).to_be_visible()
+    def memory():
+        no_storage()
+        page.locator(".svet [data-action='settings']").last.click()
+        expect(page.locator("#sheet-settings")).to_be_visible()
+        page.locator("[data-set='textLarge']").click()
+        expect(html).to_have_class(re.compile("text-large"))
+        no_storage()
+        page.locator("[data-set='memory']").click()
+        local = storage(page)["local"]
+        assert local.get("io.v1.memory") == "on" and local.get("io.v1.textLarge") == "true", local
+        expect(page.locator("[data-data-list]")).to_contain_text("Текст")
+        page.locator("#sheet-settings [data-action='forget']").click()
+        page.locator("#sheet-settings .forget-confirm .btn--danger-ghost").click()
+        no_storage()
+        expect(html).not_to_have_class(re.compile("text-large"))
+        page.keyboard.press("Escape")
 
-    check("Request builder: presets, edits, normalization, clipboard, safe text, reset", builder_flow, page)
+    run.check("Memory: off by default, on writes only io.v1.*, «Стереть всё» erases", memory, page)
 
-    def clipboard_failure():
-        page.locator("button[data-builder]").first.click()
-        page.evaluate("""() => {
-            window.__oldClipboard = navigator.clipboard.writeText;
-            window.__oldExec = document.execCommand;
-            navigator.clipboard.writeText = () => Promise.reject(new Error('denied'));
-            document.execCommand = () => false;
-        }""")
-        page.locator("#builder-copy").click()
-        expect(page.locator("#builder-copy-status")).to_contain_text("Не удалось скопировать автоматически")
-        assert page.evaluate("getSelection().toString()") == page.locator("#builder-preview").inner_text()
-        page.evaluate("() => { navigator.clipboard.writeText = window.__oldClipboard; document.execCommand = window.__oldExec; }")
+    def theme():
+        page.locator(".theme-switch [data-theme-value='night']").click()
+        expect(html).to_have_attribute("data-theme", "night", timeout=3000)
+        page.locator(".theme-switch [data-theme-value='day']").click()
+        expect(html).to_have_attribute("data-theme", "day", timeout=3000)
+        expect(page.locator("[data-footer-prefs]")).to_contain_text("Без ночника")
 
-    check("Request builder: denied clipboard gives a usable manual fallback", clipboard_failure, page)
+    run.check("Theme switch: night and day, footer summary", theme, page)
 
-    def comfort_mode():
-        toggle = page.locator("#comfort-toggle")
-        before = page.locator(".hero-description, .hero-copy p, main p").first.evaluate("el => parseFloat(getComputedStyle(el).fontSize)")
-        toggle.click()
-        expect(toggle).to_have_attribute("aria-pressed", "true")
-        assert page.evaluate("document.documentElement.classList.contains('comfort-mode')")
-        after = page.locator(".hero-description, .hero-copy p, main p").first.evaluate("el => parseFloat(getComputedStyle(el).fontSize)")
-        assert after > before, f"Comfort mode did not enlarge text: {before} -> {after}"
-        toggle.click()
-        expect(toggle).to_have_attribute("aria-pressed", "false")
+    print("Night and bot")
 
-    check("Comfort mode: visible text grows and can return to default", comfort_mode, page)
+    def night_day_band():
+        assert page.evaluate("document.getElementById('nochnik').previousElementSibling.id") == "irina"
+        expect(page.locator("#nochnik")).to_have_class(re.compile("is-band"))
+        page.locator("[data-noise-toggle]").click()
+        expect(page.locator("[data-noise-status]")).to_contain_text("Мягкий шум")
+        page.locator("[data-noise-type='brown']").click()
+        expect(page.locator("[data-noise-status]")).to_contain_text("Глубокий шум")
+        page.locator("[data-noise-toggle]").click()
+        expect(page.locator("[data-noise-status]")).to_be_empty()
 
-    def mobile_tools():
-        page.set_viewport_size({"width": 375, "height": 812})
-        for tool in ["guide", "grounding", "builder"]:
-            page.locator(f"button[data-{tool}]").first.click()
-            dialog = page.locator(f"#{tool}-dialog")
-            expect(dialog).to_be_visible()
-            bounds = dialog.bounding_box()
-            assert bounds and bounds["x"] >= -1 and bounds["x"] + bounds["width"] <= 376
-            assert dialog.evaluate("el => el.scrollWidth <= el.clientWidth + 1"), f"{tool} overflows horizontally"
-            page.keyboard.press("Escape")
-            expect(dialog).to_be_hidden()
-        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth + 1")
+    run.check("Night band by day; sleep noise starts, changes and stops", night_day_band, page)
 
-    check("Mobile: all dialogs fit at 375px and Escape closes them", mobile_tools, page)
+    night = new_context(browser, run, reduced_motion="reduce")
+    night_page = open_page(night, run, "/?tod=night&stage=postpartum")
 
-    check("Tools never write browser storage", lambda: (
-        None if page.evaluate("({local: {...localStorage}, session: {...sessionStorage}})") == initial_storage
-        else (_ for _ in ()).throw(AssertionError("Browser storage changed"))
-    ), page)
+    def night_first():
+        assert night_page.evaluate("document.documentElement.dataset.theme") == "night"
+        assert night_page.evaluate("document.getElementById('nochnik').nextElementSibling.id") == "main"
+        expect(night_page.locator("#nochnik")).to_have_class(re.compile("is-top"))
+        expect(night_page.locator("[data-human-time]")).to_have_text("Начало четвёртого")
+        expect(night_page.locator("[data-night-title]")).to_have_text("Ночная смена? Ты не одна в ней.")
+        expect(night_page.locator("[data-night-note]")).to_be_hidden()
+        night_page.locator("[data-night-moods] [data-mood='hard']").click()
+        expect(night_page.locator(".nochnik__answer")).to_be_visible()
+        night_page.locator("[data-night-hard]").click()
+        expect(night_page.locator("#sheet-stop")).to_be_visible()
+        assert storage(night_page) == EMPTY
 
-    report = {
-        "checks": checks,
-        "passed": sum(item["passed"] for item in checks),
-        "total": len(checks),
-        "page_errors": errors,
-        "new_network_requests": requests[initial_requests:],
-    }
-    REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps(report, ensure_ascii=False, indent=2))
-    browser.close()
-    assert all(item["passed"] for item in checks) and not errors
+    run.check("Night 3 a.m.: «Ночная смена» first, human clock, tiles route to the stop", night_first, night_page)
+
+    def bot():
+        expect(page.locator("[data-bot-greeting]")).not_to_be_empty()
+        expect(page.locator("#bot")).to_contain_text("ИИ-ассистент, а не я лично")
+        expect(page.locator(".bubble.is-waiting")).to_have_count(0)
+
+    run.check("Bot demo: honest line, bubbles visible with reduced motion", bot, page)
+
+    run.check("No cookies or storage were written during the whole visit", no_storage, page)

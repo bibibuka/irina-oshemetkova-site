@@ -33,6 +33,6 @@ html[data-theme='night'] .bubble--me { background: #3d5243; }
 .phone__pause { font-size: var(--text-small); }
 
 @media (max-width: 860px) {
-  .karman__inner { grid-template-columns: 1fr; }
+  .karman__inner { grid-template-columns: minmax(0, 1fr); }
   .phone__screen { transform: none; min-height: 500px; }
 }

@@ -124,7 +124,7 @@ html.is-quiet .body-map__zone.is-on { animation: none; }
 .bubble-chip[aria-pressed='true'] { background: var(--green); color: var(--on-green); border-color: var(--green); }
 .heard-card { margin: 0; display: grid; gap: 12px; padding: 24px 26px; border-radius: var(--radius-lg); background: var(--surface-raised); box-shadow: var(--shadow-sm); }
 .heard-card p { font-family: var(--serif); font-size: clamp(24px, 1.4vw + 16px, 32px); line-height: 1.25; }
-@media (max-width: 560px) { .feel-map { grid-template-columns: 1fr; justify-items: center; } .body-map { width: 120px; } }
+@media (max-width: 560px) { .feel-map { grid-template-columns: minmax(0, 1fr); justify-items: center; } .body-map { width: 120px; } }
 
 /* Конверт */
 .envelope__paper { position: relative; padding: 18px 20px; border-radius: 6px; background: #fbf9f3; box-shadow: var(--shadow-sm); background-image: repeating-linear-gradient(transparent 0 33px, rgba(196, 205, 184, .5) 33px 34px); }

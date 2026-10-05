@@ -66,7 +66,7 @@ html.is-quiet .nochnik__glow { animation: none; }
 
 /* At night: the first screen «Ночная смена». */
 .nochnik.is-top { min-height: 100svh; padding-top: calc(var(--header-h) + clamp(20px, 4vw, 48px)); }
-.nochnik.is-top .nochnik__inner { grid-template-columns: 1fr; max-width: 760px; }
+.nochnik.is-top .nochnik__inner { grid-template-columns: minmax(0, 1fr); max-width: 760px; }
 .nochnik.is-top .nochnik__clock { display: grid; gap: 6px; justify-items: center; text-align: center; padding-block: clamp(24px, 6vh, 64px) clamp(12px, 3vh, 32px); }
 .nochnik__time { font-family: var(--serif); font-weight: 400; font-size: clamp(52px, 15vw, 128px); line-height: 1; color: #ecdcc6; letter-spacing: -.02em; }
 .nochnik__date { font-size: 15px; color: #a9a99a; font-variant-numeric: tabular-nums; }
@@ -78,12 +78,12 @@ html.is-quiet .nochnik__glow { animation: none; }
 .nochnik.is-top .night-tiles { order: 0; }
 
 @media (max-width: 960px) {
-  .nochnik__inner { grid-template-columns: 1fr; }
+  .nochnik__inner { grid-template-columns: minmax(0, 1fr); }
   .noise { grid-column: 1; }
 }
 @media (max-width: 560px) {
   .night-tile { min-height: 112px; padding: 16px; }
-  .noise { grid-template-columns: 1fr; padding: 18px; }
+  .noise { grid-template-columns: minmax(0, 1fr); padding: 18px; }
   .noise__orb { width: 84px; }
   .noise__toggle { flex: 1; }
 }

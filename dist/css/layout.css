@@ -189,7 +189,7 @@ html[data-theme='night'] .svet { --svet-bg: #0f1311; }
 .svet__bottom .link { min-height: 0; font-size: inherit; }
 .svet :focus-visible { outline-color: #e7a77f; }
 @media (max-width: 1023px) { .svet__cols { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 560px) { .svet__cols { grid-template-columns: 1fr; } .svet__lamp { width: 460px; height: 460px; } }
+@media (max-width: 560px) { .svet__cols { grid-template-columns: minmax(0, 1fr); } .svet__lamp { width: 460px; height: 460px; } }
 
 /* ---------- Print: just the words ---------- */
 @media print {

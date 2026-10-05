@@ -36,7 +36,7 @@ html[data-theme='night'] .letter__status { color: var(--sage-500); }
 .letter .privacy-line a { color: var(--ink); }
 
 @media (max-width: 960px) {
-  .vstrecha__inner { grid-template-columns: 1fr; }
+  .vstrecha__inner { grid-template-columns: minmax(0, 1fr); }
   .vstrecha__about { position: static; }
 }
 @media (max-width: 767px) {
@@ -67,7 +67,7 @@ html[data-theme='night'] .letter__status { color: var(--sage-500); }
 .faq details::details-content { transition: content-visibility var(--t-mid) allow-discrete, opacity var(--t-mid); opacity: 0; }
 .faq details[open]::details-content { opacity: 1; }
 @media (max-width: 860px) {
-  .voprosy__inner { grid-template-columns: 1fr; }
+  .voprosy__inner { grid-template-columns: minmax(0, 1fr); }
   .voprosy__aside { position: static; }
   .voprosy__arch { aspect-ratio: 16 / 10; max-width: none; }
 }

@@ -69,11 +69,11 @@ html.motion-reduced .principle[aria-pressed='true'] .principle__back { opacity: 
   .docs li .doc { transform: none !important; margin-left: 0 !important; }
 }
 @media (max-width: 860px) {
-  .irina__inner { grid-template-columns: 1fr; }
+  .irina__inner { grid-template-columns: minmax(0, 1fr); }
   .irina__arch { aspect-ratio: 4 / 5; margin-inline: auto; width: min(100%, 440px); }
 }
 @media (max-width: 560px) {
-  .principles { grid-template-columns: 1fr; }
+  .principles { grid-template-columns: minmax(0, 1fr); }
   .principle { min-height: 190px; }
 }
 

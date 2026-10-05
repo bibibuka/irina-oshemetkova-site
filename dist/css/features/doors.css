@@ -42,5 +42,5 @@ html.js .door-panel + .door-panel { margin-top: 0; }
   .doors__row::-webkit-scrollbar { display: none; }
   .door { flex: 0 0 132px; scroll-snap-align: start; }
   .door__frame { width: 92px; }
-  .door-panel__cols { grid-template-columns: 1fr; }
+  .door-panel__cols { grid-template-columns: minmax(0, 1fr); }
 }

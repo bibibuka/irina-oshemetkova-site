@@ -38,7 +38,7 @@
 .answer__phrase { font-family: var(--serif); font-style: italic; font-size: clamp(26px, 1.6vw + 16px, 36px); line-height: 1.18; color: var(--ink); outline: none; }
 .answer__next { grid-column: 2; grid-row: 1 / span 3; display: grid; gap: 8px; align-content: start; }
 .answer__cap { font-size: var(--text-small); color: var(--muted); }
-.answer--very-hard { grid-template-columns: 1fr; }
+.answer--very-hard { grid-template-columns: minmax(0, 1fr); }
 .answer--very-hard .answer__next { grid-column: 1; grid-row: auto; }
 html.lamp-on .answer--hard, html.lamp-on .answer--very-hard { box-shadow: 0 0 0 1px var(--line), 0 30px 120px -20px color-mix(in srgb, var(--lamp) 45%, transparent); }
 
@@ -65,14 +65,14 @@ html.lamp-on .answer--hard, html.lamp-on .answer--very-hard { box-shadow: 0 0 0 
 .mini-breath--inline { margin-top: 4px; }
 
 @media (max-width: 1023px) {
-  .pogoda__inner { grid-template-columns: 1fr; }
+  .pogoda__inner { grid-template-columns: minmax(0, 1fr); }
   .pogoda__head { position: static; }
   .pogoda .weather, .pogoda .louder, .pogoda .checkin-answer, .pogoda noscript { grid-column: 1; }
 }
 @media (max-width: 767px) {
-  .weather { grid-template-columns: 1fr; gap: 8px; }
+  .weather { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .weather__tile { grid-template-columns: 44px 1fr; justify-items: start; text-align: left; min-height: 64px; padding: 8px 18px; gap: 16px; border-radius: var(--radius); font-size: 18px; }
   .weather__glyph { width: 40px; height: 40px; }
-  .answer { grid-template-columns: 1fr; padding: 22px 18px; }
+  .answer { grid-template-columns: minmax(0, 1fr); padding: 22px 18px; }
   .answer__next { grid-column: 1; grid-row: auto; }
 }

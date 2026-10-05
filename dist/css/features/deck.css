@@ -48,7 +48,7 @@ html.motion-reduced .deck-card { transition: none; }
 .deck-saved__list .icon-btn { position: absolute; top: 4px; right: 0; padding: 8px 10px; }
 
 @media (max-width: 860px) {
-  .opory__inner { grid-template-columns: 1fr; }
+  .opory__inner { grid-template-columns: minmax(0, 1fr); }
   .opory__arch { position: relative; top: 0; width: min(60%, 260px); aspect-ratio: 4 / 5; }
   .deck { justify-items: center; }
   .deck__moods { justify-content: center; }
