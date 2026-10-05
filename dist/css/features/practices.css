@@ -1,5 +1,5 @@
 /* «Полка практик» — objects of different shapes on one shelf, and the full-screen rooms. */
-.polka__head { display: grid; gap: 18px; max-width: 46rem; margin-bottom: clamp(36px, 5vw, 64px); }
+.polka__head { display: grid; gap: 18px; max-width: 46rem; margin-bottom: clamp(28px, 3.6vw, 52px); }
 
 .shelf { position: relative; }
 .shelf__track {
@@ -64,7 +64,7 @@
 .morning-envelope__actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .morning-envelope__note { flex-basis: 100%; margin: 0; padding: 14px 16px; border-radius: var(--radius-sm); background: var(--surface); white-space: pre-wrap; font-size: var(--text-small); }
 
-@media (max-width: 1023px) {
+@media (max-width: 1180px) {
   .shelf__track { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); margin-inline: calc(-1 * var(--gutter)); padding: 24px var(--gutter) 8px; scrollbar-width: none; }
   .shelf__track::-webkit-scrollbar { display: none; }
   .shelf__track::after { left: 0; right: 0; bottom: 0; }

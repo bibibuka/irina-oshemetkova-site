@@ -3,7 +3,7 @@
   position: relative; overflow: hidden; isolation: isolate;
   background: #141a16; color: #e6e4da;
   --on-band: #e6e4da; --on-band-muted: #a9b0a2; --amber: #e0a77c;
-  padding-block: clamp(80px, 10vw, 150px);
+  padding-block: var(--section);
 }
 html.no-js .nochnik { display: none; }
 /* Before night.js places it: shown first only in the night hours (set by the inline head script). */
@@ -80,6 +80,16 @@ html.is-quiet .nochnik__glow { animation: none; }
 .nochnik.is-top .nochnik__moods { display: grid; }
 .nochnik.is-top .night-tiles { order: 0; }
 
+/* Day band on a wide screen: words and links on the left, tiles and the noise on the right —
+   the links no longer hang under an empty left column. */
+@media (min-width: 961px) {
+  .nochnik:not(.is-top) .nochnik__inner { grid-template-areas: 'copy tiles' 'copy noise' 'foot noise'; grid-template-rows: auto auto 1fr; }
+  .nochnik:not(.is-top) .nochnik__copy { grid-area: copy; }
+  .nochnik:not(.is-top) .night-tiles { grid-area: tiles; }
+  .nochnik:not(.is-top) .noise { grid-area: noise; }
+  .nochnik:not(.is-top) .nochnik__foot { grid-area: foot; align-self: start; padding-top: 22px; border-top: 1px solid rgba(230, 228, 218, .12); }
+  .nochnik:not(.is-top) .nochnik__links { flex-direction: column; align-items: flex-start; }
+}
 @media (max-width: 960px) {
   .nochnik__inner { grid-template-columns: minmax(0, 1fr); }
   .noise { grid-column: 1; }

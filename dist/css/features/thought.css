@@ -73,13 +73,13 @@ html[data-theme='night'] .notebook__new { color: var(--sage-500); }
 }
 
 /* ---------- Traps: twelve straight cards, four in a row ---------- */
-.traps { margin-top: clamp(72px, 9vw, 128px); }
+.traps { margin-top: clamp(52px, 6vw, 88px); }
 .traps__title { font-size: clamp(32px, 2.6vw + 14px, 50px); margin-bottom: 10px; }
 .traps__sub { color: var(--muted); margin-bottom: 30px; }
 .traps__fan { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 1180px) { .traps__fan { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .trap {
-  position: relative; display: grid; min-width: 0; min-height: 220px; perspective: 1400px; text-align: left; color: var(--ink);
+  position: relative; display: grid; min-width: 0; min-height: 170px; perspective: 1400px; text-align: left; color: var(--ink);
   border-radius: var(--radius); transition: transform .5s var(--ease-settle);
 }
 .trap__face {
@@ -116,7 +116,16 @@ html.motion-reduced .trap[aria-pressed='true'] .trap__back { opacity: 1; }
   .trap { flex: 0 0 72vw; max-width: 280px; scroll-snap-align: start; }
 }
 
-.trap-game { display: grid; gap: 14px; margin-top: 40px; padding: clamp(22px, 3vw, 36px); border-radius: var(--radius-lg); border: 1px dashed var(--line-strong); max-width: 52rem; }
+.trap-game { display: grid; gap: 14px; margin-top: 32px; padding: clamp(22px, 3vw, 36px); border-radius: var(--radius-lg); border: 1px dashed var(--line-strong); }
+@media (min-width: 1024px) {
+  .trap-game { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); grid-template-areas: 'title title' 'thought answers' 'thought feedback' 'thought more'; grid-template-rows: auto auto auto 1fr; gap: 14px clamp(32px, 4vw, 64px); align-items: start; }
+  .trap-game__title { grid-area: title; }
+  .trap-game__thought { grid-area: thought; }
+  .trap-game > .chips-row { grid-area: answers; }
+  .trap-game__feedback { grid-area: feedback; }
+  .trap-game__more { grid-area: more; }
+  .trap-game__feedback:empty { min-height: 0; }
+}
 .trap-game__title { font-family: var(--serif); font-size: 28px; font-weight: 400; }
 .trap-game__thought { font-family: var(--serif); font-style: italic; font-size: clamp(24px, 1.2vw + 16px, 30px); line-height: 1.25; outline: none; }
 .trap-game__feedback { min-height: 1.5em; color: var(--ink-soft); }

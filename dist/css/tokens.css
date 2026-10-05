@@ -74,7 +74,7 @@
   /* Space & shape */
   --gutter: clamp(16px, 4.4vw, 64px);
   --max: 1280px;
-  --section: clamp(84px, 11vw, 168px);
+  --section: clamp(60px, 6.6vw, 104px);
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius: 18px;

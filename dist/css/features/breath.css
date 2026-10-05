@@ -1,5 +1,5 @@
 /* «Подыши со мной» — the dark, quiet band with the live circle. The deepest point of the page. */
-.dyhanie { padding-block: clamp(84px, 10vw, 150px); overflow: clip; }
+.dyhanie { padding-block: var(--section); overflow: clip; }
 .dyhanie::before { /* dusk at the top edge: the curtains are drawn */
   content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 120px; pointer-events: none;
   background: linear-gradient(var(--paper), transparent); opacity: .08;

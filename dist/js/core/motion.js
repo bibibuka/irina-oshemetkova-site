@@ -43,7 +43,7 @@ export function splitWords(el) {
 // Headings rise word by word; blocks rise; the items of a group arrive one after another.
 const HEADINGS = 'main h2, .traps__title, .principles__title, .docs__title, .nochnik__copy h2, .svet__head h2';
 const BLOCKS = [
-  '.section .lead', '.pogoda__sub', '.traps__sub', '.docs__sub', '.notebook', '.trap-game', '.book', '.deck',
+  '.section .lead', '.pogoda__sub', '.traps__sub', '.docs__sub', '.notebook', '.trap-game', '.book', '.deck__moods', '.deck__stack', '.deck__controls',
   '.letter', '.phone', '.karman__honest', '.karman__actions', '.irina__text > p', '.calm-card', '.facts',
   '.vstrecha__about > .note', '.breath', '.breath-settings', '.dyhanie__lead', '.dyhanie__side', '.nochnik__margin',
   '.nochnik__lead', '.noise', '.next-line', '.svet__head > p', '.svet__head > .btn',
@@ -53,7 +53,7 @@ const PHOTOS = '.irina__arch, .opory__arch, .voprosy__arch';
 const GROUPS = [
   ['.weather', '.weather__tile'], ['.doors__row', '.door'], ['.shelf__track', '.shelf-item'],
   ['.traps__fan', '.trap', true], ['.principles', ':scope > *', true], ['.docs', ':scope > li'], ['.night-tiles', ':scope > *', true],
-  ['.first-steps', ':scope > li'], ['.faq', ':scope > details'], ['.svet__cols', ':scope > *'],
+  ['.first-steps', ':scope > li'], ['.faq', ':scope > details'], ['.svet__cols', ':scope > *'], ['.karman__features', ':scope > li', true],
 ];
 
 function columnsOf(box) {

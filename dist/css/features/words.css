@@ -1,5 +1,5 @@
 /* «Что сказать, когда…» — a book spread: contents on the left, quotes on the right. */
-.slova__head { display: grid; gap: 18px; max-width: 46rem; margin-bottom: clamp(36px, 5vw, 64px); }
+.slova__head { display: grid; gap: 18px; max-width: 46rem; margin-bottom: clamp(28px, 3.6vw, 52px); }
 .book { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 8fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
 .book__toc { display: grid; gap: 2px; position: sticky; top: calc(var(--header-h) + 24px); }
 .book__toc [role='tab'] {

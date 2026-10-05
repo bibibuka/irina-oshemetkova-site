@@ -1,5 +1,5 @@
 /* «С чем ко мне приходят» — doors instead of identical cards. */
-.dveri__head { display: grid; gap: 20px; max-width: 46rem; margin-bottom: clamp(36px, 5vw, 64px); }
+.dveri__head { display: grid; gap: 20px; max-width: 46rem; margin-bottom: clamp(28px, 3.6vw, 52px); }
 .doors__row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; align-items: end; }
 .door {
   display: grid; justify-items: center; gap: 6px; padding: 0 4px 14px; text-align: center; color: var(--ink);
@@ -40,6 +40,12 @@ html.js .door-panel + .door-panel { margin-top: 0; }
 .door-panel__feel li::before { content: ''; position: absolute; left: 4px; top: .62em; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--terracotta); }
 .door-panel__work li::before { content: ''; position: absolute; left: 2px; top: .78em; width: 12px; height: 1px; background: var(--sage-500); }
 .door-panel .btn { justify-self: start; }
+@media (min-width: 1024px) {
+  .door-panel { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); grid-template-rows: auto 1fr; gap: 24px clamp(32px, 5vw, 80px); max-width: none; }
+  .door-panel > h3 { grid-column: 1; grid-row: 1; font-size: clamp(32px, 1.4vw + 18px, 40px); }
+  .door-panel > .btn { grid-column: 1; grid-row: 2; align-self: start; }
+  .door-panel__cols { grid-column: 2; grid-row: 1 / span 2; padding-top: 6px; }
+}
 /* Opening a door: the room fills in — heading, then the two lists line by line, then the button. */
 .door-panel.appear { animation: fade-in .35s var(--ease-out) both; }
 .door-panel.appear > h3, .door-panel.appear .door-panel__cap, .door-panel.appear li, .door-panel.appear > .btn { animation: rise-in .7s var(--ease-settle) backwards; }

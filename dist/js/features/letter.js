@@ -196,10 +196,17 @@ function initFaq() {
   document.addEventListener('theme:change', order);
 }
 
+function initAboutColumn() {
+  const about = $('.vstrecha__about');
+  if (!about || !('ResizeObserver' in window)) return;
+  new ResizeObserver(() => about.style.setProperty('--about-h', `${Math.ceil(about.offsetHeight)}px`)).observe(about);
+}
+
 export function init() {
   const root = $('[data-letter]');
   initCalm();
   initFaq();
+  initAboutColumn();
   if (!root) return;
   el = {
     name: $('#letter-name'), topic: $('#letter-topic'), preview: $('[data-letter-preview]'),
