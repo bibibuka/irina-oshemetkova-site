@@ -6,7 +6,8 @@
   padding-block: clamp(80px, 10vw, 150px);
 }
 html.no-js .nochnik { display: none; }
-html[data-theme='day'] .nochnik:not(.is-placed) { display: none; }
+/* Before night.js places it: shown first only in the night hours (set by the inline head script). */
+html:not(.night-hours) .nochnik:not(.is-placed) { display: none; }
 .nochnik.is-band::before { /* dusk → night */
   content: ''; position: absolute; left: 0; right: 0; top: 0; height: 160px; z-index: -1;
   background: linear-gradient(var(--paper), #141a16); opacity: .14;

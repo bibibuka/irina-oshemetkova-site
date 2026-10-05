@@ -28,6 +28,7 @@
       try { dark = matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {}
       var night = theme === 'night' || (theme === 'auto' && (h >= 22 || h < 6 || dark));
       d.setAttribute('data-theme', night ? 'night' : 'day');
+      if (night && (h >= 22 || h < 6)) d.classList.add('night-hours');
       d.setAttribute('data-part', part);
       var stage = q.get('stage') || saved('stage');
       d.setAttribute('data-stage', stage || 'unset');

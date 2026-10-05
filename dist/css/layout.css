@@ -91,7 +91,7 @@ html:not([data-stage='unset']) .stage-chip { border-color: var(--sage-300); back
 }
 @media (max-width: 960px) {
   .header-cta { display: none; }
-  .theme-switch__label { display: none; }
+  .theme-switch__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 @media (max-width: 767px) {
   :root { --header-h: 64px; }
