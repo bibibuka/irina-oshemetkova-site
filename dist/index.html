@@ -5,36 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f8f7f2">
-  <title>Ирина Ошемёткова — перинатальный психолог</title>
-  <meta name="description" content="Ирина Ошемёткова — клинический, перинатальный и семейный психолог. Планирование, беременность, первые месяцы с малышом, утрата. Практики, которые работают и в три часа ночи. Онлайн и в Санкт-Петербурге.">
-  <meta property="og:title" content="Быть мамой. Быть собой. — Ирина Ошемёткова">
-  <meta property="og:description" content="Перинатальный психолог. Практики, слова для близких и запись — всё на одной странице.">
+  <title>Ирина Ошемёткова — перинатальный психолог в Петербурге и онлайн</title>
+  <meta name="description" content="Перинатальный и клинический психолог Ирина Ошемёткова. Поддержка при планировании и ЭКО, в беременности, после родов и после утраты. Онлайн и очно в Санкт-Петербурге. Консультация 50 минут — 4 000 ₽.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/irina-portrait.png">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Быть мамой. Быть собой. — Ирина Ошемёткова, перинатальный психолог">
+  <meta property="og:description" content="Поддержка от планирования до первых лет с малышом и после утраты. Онлайн и в Петербурге. Практики без регистрации прямо на сайте.">
+  <meta property="og:image" content="https://perinatmama.ru/assets/irina-portrait.png">
+  <meta property="og:url" content="https://perinatmama.ru/">
+  <link rel="canonical" href="https://perinatmama.ru/">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <script>
-    /* Before the first paint: theme, part of day and stage, so there is no white flash at night. */
+    /* Before the first paint: theme and part of day, so there is no white flash at night. */
     (function () {
-      var d = document.documentElement, q = new URLSearchParams(location.search), mem = null;
+      var d = document.documentElement, q = new URLSearchParams(location.search);
       d.classList.remove('no-js'); d.classList.add('js');
-      try { if (localStorage.getItem('io.v1.memory') === 'on') mem = localStorage; } catch (e) {}
-      function saved(k) { try { var v = mem && mem.getItem('io.v1.' + k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
       var h = new Date().getHours(), tod = { morning: 8, day: 14, evening: 20, night: 3 }[q.get('tod')];
       if (tod != null) h = tod;
       var part = h >= 5 && h < 11 ? 'morning' : h >= 11 && h < 17 ? 'day' : h >= 17 && h < 23 ? 'evening' : 'night';
-      var theme = q.get('theme') || saved('theme') || 'auto', dark = false;
+      var theme = q.get('theme') || 'auto', dark = false;
       try { dark = matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {}
       var night = theme === 'night' || (theme === 'auto' && (h >= 22 || h < 6 || dark));
       d.setAttribute('data-theme', night ? 'night' : 'day');
       d.setAttribute('data-part', part);
-      var stage = q.get('stage') || saved('stage');
-      d.setAttribute('data-stage', stage || 'unset');
-      if (stage === 'loss') d.classList.add('is-quiet');
-      if (saved('textLarge')) d.classList.add('text-large');
-      if (saved('motion') === 'reduced') d.classList.add('motion-reduced');
       var meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.setAttribute('content', night ? '#171d19' : '#f8f7f2');
     })();
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Ирина Ошемёткова — перинатальный психолог",
+    "url": "https://perinatmama.ru/",
+    "image": "https://perinatmama.ru/assets/irina-portrait.png",
+    "telephone": "+7 921 755-71-71",
+    "email": "irinaoshemetkova@gmail.com",
+    "areaServed": ["Санкт-Петербург", "Онлайн"],
+    "address": { "@type": "PostalAddress", "addressLocality": "Санкт-Петербург", "addressCountry": "RU" },
+    "employee": { "@type": "Person", "name": "Ирина Ошемёткова", "jobTitle": "Клинический, перинатальный и семейный психолог" },
+    "makesOffer": { "@type": "Offer", "name": "Индивидуальная консультация, 50 минут", "price": "4000", "priceCurrency": "RUB" }
+  }
   </script>
   <link rel="preload" href="assets/fonts/cormorant-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/cormorant-italic-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -42,22 +53,9 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/motion.css">
-  <link rel="stylesheet" href="css/features/hero.css">
-  <link rel="stylesheet" href="css/features/checkin.css">
-  <link rel="stylesheet" href="css/features/doors.css">
-  <link rel="stylesheet" href="css/features/breath.css">
-  <link rel="stylesheet" href="css/features/practices.css">
-  <link rel="stylesheet" href="css/features/thought.css">
-  <link rel="stylesheet" href="css/features/words.css">
-  <link rel="stylesheet" href="css/features/deck.css">
-  <link rel="stylesheet" href="css/features/irina.css">
-  <link rel="stylesheet" href="css/features/night.css">
-  <link rel="stylesheet" href="css/features/bot.css">
-  <link rel="stylesheet" href="css/features/letter.css">
-  <link rel="stylesheet" href="css/features/help.css">
-  <link rel="stylesheet" href="css/features/settings.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/sheets.css">
+  <link rel="stylesheet" href="css/practices.css">
   <script type="module" src="js/main.js"></script>
 </head>
 <body class="grain">
@@ -68,23 +66,19 @@
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
     <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 4v16M6 14l6 6 6-6"/></symbol>
     <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M20 12H4M10 6l-6 6 6 6"/></symbol>
-    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
     <symbol id="i-flower" viewBox="0 0 60 60"><path d="M30 28C9 18 18 2 27 10c3 3 3 12 3 18Zm2 0C32 5 51 9 47 20c-2 4-9 7-15 8Zm1 3c20-12 27 6 16 10-5 2-11-5-16-10Zm-2 3c18 14 4 27-3 18-3-4 1-12 3-18Zm-4-1C23 54 5 45 13 36c3-3 9-3 14-3Zm-1-3C4 34 3 14 13 15c6 1 10 10 13 15Z"/><circle cx="30" cy="31" r="3"/></symbol>
     <symbol id="i-lifebuoy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="m5.6 5.6 3.6 3.6m5.6 5.6 3.6 3.6m0-12.8-3.6 3.6m-5.6 5.6-3.6 3.6"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1Z"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2m0 14.6v2.2M2.5 12h2.2m14.6 0h2.2M5.3 5.3l1.6 1.6m10.2 10.2 1.6 1.6m0-13.4-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
-    <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M3 19h18M6.5 19a5.5 5.5 0 0 1 11 0M12 4v4m-4.6 2.4L6 9m10.6 1.4L18 9M9.5 6 12 3.5 14.5 6"/></symbol>
-    <symbol id="i-sunset" viewBox="0 0 24 24"><path d="M3 19h18M6.5 19a5.5 5.5 0 0 1 11 0M12 3.5v4.5m-4.6 2.4L6 9m10.6 1.4L18 9M9.5 5.5 12 8l2.5-2.5"/></symbol>
     <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8.5 5.5-14 15-14 0 9.5-5.5 15-15 14Zm0 0 8.5-8.5"/></symbol>
-    <symbol id="i-auto" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17Z" fill="currentColor" stroke="none"/></symbol>
     <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-8-4.9-8-10.4A4.4 4.4 0 0 1 12 7a4.4 4.4 0 0 1 8 2.6C20 15.1 12 20 12 20Z"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="3"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3m-3.5 4.5v2"/></symbol>
     <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M21 4 3 11l6.5 2.2L18 7.5l-6.3 7.1L17.5 20 21 4ZM9.5 13.2V19l2.6-3"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11" height="12" rx="2.5"/><path d="M15.5 5.5V5a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 5v10A1.5 1.5 0 0 0 6 16.5h.5"/></symbol>
     <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8M6 12H5a1 1 0 0 0-1 1v6.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V13a1 1 0 0 0-1-1h-1"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></symbol>
     <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4Z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6m2.5-8.5a8 8 0 0 1 0 11"/></symbol>
-    <symbol id="i-sound-off" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4Zm12 .5 4 4m0-4-4 4"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5Z"/></symbol>
     <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8.5 5.5v13m7-13v13"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
@@ -93,19 +87,13 @@
     <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
     <symbol id="i-phone" viewBox="0 0 24 24"><path d="M7.5 3.5h-2a2 2 0 0 0-2 2.2C4.3 13.7 10.3 19.7 18.3 20.5a2 2 0 0 0 2.2-2v-2.1a1 1 0 0 0-.7-1l-3.2-1a1 1 0 0 0-1 .3l-1.4 1.6a12 12 0 0 1-5.5-5.5l1.6-1.4a1 1 0 0 0 .3-1l-1-3.2a1 1 0 0 0-1-.7Z"/></symbol>
     <symbol id="i-sms" viewBox="0 0 24 24"><path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4Z"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" stroke-width="2.2"/></symbol>
-    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3.5V15m-5-5 5 5 5-5M4.5 20.5h15"/></symbol>
     <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="m4 17 5-5 4 4 2.5-2.5L20 18"/><circle cx="15.5" cy="9" r="1.5"/></symbol>
-    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9m4 0h3M4 17h3m4 0h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
-    <symbol id="i-eye-closed" viewBox="0 0 24 24"><path d="M3.5 10.5c4 4.7 13 4.7 17 0M7 14l-1.4 2.2m6.4-1v2.6m5-3.8 1.4 2.2"/></symbol>
-    <symbol id="i-dim" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16Z" fill="currentColor" stroke="none" opacity=".35"/></symbol>
-    <symbol id="i-vibrate" viewBox="0 0 24 24"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4.5 9v6m15-6v6"/></symbol>
     <symbol id="i-candle" viewBox="0 0 24 24"><path d="M12 3c1.6 1.9 1.9 3.6 0 5.2-1.9-1.6-1.6-3.3 0-5.2ZM9 11h6v10H9Zm-3 10h12"/></symbol>
     <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9m0 2.5c-5 .4-7-2.6-7-6.2 4.6 0 7 2 7 6.2Zm0-3c-.2-5 3.1-7.5 7-7.5 0 4.6-2.6 7.7-7 7.5Z"/></symbol>
     <symbol id="i-rings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="13.2" cy="13.4" r="3.6"/></symbol>
     <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="16.5" cy="9.5" r="2.4"/><path d="M3.5 19.5c.6-3.6 2.8-5.5 5.5-5.5s4.9 1.9 5.5 5.5m.5-5.3c2.6-.6 4.6.8 5 4"/></symbol>
     <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3.5 7h3c5.5 0 5.5 10 11 10h3m-17 0h3c1.6 0 2.7-.9 3.6-2.2m2.8-5.6C14.8 7.9 15.9 7 17.5 7h3M18 4l3 3-3 3m0 4 3 3-3 3"/></symbol>
     <symbol id="i-anchor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v14m-7-7a7 7 0 0 0 14 0M8.5 11h7"/></symbol>
-    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M9 3.5v4m6-4v4"/></symbol>
     <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 12.5V6a1.5 1.5 0 0 1 3 0v5m0-6.5a1.5 1.5 0 0 1 3 0V11m0-5a1.5 1.5 0 0 1 3 0v6.5m0-3.5a1.5 1.5 0 0 1 3 0v5.5a7 7 0 0 1-7 7h-1.2a6 6 0 0 1-4.6-2.2L4.5 15a1.6 1.6 0 0 1 2.4-2.1L8 14"/></symbol>
     <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
     <symbol id="i-ear" viewBox="0 0 24 24"><path d="M7 9a5.5 5.5 0 0 1 11 0c0 3.5-3.5 4.5-3.5 7.5a3 3 0 0 1-5.5 1.6M10 9.5a2.5 2.5 0 0 1 5 0c0 1.5-1.5 2-1.5 3"/></symbol>
@@ -113,717 +101,587 @@
     <symbol id="i-cup" viewBox="0 0 24 24"><path d="M5 8.5h11v5a5.5 5.5 0 0 1-11 0Zm11 1.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5c-.7 1 .7 2 0 3m3.5-3c-.7 1 .7 2 0 3"/></symbol>
     <symbol id="i-body" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.3"/><path d="M12 8.5c-3 0-4.5 2.3-4.5 5.5l.8 3.5h7.4l.8-3.5c0-3.2-1.5-5.5-4.5-5.5Zm-4 9-2.5 3m10.5-3 2.5 3"/></symbol>
     <symbol id="i-quote" viewBox="0 0 24 24"><path d="M10 7c-3.5.8-5.5 3.4-5.5 7.5V18H10v-5H7c0-2 1-3.4 3-4Zm9.5 0c-3.5.8-5.5 3.4-5.5 7.5V18h5.5v-5h-3c0-2 1-3.4 3-4Z"/></symbol>
-    <symbol id="i-door" viewBox="0 0 24 24"><path d="M5.5 21V10a6.5 6.5 0 0 1 13 0v11M3.5 21h17M15 14.5v.01" /></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4.5 6.5A2 2 0 0 1 6.5 4.5h11a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H11l-4.5 3.5V16h0a2 2 0 0 1-2-2Z"/></symbol>
-    <symbol id="i-text" viewBox="0 0 24 24"><path d="m3 18 5-12 5 12M4.7 14h6.6M15 18v-4.8a2.8 2.8 0 0 1 5.6 0V18m0-3.5c-3-.7-5.6.1-5.6 2"/></symbol>
     <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2.5 12c2.4-4.5 4.4-4.5 6.3 0s3.9 4.5 6.3 0 4.2-4.5 6.4 0"/></symbol>
-    <symbol id="i-memory" viewBox="0 0 24 24"><path d="M5 4.5h11l3 3V19.5H5Zm3 0V9h7V4.5M8 19.5v-6h8v6"/></symbol>
-    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15M9.5 7V4.5h5V7m-8 0 .8 12.5a1.5 1.5 0 0 0 1.5 1.5h6.4a1.5 1.5 0 0 0 1.5-1.5L18 7"/></symbol>
-    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M14.5 5.5 18.5 9.5M4.5 19.5l1-4.5L16 4.5a1.4 1.4 0 0 1 2 0l1.5 1.5a1.4 1.4 0 0 1 0 2L9 18.5Z"/></symbol>
     <symbol id="i-envelope" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="m3.5 7 8.5 6.5L20.5 7"/></symbol>
     <symbol id="i-feather" viewBox="0 0 24 24"><path d="M20 4C11 4 6 9.5 6 18l-2 2.5M6 18c8.5 0 13.5-5 14-14M6 18l9-9m-5.5 4.5H15m-3.5-5h5.7"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-cards" viewBox="0 0 24 24"><rect x="7.5" y="3.5" width="11" height="15" rx="2" transform="rotate(8 13 11)"/><rect x="4.5" y="5.5" width="11" height="15" rx="2"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5h10a4 4 0 0 0 .4-8 6 6 0 0 0-11.5 1.6A3.3 3.3 0 0 0 7 18.5Z"/></symbol>
+    <symbol id="i-door" viewBox="0 0 24 24"><path d="M5.5 21V10a6.5 6.5 0 0 1 13 0v11M3.5 21h17M15 14.5v.01"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M9 3.5v4m6-4v4"/></symbol>
   </defs></svg>
 
-  <!-- Light from the window: decorative, follows the visitor's part of day. -->
-  <div class="daylight" aria-hidden="true">
-    <div class="daylight__window"><i></i><i></i><i></i><i></i></div>
-    <div class="daylight__lamp"></div>
-  </div>
+  <!-- Light from the window: decorative, tinted by the visitor's part of day. -->
+  <div class="daylight" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="site-header__inner">
-      <a class="brand" href="#okno">
+      <a class="brand" href="#top" aria-label="Ирина Ошемёткова, перинатальный психолог — в начало">
         <svg class="icon brand__flower" aria-hidden="true"><use href="#i-flower"/></svg>
         <span class="brand__text"><span class="brand__name">Ирина Ошемёткова</span><span class="brand__role">перинатальный психолог</span></span>
       </a>
       <nav class="site-nav" aria-label="Разделы">
-        <a href="#polka" data-spy>Практики</a>
-        <a href="#slova" data-spy>Слова</a>
-        <a href="#irina" data-spy>Об Ирине</a>
-        <a href="#vstrecha" data-spy>Встреча</a>
+        <a href="#pomogayu" data-spy>С чем помогаю</a>
+        <a href="#obo-mne" data-spy>Обо мне</a>
+        <a href="#stoimost" data-spy>Стоимость</a>
+        <a href="#praktiki" data-spy>Практики</a>
+        <a href="#voprosy" data-spy>Вопросы</a>
       </nav>
       <div class="site-header__tools">
-        <button class="stage-chip js-only" type="button" data-open-sheet="sheet-stage" aria-haspopup="dialog">
-          <svg class="icon" aria-hidden="true"><use href="#i-door" data-stage-icon/></svg>
-          <span data-stage-label>Мой этап</span>
+        <button class="icon-btn theme-toggle js-only" type="button" data-theme-toggle aria-pressed="false" aria-label="Ночная тема">
+          <svg class="icon theme-toggle__moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="icon theme-toggle__sun" aria-hidden="true"><use href="#i-sun"/></svg>
         </button>
-        <div class="theme-switch js-only" role="group" aria-label="Ночник">
-          <button type="button" data-action="theme" data-theme-value="auto" aria-pressed="true" title="Ночник сам по времени: с 22:00 до 6:00"><svg class="icon" aria-hidden="true"><use href="#i-auto"/></svg><span class="theme-switch__label">авто</span></button>
-          <button type="button" data-action="theme" data-theme-value="day" aria-pressed="false" title="Всегда светлая страница"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg><span class="visually-hidden">день</span></button>
-          <button type="button" data-action="theme" data-theme-value="night" aria-pressed="false" title="Ночник включён"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg><span class="visually-hidden">ночь</span></button>
-        </div>
         <a class="help-link" href="#help-now" data-open-sheet="sheet-help">
           <svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg><span>Помощь <span class="help-link__more">сейчас</span></span>
         </a>
-        <a class="btn btn--primary btn--small header-cta" href="#vstrecha" data-action="write">Написать Ирине</a>
+        <a class="btn btn--primary btn--small header-cta" href="#zapis" data-action="write">Записаться</a>
+        <button class="icon-btn menu-btn js-only" type="button" data-open-sheet="sheet-menu" aria-haspopup="dialog" aria-label="Меню">
+          <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Night band. By day it lives in the middle of the page; at night it moves to the top as «Ночная смена». -->
-  <section class="nochnik" id="nochnik" aria-labelledby="nochnik-title">
-    <div class="nochnik__glow" aria-hidden="true"></div>
-    <div class="wrap nochnik__inner">
-      <div class="nochnik__clock" aria-hidden="true">
-        <p class="nochnik__time" data-human-time>Ночь</p>
-        <p class="nochnik__date" data-clock-line></p>
-      </div>
-      <div class="nochnik__copy">
-        <p class="nochnik__margin">— на случай бессонной ночи</p>
-        <h2 id="nochnik-title" data-night-title>Для ночной смены — <em>ночник.</em></h2>
-        <p class="nochnik__lead" data-night-lead>Если не спится, если малыш никак не засыпает, если накрывает — здесь всё под одной рукой: тёмный экран, тихий звук, крупные кнопки. С 22:00 до 6:00 сайт включает ночник сам.</p>
-      </div>
-      <div class="night-tiles" role="list">
-        <div role="listitem"><button class="night-tile" type="button" data-action="practice" data-practice="envelope"><svg class="icon" aria-hidden="true"><use href="#i-envelope"/></svg><span class="night-tile__title">Отложить мысли до утра</span><span class="night-tile__sub">конверт подождёт</span></button></div>
-        <div role="listitem"><button class="night-tile" type="button" data-action="breathe" data-pattern="36" data-length="60" data-start="true"><svg class="icon" aria-hidden="true"><use href="#i-wave"/></svg><span class="night-tile__title">Подышать минуту</span><span class="night-tile__sub">длинный выдох, без задержек</span></button></div>
-        <div role="listitem"><button class="night-tile" type="button" data-action="very-hard" data-night-hard><svg class="icon" aria-hidden="true"><use href="#i-anchor"/></svg><span class="night-tile__title" data-hard-title>Мне сейчас очень тяжело</span><span class="night-tile__sub" data-hard-sub>пять шагов, чтобы переждать</span></button></div>
-        <div role="listitem"><button class="night-tile night-tile--noise" type="button" data-action="noise-focus"><svg class="icon" aria-hidden="true"><use href="#i-sound"/></svg><span class="night-tile__title" data-noise-tile>Шум для сна</span><span class="night-tile__sub">для малыша или для тебя</span></button></div>
-      </div>
-      <div class="noise" id="noise" data-noise aria-labelledby="noise-title">
-        <div class="noise__orb" aria-hidden="true"><span></span></div>
-        <div class="noise__body">
-          <h3 class="noise__title" id="noise-title">Шум для сна</h3>
-          <div class="seg seg--dark" role="group" aria-label="Звук">
-            <button type="button" data-noise-type="white" aria-pressed="false">Ровный</button>
-            <button type="button" data-noise-type="pink" aria-pressed="true">Мягкий</button>
-            <button type="button" data-noise-type="brown" aria-pressed="false">Глубокий</button>
-            <button type="button" data-noise-type="shh" aria-pressed="false" data-loud-only>Шшш</button>
-          </div>
-          <div class="seg seg--dark" role="group" aria-label="Таймер">
-            <button type="button" data-noise-timer="15" aria-pressed="false">15 мин</button>
-            <button type="button" data-noise-timer="30" aria-pressed="true">30 мин</button>
-            <button type="button" data-noise-timer="60" aria-pressed="false">1 час</button>
-            <button type="button" data-noise-timer="0" aria-pressed="false">Пока не выключу</button>
-          </div>
-          <div class="seg seg--dark" role="group" aria-label="Громкость">
-            <button type="button" data-noise-level="0.35" aria-pressed="true">Тише</button>
-            <button type="button" data-noise-level="0.6" aria-pressed="false">Средне</button>
-            <button type="button" data-noise-level="0.9" aria-pressed="false">Громче</button>
-          </div>
-          <div class="noise__row">
-            <button class="btn btn--light noise__toggle" type="button" data-noise-toggle><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span>Включить</span></button>
-            <p class="noise__status" data-noise-status role="status"></p>
-          </div>
-          <p class="noise__safety">Поставь телефон подальше от кроватки — метра на два — и делай тише, чем кажется нужным. Экран можно заблокировать: шум продолжит играть.</p>
-        </div>
-      </div>
-      <div class="nochnik__foot">
-        <div class="nochnik__moods js-only" data-night-moods>
-          <p class="nochnik__ask">Как ты сейчас?</p>
-          <div class="pebbles" role="group" aria-label="Как ты сейчас">
-            <button type="button" data-action="checkin" data-mood="good">хорошо</button>
-            <button type="button" data-action="checkin" data-mood="ok">нормально</button>
-            <button type="button" data-action="checkin" data-mood="meh">так себе</button>
-            <button type="button" data-action="checkin" data-mood="hard">тяжело</button>
-            <button type="button" data-action="checkin" data-mood="very-hard">очень тяжело</button>
-          </div>
-        </div>
-        <p class="nochnik__links">
-          <button class="link link--light js-only" type="button" data-action="night-preview" data-night-preview>Посмотреть, как это выглядит ночью</button>
-          <a class="link link--light" href="#vstrecha" data-action="write">Написать Ирине — прочитаю утром</a>
-        </p>
-        <p class="nochnik__sos">Если опасно прямо сейчас — <a href="tel:112">позвонить 112</a>.</p>
-      </div>
-    </div>
-  </section>
-
   <main id="main" tabindex="-1">
 
-    <!-- 1. Окно -->
-    <section class="okno" id="okno" aria-labelledby="okno-title">
-      <div class="wrap okno__inner">
-        <div class="okno__copy">
-          <p class="okno__greeting"><svg class="icon" aria-hidden="true"><use href="#i-leaf" data-part-icon/></svg><span data-greeting>Здравствуй. Здесь можно выдохнуть.</span></p>
-          <h1 id="okno-title" class="okno__title" data-hero-title>Быть мамой. <em>Быть собой.</em></h1>
-          <p class="lead okno__lead" data-hero-lead>Я Ирина, перинатальный психолог. Здесь можно выдохнуть, разобраться с мыслью, которая не отпускает, и найти слова для близких — в любое время суток. А когда захочется поговорить с живым человеком, напиши мне.</p>
-          <p class="okno__night-note" data-night-note hidden><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg>Сейчас я, скорее всего, сплю — но всё здесь работает и в три часа ночи.</p>
-          <p class="okno__welcome" data-welcome hidden></p>
-
-          <div class="stage-pick js-only" data-stage-pick>
-            <h2 class="stage-pick__q" id="stage-q">Что сейчас про тебя?</h2>
-            <div class="stage-pick__chips" role="group" aria-labelledby="stage-q">
-              <button class="chip" type="button" data-action="stage" data-stage="planning" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-sprout"/></svg>Планирую</button>
-              <button class="chip" type="button" data-action="stage" data-stage="pregnancy" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-rings"/></svg>Жду малыша</button>
-              <button class="chip" type="button" data-action="stage" data-stage="postpartum" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg>Малыш родился</button>
-              <button class="chip" type="button" data-action="stage" data-stage="loss" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-candle"/></svg>Пережила потерю</button>
-            </div>
-            <p class="stage-pick__links">
-              <button class="link" type="button" data-action="stage" data-stage="close" aria-pressed="false">Я близкий человек</button>
-              <button class="link" type="button" data-action="stage" data-stage="none" aria-pressed="false">Не хочу отвечать</button>
-            </p>
-            <p class="stage-pick__hint">Можно не отвечать. Ответ меняет только тексты на этой странице и никуда не уходит.</p>
-            <div class="stage-pick__reply" data-stage-reply aria-live="polite"></div>
+    <!-- ===== 1. Первый экран: оффер ===== -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="wrap hero__inner">
+        <div class="hero__copy">
+          <p class="hero__greeting"><svg class="icon" aria-hidden="true"><use href="#i-leaf"/></svg><span data-greeting>Здравствуйте. Здесь можно выдохнуть.</span></p>
+          <h1 id="hero-title" class="hero__title">Быть мамой. <em>Быть собой.</em></h1>
+          <p class="hero__lead">Я Ирина Ошемёткова, перинатальный психолог. Помогаю, когда на пути к&nbsp;материнству и&nbsp;внутри него становится тяжело: при планировании и&nbsp;ЭКО, в&nbsp;беременности, после родов и&nbsp;после утраты.</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary btn--large" href="#zapis" data-action="write">Записаться на консультацию<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost btn--large" href="#praktiki">Практики без регистрации</a>
           </div>
+          <p class="hero__terms"><span>50 минут</span><span>4 000 ₽</span><span>онлайн или очно в Петербурге</span></p>
+          <ul class="hero__proof" role="list">
+            <li><b>Клинический психолог</b><span>перинатальный и семейный</span></li>
+            <li><b>Роддом им. Снегирёва</b><span>опыт работы</span></li>
+            <li><b>Центр «Медика»</b><span>планирование семьи</span></li>
+          </ul>
         </div>
 
-        <figure class="okno__window">
+        <figure class="hero__visual">
           <div class="arch-window">
-            <img class="arch-window__img arch-window__img--day" src="assets/irina-portrait.webp" alt="Ирина Ошемёткова сидит на подоконнике в светлой комнате и улыбается" width="853" height="1280" fetchpriority="high">
-            <img class="arch-window__img arch-window__img--evening" data-src="assets/irina-window.webp" alt="Ирина Ошемёткова у окна с чашкой в руках" width="853" height="1280">
+            <img class="arch-window__img" src="assets/irina-portrait.webp" alt="Ирина Ошемёткова сидит на подоконнике в светлой комнате и улыбается" width="853" height="1280" fetchpriority="high">
             <span class="arch-window__mullion" aria-hidden="true"></span>
           </div>
           <div class="orbit-badge" aria-hidden="true">
-            <svg class="orbit-badge__ring" viewBox="0 0 120 120"><defs><path id="orbit-path" d="M60 60m-45 0a45 45 0 1 1 90 0a45 45 0 1 1-90 0"/></defs><text><textPath href="#orbit-path" data-badge-text>ЗДЕСЬ МОЖНО БЫТЬ СОБОЙ · ЗДЕСЬ МОЖНО БЫТЬ СОБОЙ · </textPath></text></svg>
+            <svg class="orbit-badge__ring" viewBox="0 0 120 120"><defs><path id="orbit-path" d="M60 60m-45 0a45 45 0 1 1 90 0a45 45 0 1 1-90 0"/></defs><text><textPath href="#orbit-path">ЗДЕСЬ МОЖНО БЫТЬ СОБОЙ · ЗДЕСЬ МОЖНО БЫТЬ СОБОЙ · </textPath></text></svg>
             <svg class="icon orbit-badge__flower"><use href="#i-flower"/></svg>
           </div>
-          <figcaption class="okno__caption">Ирина Ошемёткова — клинический, перинатальный и семейный психолог. Петербург и онлайн.</figcaption>
+          <figcaption class="hero__note">
+            <svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg>
+            <span>Можно прийти без готового запроса. Со&nbsp;словами «мне непросто» — уже достаточно.</span>
+          </figcaption>
         </figure>
       </div>
-      <p class="wrap next-line"><a href="#pogoda">Дальше — как ты сейчас?<svg class="icon" aria-hidden="true"><use href="#i-arrow-down"/></svg></a></p>
     </section>
 
-    <!-- 2. Как ты сейчас? -->
-    <section class="pogoda" id="pogoda" aria-labelledby="pogoda-title">
-      <div class="wrap pogoda__inner">
-        <header class="pogoda__head">
-          <h2 id="pogoda-title" data-reveal="light">Как ты сейчас? <em>Честно.</em></h2>
-          <p class="pogoda__sub">Один выбор. Ничего не сохраняется и не оценивается.</p>
+    <!-- ===== 2. Узнаёте себя? ===== -->
+    <section class="mirror section" id="uznaete" aria-labelledby="mirror-title">
+      <div class="wrap">
+        <header class="section-head">
+          <h2 id="mirror-title" data-reveal>Возможно, вы узнаете <em>себя.</em></h2>
+          <p class="lead">Об этом редко говорят вслух. Но именно с этими мыслями ко мне приходят чаще всего.</p>
         </header>
-        <div class="weather js-only" role="radiogroup" aria-labelledby="pogoda-title" data-weather>
-          <button class="weather__tile" type="button" role="radio" aria-checked="false" data-mood="good">
-            <svg class="weather__glyph weather__glyph--good" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="10"/><g class="g-rays"><path d="M32 8v8M32 48v8M8 32h8M48 32h8M15 15l5.6 5.6M43.4 43.4 49 49M49 15l-5.6 5.6M20.6 43.4 15 49"/></g></svg>
-            <span>хорошо</span>
-          </button>
-          <button class="weather__tile" type="button" role="radio" aria-checked="false" data-mood="ok">
-            <svg class="weather__glyph weather__glyph--ok" viewBox="0 0 64 64" aria-hidden="true"><g class="g-sun"><circle cx="24" cy="24" r="8"/><path d="M24 8v4M8 24h4M12.7 12.7l2.8 2.8M35.3 12.7l-2.8 2.8"/></g><path class="g-cloud" d="M22 48h24a8 8 0 0 0 0-16 11 11 0 0 0-21 2.5A6.8 6.8 0 0 0 22 48Z"/></svg>
-            <span>нормально</span>
-          </button>
-          <button class="weather__tile" type="button" role="radio" aria-checked="false" data-mood="meh">
-            <svg class="weather__glyph weather__glyph--meh" viewBox="0 0 64 64" aria-hidden="true"><path class="g-cloud" d="M17 44h30a9 9 0 0 0 0-18 13 13 0 0 0-25 3A7.6 7.6 0 0 0 17 44Z"/><path class="g-cloud g-cloud--back" d="M40 22a9 9 0 0 1 12 8"/></svg>
-            <span>так себе</span>
-          </button>
-          <button class="weather__tile" type="button" role="radio" aria-checked="false" data-mood="hard">
-            <svg class="weather__glyph weather__glyph--hard" viewBox="0 0 64 64" aria-hidden="true"><path class="g-cloud" d="M17 38h30a9 9 0 0 0 0-18 13 13 0 0 0-25 3A7.6 7.6 0 0 0 17 38Z"/><g class="g-drops"><path d="M24 45l-2 5"/><path d="M33 45l-2 5"/><path d="M42 45l-2 5"/></g></svg>
-            <span>тяжело</span>
-          </button>
-          <button class="weather__tile" type="button" role="radio" aria-checked="false" data-mood="very-hard">
-            <svg class="weather__glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M15 34h32a9 9 0 0 0 0-18 13 13 0 0 0-25 3A7.6 7.6 0 0 0 15 34Z"/><path d="M20 40l-3 7m11-7-3 7m11-7-3 7m11-7-3 7M23 51l-2 4m10-4-2 4m10-4-2 4"/></svg>
-            <span>очень тяжело</span>
-          </button>
-        </div>
-        <div class="louder" data-louder hidden>
-          <p class="louder__q" id="louder-q">Если хочется уточнить — что сейчас громче?</p>
-          <div class="louder__chips" role="group" aria-labelledby="louder-q">
-            <button class="chip chip--quiet" type="button" data-louder-value="anxiety" aria-pressed="false">тревога</button>
-            <button class="chip chip--quiet" type="button" data-louder-value="tired" aria-pressed="false">усталость</button>
-            <button class="chip chip--quiet" type="button" data-louder-value="loop" aria-pressed="false">мысли по кругу</button>
-            <button class="chip chip--quiet" type="button" data-louder-value="lonely" aria-pressed="false">одиночество</button>
-            <button class="chip chip--quiet" type="button" data-louder-value="anger" aria-pressed="false">злость</button>
-            <button class="chip chip--quiet" type="button" data-louder-value="empty" aria-pressed="false">пустота</button>
-            <button class="chip chip--quiet" type="button" data-louder-value="unknown" aria-pressed="false">не знаю</button>
+        <ul class="thoughts" role="list">
+          <li class="thought-card" data-reveal><p>«Снова не получилось. Сколько ещё ждать — и&nbsp;как не сойти с ума от этого ожидания?»</p><span>планирование, ЭКО</span></li>
+          <li class="thought-card" data-reveal><p>«Я же должна быть счастлива. А мне тревожно почти всё время.»</p><span>беременность</span></li>
+          <li class="thought-card" data-reveal><p>«Боюсь родов так, что не могу об этом даже думать.»</p><span>беременность</span></li>
+          <li class="thought-card" data-reveal><p>«Устала так, что не узнаю себя. Все справляются, а я — нет.»</p><span>после родов</span></li>
+          <li class="thought-card" data-reveal><p>«Срываюсь на близких, а потом весь вечер виню себя.»</p><span>после родов</span></li>
+          <li class="thought-card" data-reveal><p>«После утраты никто не знает, что мне сказать. И я не знаю, как с этим жить.»</p><span>утрата</span></li>
+          <li class="thought-card" data-reveal><p>«Мы с партнёром будто на разных берегах — и каждый разговор заканчивается ссорой.»</p><span>пара</span></li>
+          <li class="thought-card" data-reveal><p>«Не могу объяснить, что со мной. Просто тяжело.»</p><span>и так тоже бывает</span></li>
+        </ul>
+        <div class="mirror__answer" data-reveal>
+          <p class="mirror__text">Ни одна из этих мыслей не делает вас плохой мамой или «слабой». Это знак, что сейчас вам нужна поддержка, — и&nbsp;её можно получить.</p>
+          <div class="mirror__actions">
+            <a class="btn btn--primary" href="#zapis" data-action="write">Поговорить об этом<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="link" href="#praktiki">Сначала попробовать практику</a>
           </div>
         </div>
-        <div class="checkin-answer" data-checkin-answer hidden></div>
-        <noscript><p class="note">Если сейчас тяжело — внизу страницы есть номера помощи и шаги, которые можно сделать прямо сейчас.</p></noscript>
       </div>
     </section>
 
-    <!-- Sections 3–7 are re-ordered for the chosen stage (DOM move, so tab order follows). -->
-    <div class="flow" data-flow>
+    <!-- ===== 3. С чем я помогаю ===== -->
+    <section class="services section" id="pomogayu" aria-labelledby="services-title">
+      <div class="wrap">
+        <header class="section-head section-head--split">
+          <h2 id="services-title" data-reveal>С чем я <em>помогаю.</em></h2>
+          <p class="lead">Работаю с женщинами и парами на всём пути: от первых мыслей о ребёнке до первых лет с малышом. Выберите, что ближе вам сейчас.</p>
+        </header>
 
-      <!-- С чем приходят ко мне -->
-      <section class="dveri section" id="dveri" data-flow-item="doors" aria-labelledby="dveri-title">
-        <div class="wrap">
-          <header class="dveri__head">
-            <h2 id="dveri-title" data-reveal="light">С чем ко мне <em>приходят.</em></h2>
-            <p class="lead">Можно прийти с готовым вопросом — или просто со словами «мне непросто». Выбери дверь, которая ближе.</p>
-          </header>
-          <div class="doors" data-doors>
-            <div class="doors__row" role="tablist" aria-label="С чем приходят">
-              <button class="door" type="button" role="tab" id="door-tab-planning" aria-controls="door-planning" aria-selected="true" data-door="planning">
-                <span class="door__frame" aria-hidden="true"><svg class="icon"><use href="#i-sprout"/></svg></span>
-                <span class="door__label">Жду и надеюсь</span><span class="door__sub">планирование, ЭКО</span>
-              </button>
-              <button class="door" type="button" role="tab" id="door-tab-pregnancy" aria-controls="door-pregnancy" aria-selected="false" data-door="pregnancy" tabindex="-1">
-                <span class="door__frame" aria-hidden="true"><svg class="icon"><use href="#i-rings"/></svg></span>
-                <span class="door__label">Жду малыша</span><span class="door__sub">беременность</span>
-              </button>
-              <button class="door" type="button" role="tab" id="door-tab-postpartum" aria-controls="door-postpartum" aria-selected="false" data-door="postpartum" tabindex="-1">
-                <span class="door__frame" aria-hidden="true"><svg class="icon"><use href="#i-sun"/></svg></span>
-                <span class="door__label">Малыш родился</span><span class="door__sub">первые месяцы и годы</span>
-              </button>
-              <button class="door" type="button" role="tab" id="door-tab-loss" aria-controls="door-loss" aria-selected="false" data-door="loss" tabindex="-1">
-                <span class="door__frame" aria-hidden="true"><svg class="icon"><use href="#i-candle"/></svg></span>
-                <span class="door__label">Пережить утрату</span><span class="door__sub">беременности или малыша</span>
-              </button>
-              <button class="door" type="button" role="tab" id="door-tab-close" aria-controls="door-close" aria-selected="false" data-door="close" tabindex="-1">
-                <span class="door__frame" aria-hidden="true"><svg class="icon"><use href="#i-people"/></svg></span>
-                <span class="door__label">Пары и близкие</span><span class="door__sub">вдвоём или ради неё</span>
-              </button>
-            </div>
+        <div class="doors" data-doors>
+          <div class="doors__row" role="tablist" aria-label="Этап">
+            <button class="door" type="button" role="tab" id="door-tab-planning" aria-controls="door-planning" aria-selected="true" data-door="planning">
+              <span class="door__icon" aria-hidden="true"><svg class="icon"><use href="#i-sprout"/></svg></span>
+              <span class="door__label">Планирую</span><span class="door__sub">ожидание, ЭКО</span>
+            </button>
+            <button class="door" type="button" role="tab" id="door-tab-pregnancy" aria-controls="door-pregnancy" aria-selected="false" data-door="pregnancy" tabindex="-1">
+              <span class="door__icon" aria-hidden="true"><svg class="icon"><use href="#i-rings"/></svg></span>
+              <span class="door__label">Жду малыша</span><span class="door__sub">беременность</span>
+            </button>
+            <button class="door" type="button" role="tab" id="door-tab-postpartum" aria-controls="door-postpartum" aria-selected="false" data-door="postpartum" tabindex="-1">
+              <span class="door__icon" aria-hidden="true"><svg class="icon"><use href="#i-sun"/></svg></span>
+              <span class="door__label">Малыш родился</span><span class="door__sub">первые месяцы и годы</span>
+            </button>
+            <button class="door" type="button" role="tab" id="door-tab-loss" aria-controls="door-loss" aria-selected="false" data-door="loss" tabindex="-1">
+              <span class="door__icon" aria-hidden="true"><svg class="icon"><use href="#i-candle"/></svg></span>
+              <span class="door__label">Пережить утрату</span><span class="door__sub">беременности или малыша</span>
+            </button>
+            <button class="door" type="button" role="tab" id="door-tab-close" aria-controls="door-close" aria-selected="false" data-door="close" tabindex="-1">
+              <span class="door__icon" aria-hidden="true"><svg class="icon"><use href="#i-people"/></svg></span>
+              <span class="door__label">Пары и близкие</span><span class="door__sub">вдвоём или ради неё</span>
+            </button>
+          </div>
 
-            <div class="door-panel" role="tabpanel" id="door-planning" aria-labelledby="door-tab-planning">
-              <h3>Когда ожидание растягивается</h3>
+          <div class="door-panel" role="tabpanel" id="door-planning" aria-labelledby="door-tab-planning" tabindex="0">
+            <div class="door-panel__body">
+              <h3>Когда ожидание <em>растягивается</em></h3>
               <div class="door-panel__cols">
                 <div><p class="door-panel__cap">Что бывает внутри</p><ul class="door-panel__feel" role="list"><li>Надежда и страх по очереди — иногда за один день.</li><li>«Ну когда уже?» от родных, коллег и случайных знакомых.</li><li>Усталость от обследований, анализов, протоколов.</li><li>Сравнение с другими — и неловкость за это сравнение.</li></ul></div>
-                <div><p class="door-panel__cap">С чем работаем</p><ul class="door-panel__work" role="list"><li>Как прожить ожидание и не потеряться в нём.</li><li>Как говорить с партнёром, если вы проживаете это по-разному.</li><li>Что отвечать на вопросы, которые ранят.</li><li>Где найти опору, если всё идёт не так, как хотелось.</li></ul></div>
+                <div><p class="door-panel__cap">Над чем работаем вместе</p><ul class="door-panel__work" role="list"><li>Как прожить ожидание и не потеряться в нём.</li><li>Как говорить с партнёром, если вы проживаете это по-разному.</li><li>Что отвечать на вопросы, которые ранят.</li><li>Где найти опору, если всё идёт не так, как хотелось.</li></ul></div>
               </div>
-              <button class="btn btn--soft" type="button" data-action="write" data-topic="ожидание беременности, ЭКО">Написать об этом<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              <button class="btn btn--primary" type="button" data-action="write" data-topic="ожидание беременности, ЭКО">Записаться с этой темой<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
             </div>
-            <div class="door-panel" role="tabpanel" id="door-pregnancy" aria-labelledby="door-tab-pregnancy">
-              <h3>Когда внутри всего сразу много</h3>
+            <figure class="door-panel__aside door-panel__aside--quote"><blockquote>Есть место и&nbsp;для ясности, и&nbsp;для неопределённости.</blockquote></figure>
+          </div>
+          <div class="door-panel" role="tabpanel" id="door-pregnancy" aria-labelledby="door-tab-pregnancy" tabindex="0">
+            <div class="door-panel__body">
+              <h3>Когда внутри всего <em>сразу много</em></h3>
               <div class="door-panel__cols">
                 <div><p class="door-panel__cap">Что бывает внутри</p><ul class="door-panel__feel" role="list"><li>Радость и тревога, которые помещаются в один день.</li><li>Страх родов — или страх, что что-то пойдёт не так.</li><li>Тело меняется быстрее, чем к этому успеваешь привыкнуть.</li><li>«Я же должна быть счастлива» — а получается не всегда.</li></ul></div>
-                <div><p class="door-panel__cap">С чем работаем</p><ul class="door-panel__work" role="list"><li>Тревожные мысли: как сделать так, чтобы не они управляли днём.</li><li>Подготовка к родам — не только телом.</li><li>Пара и роли, которые меняются.</li><li>Как заранее договориться о помощи.</li></ul></div>
+                <div><p class="door-panel__cap">Над чем работаем вместе</p><ul class="door-panel__work" role="list"><li>Тревожные мысли: как сделать, чтобы не они управляли днём.</li><li>Подготовка к родам — не только телом.</li><li>Пара и роли, которые меняются.</li><li>Как заранее договориться о помощи.</li></ul></div>
               </div>
-              <button class="btn btn--soft" type="button" data-action="write" data-topic="тревога в беременности">Написать об этом<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              <button class="btn btn--primary" type="button" data-action="write" data-topic="тревога в беременности">Записаться с этой темой<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
             </div>
-            <div class="door-panel" role="tabpanel" id="door-postpartum" aria-labelledby="door-tab-postpartum">
-              <h3>Когда от тебя прежней будто ничего не осталось</h3>
+            <figure class="door-panel__aside"><img src="assets/baby-feather.webp" alt="Спящий малыш и пёрышко" width="853" height="1280" loading="lazy"></figure>
+          </div>
+          <div class="door-panel" role="tabpanel" id="door-postpartum" aria-labelledby="door-tab-postpartum" tabindex="0">
+            <div class="door-panel__body">
+              <h3>Когда от прежней себя будто <em>ничего не осталось</em></h3>
               <div class="door-panel__cols">
                 <div><p class="door-panel__cap">Что бывает внутри</p><ul class="door-panel__feel" role="list"><li>Усталость, которую не объяснить тем, кто не был внутри.</li><li>Раздражение и слёзы — и вина за них.</li><li>Одиночество, даже когда вокруг люди.</li><li>Ощущение, что все вокруг справляются лучше.</li></ul></div>
-                <div><p class="door-panel__cap">С чем работаем</p><ul class="door-panel__work" role="list"><li>Как восстанавливаться без чувства вины.</li><li>Беби-блюз или что-то большее — разобраться вместе.</li><li>Как делить нагрузку с партнёром и родными.</li><li>Как вернуть себе хотя бы немного времени.</li></ul></div>
+                <div><p class="door-panel__cap">Над чем работаем вместе</p><ul class="door-panel__work" role="list"><li>Как восстанавливаться без чувства вины.</li><li>Беби-блюз или что-то большее — разобраться вместе.</li><li>Как делить нагрузку с партнёром и родными.</li><li>Как вернуть себе хотя бы немного времени.</li></ul></div>
               </div>
-              <button class="btn btn--soft" type="button" data-action="write" data-topic="усталость после родов">Написать об этом<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              <button class="btn btn--primary" type="button" data-action="write" data-topic="усталость после родов">Записаться с этой темой<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
             </div>
-            <div class="door-panel" role="tabpanel" id="door-loss" aria-labelledby="door-tab-loss">
-              <h3>Здесь можно просто быть</h3>
+            <figure class="door-panel__aside"><img src="assets/family-embrace.webp" alt="Мама обнимает малыша" width="853" height="1280" loading="lazy"></figure>
+          </div>
+          <div class="door-panel" role="tabpanel" id="door-loss" aria-labelledby="door-tab-loss" tabindex="0">
+            <div class="door-panel__body">
+              <h3>Здесь можно <em>просто быть</em></h3>
               <div class="door-panel__cols">
                 <div><p class="door-panel__cap">Что бывает внутри</p><ul class="door-panel__feel" role="list"><li>Горе, для которого у окружающих не находится слов.</li><li>Вина и бесконечное «почему».</li><li>Воспоминания, которые накрывают внезапно.</li><li>Страх думать о будущем — и страх о нём не думать.</li></ul></div>
-                <div><p class="door-panel__cap">С чем работаем</p><ul class="door-panel__work" role="list"><li>Прожить горе в своём темпе, без чужих сроков.</li><li>Сказать близким и на работе ровно столько, сколько хочется.</li><li>Остаться рядом с партнёром, когда вы горюете по-разному.</li><li>Если когда-нибудь захочется — подумать о новой беременности.</li></ul></div>
+                <div><p class="door-panel__cap">Над чем работаем вместе</p><ul class="door-panel__work" role="list"><li>Прожить горе в своём темпе, без чужих сроков.</li><li>Сказать близким и на работе ровно столько, сколько хочется.</li><li>Остаться рядом с партнёром, когда вы горюете по-разному.</li><li>Если когда-нибудь захочется — подумать о новой беременности.</li></ul></div>
               </div>
-              <button class="btn btn--soft" type="button" data-action="write" data-topic="утрата">Написать об этом<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              <button class="btn btn--primary" type="button" data-action="write" data-topic="утрата">Записаться с этой темой<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
             </div>
-            <div class="door-panel" role="tabpanel" id="door-close" aria-labelledby="door-tab-close">
-              <h3>Когда хочется поддержать — и страшно сказать не то</h3>
+            <figure class="door-panel__aside door-panel__aside--quote door-panel__aside--quiet"><blockquote>Ваши чувства не&nbsp;должны укладываться в&nbsp;чьи-то сроки.</blockquote></figure>
+          </div>
+          <div class="door-panel" role="tabpanel" id="door-close" aria-labelledby="door-tab-close" tabindex="0">
+            <div class="door-panel__body">
+              <h3>Когда хочется поддержать — и <em>страшно сказать не&nbsp;то</em></h3>
               <div class="door-panel__cols">
                 <div><p class="door-panel__cap">Что бывает внутри</p><ul class="door-panel__feel" role="list"><li>Беспомощность: кажется, что любые слова прозвучат не так.</li><li>Вы проживаете одно и то же по-разному.</li><li>Ссоры из-за усталости, быта, родственников.</li></ul></div>
-                <div><p class="door-panel__cap">С чем работаем</p><ul class="door-panel__work" role="list"><li>Встречи вдвоём — при планировании, после рождения малыша и после утраты.</li><li>Как поддерживать без советов и «всё будет хорошо».</li><li>Как договариваться о нагрузке и границах с родными.</li></ul></div>
+                <div><p class="door-panel__cap">Над чем работаем вместе</p><ul class="door-panel__work" role="list"><li>Встречи вдвоём — при планировании, после рождения малыша и после утраты.</li><li>Как поддерживать без советов и «всё будет хорошо».</li><li>Как договариваться о нагрузке и границах с родными.</li></ul></div>
               </div>
-              <button class="btn btn--soft" type="button" data-action="write" data-topic="отношения в паре" data-format="pair">Написать об этом<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              <button class="btn btn--primary" type="button" data-action="write" data-topic="отношения в паре" data-format="pair">Записаться вдвоём<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
             </div>
-          </div>
-          <p class="next-line">Что дальше: <a href="#dyhanie">подышать минуту</a> · <a href="#vstrecha">написать Ирине</a></p>
-        </div>
-      </section>
-
-      <!-- Подыши со мной -->
-      <section class="dyhanie band" id="dyhanie" data-flow-item="breath" aria-labelledby="dyhanie-title">
-        <div class="wrap dyhanie__inner">
-          <div class="dyhanie__copy">
-            <h2 id="dyhanie-title" data-reveal="light">Подыши <em>со мной.</em></h2>
-            <p class="dyhanie__lead" data-breath-lead>Минута, чтобы вернуться в тело. Дыши, как удобно: остановиться можно в любой момент.</p>
-            <div class="breath-settings js-only">
-              <p class="breath-settings__label" id="breath-pattern-label">Ритм</p>
-              <div class="seg seg--dark seg--wrap" role="group" aria-labelledby="breath-pattern-label" data-breath-patterns>
-                <button type="button" data-pattern="36" aria-pressed="true">Длинный выдох · 3–6</button>
-                <button type="button" data-pattern="square" aria-pressed="false">Квадрат · 4–4–4–4</button>
-                <button type="button" data-pattern="478" aria-pressed="false">4–7–8</button>
-                <button type="button" data-pattern="custom" aria-pressed="false">Свой ритм</button>
-              </div>
-              <p class="breath-settings__note" data-pattern-note>без задержек, самый мягкий</p>
-              <div class="breath-custom" data-breath-custom hidden>
-                <div class="stepper"><span class="stepper__label" id="custom-in">Вдох</span><button type="button" data-step="in" data-delta="-1" aria-label="Вдох короче"><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg></button><output aria-labelledby="custom-in" data-custom-in>4 с</output><button type="button" data-step="in" data-delta="1" aria-label="Вдох длиннее"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button></div>
-                <div class="stepper"><span class="stepper__label" id="custom-out">Выдох</span><button type="button" data-step="out" data-delta="-1" aria-label="Выдох короче"><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg></button><output aria-labelledby="custom-out" data-custom-out>6 с</output><button type="button" data-step="out" data-delta="1" aria-label="Выдох длиннее"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button></div>
-              </div>
-              <p class="breath-settings__label" id="breath-length-label">Сколько</p>
-              <div class="seg seg--dark" role="group" aria-labelledby="breath-length-label" data-breath-lengths>
-                <button type="button" data-length="60" aria-pressed="true">1 минута</button>
-                <button type="button" data-length="3c" aria-pressed="false">3 круга</button>
-                <button type="button" data-length="180" aria-pressed="false">3 минуты</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="breath" data-breath>
-            <div class="breath__stage" data-breath-stage>
-              <svg class="breath__ring" viewBox="0 0 200 200" aria-hidden="true"><circle class="breath__ring-track" cx="100" cy="100" r="96"/><circle class="breath__ring-progress" cx="100" cy="100" r="96" pathLength="100" data-breath-progress/></svg>
-              <div class="breath__halo" aria-hidden="true"></div>
-              <div class="breath__disc" aria-hidden="true"><svg class="icon breath__flower"><use href="#i-flower"/></svg></div>
-              <div class="breath__square" aria-hidden="true"><span class="breath__dot"></span></div>
-              <div class="breath__readout">
-                <span class="breath__phase" data-breath-phase>Готова?</span>
-                <span class="breath__secs" data-breath-secs aria-hidden="true"></span>
-              </div>
-            </div>
-            <p class="breath__count" data-breath-count>Вдох на 3 — выдох на 6</p>
-            <div class="breath__bar" aria-hidden="true"><span data-breath-bar></span></div>
-            <p class="visually-hidden" aria-live="polite" data-breath-live></p>
-            <div class="breath__controls js-only">
-              <button class="btn btn--light" type="button" data-breath-start><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span>Начать</span></button>
-              <button class="btn btn--ghost btn--on-dark" type="button" data-breath-stop hidden>Достаточно</button>
-            </div>
-            <noscript><p class="breath__static">Вдох через нос на 3 счёта — медленный выдох сквозь сомкнутые губы на 6. Повтори шесть-семь раз, как удобно.</p></noscript>
-          </div>
-
-          <div class="dyhanie__side">
-            <div class="breath-opts js-only" role="group" aria-label="Как вести практику">
-              <button class="toggle-row" type="button" role="switch" aria-checked="false" data-breath-opt="sound"><svg class="icon" aria-hidden="true"><use href="#i-sound"/></svg><span>Звук</span></button>
-              <button class="toggle-row" type="button" role="switch" aria-checked="false" data-breath-opt="vibration" hidden><svg class="icon" aria-hidden="true"><use href="#i-vibrate"/></svg><span>Вибрация</span></button>
-              <button class="toggle-row" type="button" role="switch" aria-checked="false" data-breath-opt="eyes"><svg class="icon" aria-hidden="true"><use href="#i-eye-closed"/></svg><span>Закрой глаза — круг посчитает</span></button>
-              <button class="toggle-row" type="button" data-breath-dim><svg class="icon" aria-hidden="true"><use href="#i-dim"/></svg><span>Приглушить экран</span></button>
-            </div>
-            <p class="dyhanie__safety" data-breath-safety>Если кружится голова или неприятно — сократи паузу или просто дыши в своём ритме.</p>
-          </div>
-
-          <div class="breath-done" data-breath-done hidden tabindex="-1">
-            <p class="breath-done__phrase" data-breath-done-phrase></p>
-            <div class="breath-done__actions">
-              <button class="btn btn--light btn--small" type="button" data-breath-again>Ещё раз</button>
-              <a class="btn btn--ghost btn--on-dark btn--small" href="#polka">Другая практика</a>
-              <button class="btn btn--ghost btn--on-dark btn--small" type="button" data-action="helped" data-practice="breath">Помогло — запомнить</button>
-            </div>
-            <p class="breath-done__note" data-helped-note role="status"></p>
+            <figure class="door-panel__aside"><img src="assets/family-beach.webp" alt="Двое детей на берегу" width="1186" height="790" loading="lazy"></figure>
           </div>
         </div>
-        <div class="breath-dim" data-breath-dimmer hidden>
-          <div class="breath-dim__circle" aria-hidden="true"></div>
-          <p class="breath-dim__phase" data-dim-phase aria-hidden="true"></p>
-          <button class="btn btn--ghost btn--on-dark breath-dim__stop" type="button" data-dim-exit>Достаточно</button>
-        </div>
-      </section>
 
-      <!-- Полка практик -->
-      <section class="polka section" id="polka" data-flow-item="shelf" aria-labelledby="polka-title">
-        <div class="wrap">
-          <div class="morning-envelope" data-morning-envelope hidden></div>
-          <header class="polka__head">
-            <h2 id="polka-title" data-reveal="light">Полка <em>практик.</em></h2>
-            <p class="lead" data-practice-intro>Практика — возможность, а не ещё одно задание.</p>
-          </header>
-          <div class="helped-shelf" data-helped-shelf hidden></div>
-          <div class="shelf" data-shelf>
-            <div class="shelf__track" data-shelf-track>
-              <article class="shelf-item shelf-item--grounding" data-shelf-item="grounding">
-                <div class="shelf-item__art" aria-hidden="true"><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
-                <h3 class="shelf-item__title">Вернуться в момент</h3>
-                <p class="shelf-item__text">5-4-3-2-1: заметить то, что вокруг. Отвечать ничего не нужно.</p>
-                <p class="shelf-item__meta"><span class="pill">≈ 2 мин</span><span class="pill">без слов</span></p>
-                <ol class="shelf-item__steps no-js-only"><li>Найди глазами пять вещей, которые видишь.</li><li>Прислушайся к четырём звукам.</li><li>Прикоснись к трём предметам.</li><li>Заметь два запаха.</li><li>Почувствуй один вкус.</li></ol>
-                <button class="shelf-item__open js-only" type="button" data-action="practice" data-practice="grounding"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-              </article>
-              <article class="shelf-item shelf-item--feelings" data-shelf-item="feelings">
-                <div class="shelf-item__art" aria-hidden="true"><svg viewBox="0 0 120 120"><circle cx="60" cy="24" r="10"/><path d="M60 38c-14 0-22 12-22 28l4 18h36l4-18c0-16-8-28-22-28Zm-18 46-14 14h64L78 84"/><circle class="warm" cx="60" cy="58" r="5"/></svg></div>
-                <h3 class="shelf-item__title">Контакт с чувствами</h3>
-                <p class="shelf-item__text">Найти, где в теле живёт усталость, и услышать, что она говорит.</p>
-                <p class="shelf-item__meta"><span class="pill">≈ 3 мин</span><span class="pill">можно писать</span></p>
-                <ol class="shelf-item__steps no-js-only"><li>Где в теле ты сейчас что-то чувствуешь?</li><li>Положи туда ладонь и побудь с этим ощущением.</li><li>Если бы оно могло говорить — что бы оно сказало?</li></ol>
-                <button class="shelf-item__open js-only" type="button" data-action="practice" data-practice="feelings"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-              </article>
-              <article class="shelf-item shelf-item--envelope" data-shelf-item="envelope">
-                <div class="shelf-item__art" aria-hidden="true"><svg viewBox="0 0 140 100"><rect x="6" y="14" width="128" height="80" rx="6"/><path d="m8 18 62 44 62-44"/><circle class="seal" cx="70" cy="62" r="11"/></svg></div>
-                <h3 class="shelf-item__title">Отложить мысли до утра</h3>
-                <p class="shelf-item__text">Выписать всё, что крутится, и запечатать до завтра.</p>
-                <p class="shelf-item__meta"><span class="pill">≈ 2 мин</span><span class="pill">можно писать</span></p>
-                <ol class="shelf-item__steps no-js-only"><li>Выпиши на листок всё, что крутится в голове.</li><li>Скажи себе: «Я вижу эти мысли. Я вернусь к ним завтра утром».</li><li>Отложи листок и разреши себе отдыхать.</li></ol>
-                <button class="shelf-item__open js-only" type="button" data-action="practice" data-practice="envelope"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-              </article>
-              <article class="shelf-item shelf-item--stop" data-shelf-item="stop">
-                <div class="shelf-item__art" aria-hidden="true"><svg class="icon"><use href="#i-anchor"/></svg></div>
-                <h3 class="shelf-item__title">Экстренная остановка</h3>
-                <p class="shelf-item__text">Если накрывает рядом с малышом. Пять шагов, по одному на экран.</p>
-                <p class="shelf-item__meta"><span class="pill">5 шагов</span><span class="pill">крупно</span></p>
-                <ol class="shelf-item__steps no-js-only"><li>Положи малыша в кроватку на спину и выйди на несколько минут.</li><li>Прохладная вода на лицо и руки, стакан воды.</li><li>Сядь на пол: вдох на 3, выдох на 6.</li><li>Позови своего человека.</li><li>Если рядом никого — номера помощи внизу страницы.</li></ol>
-                <button class="shelf-item__open js-only" type="button" data-action="stop"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-              </article>
-              <article class="shelf-item shelf-item--flashback" data-shelf-item="flashback">
-                <div class="shelf-item__art" aria-hidden="true"><span class="stamp" data-today-stamp>сегодня</span></div>
-                <h3 class="shelf-item__title">Если накрывает воспоминание</h3>
-                <p class="shelf-item__text">Вернуться в сегодняшний день. Тихо, без анимаций.</p>
-                <p class="shelf-item__meta"><span class="pill">≈ 1 мин</span><span class="pill">без слов</span></p>
-                <ol class="shelf-item__steps no-js-only"><li>Скажи себе: «Это воспоминание. Это было тогда. Сейчас я здесь».</li><li>Назови сегодняшнюю дату и место, где ты сейчас.</li><li>Почувствуй стопы на полу.</li></ol>
-                <button class="shelf-item__open js-only" type="button" data-action="practice" data-practice="flashback"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-              </article>
-              <article class="shelf-item shelf-item--choose js-only" data-shelf-item="choose">
-                <div class="shelf-item__art" aria-hidden="true"><svg class="icon"><use href="#i-shuffle"/></svg></div>
-                <h3 class="shelf-item__title">Выбери за меня</h3>
-                <p class="shelf-item__text">Когда сил на выбор мало — выберу я.</p>
-                <button class="shelf-item__open" type="button" data-action="choose-practice"><span>Выбрать</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-              </article>
-            </div>
-            <p class="shelf__counter js-only" aria-hidden="true" data-shelf-counter></p>
-          </div>
-          <p class="next-line">Что дальше: <a href="#razbor">разобрать мысль, которая не отпускает</a> · <a href="#opory">вытянуть опору</a></p>
-        </div>
-      </section>
-
-      <!-- Разбор мысли -->
-      <section class="razbor section" id="razbor" data-flow-item="thought" aria-labelledby="razbor-title">
-        <div class="wrap razbor__inner">
-          <header class="razbor__head">
-            <h2 id="razbor-title" data-reveal="light">Мысль не отпускает? <em>Разберём её.</em></h2>
-            <p class="lead">Три минуты, четыре шага. Это не тест и не диагноз — просто способ посмотреть на мысль чуть со стороны. Всё остаётся в этом окне.</p>
-          </header>
-          <div class="notebook" data-thought>
-            <ol class="notebook__dots" aria-label="Шаги разбора" data-thought-dots>
-              <li aria-current="step">Ситуация</li><li>Мысль</li><li>Чувство</li><li>Взгляд со стороны</li>
-            </ol>
-            <div class="notebook__page" data-thought-page>
-              <noscript>
-                <ol class="notebook__static">
-                  <li><strong>Ситуация.</strong> Что происходило, когда стало тяжело? Где ты была, что случилось, кто был рядом.</li>
-                  <li><strong>Мысль.</strong> Какая мысль промелькнула в тот момент? Первая, какая пришла.</li>
-                  <li><strong>Чувство.</strong> Что ты почувствовала и насколько сильно?</li>
-                  <li><strong>Взгляд со стороны.</strong> Есть ли что-то, что говорит: эта мысль не совсем верна? Что бы ты сказала подруге? Как бы эта мысль звучала справедливее?</li>
-                </ol>
-              </noscript>
-            </div>
-          </div>
-          <div class="traps" data-traps>
-            <h3 class="traps__title">Ловушки, в которые <em>попадают все.</em></h3>
-            <p class="traps__sub">Двенадцать привычных поворотов мысли. Нажми на карточку, чтобы перевернуть.</p>
-            <div class="traps__fan" data-traps-fan></div>
-            <div class="trap-game" data-trap-game></div>
-          </div>
-          <p class="next-line">Что дальше: <a href="#slova">найти слова для близкого</a> · <a href="#vstrecha">обсудить с Ириной</a></p>
-        </div>
-      </section>
-
-      <!-- Слова для своих -->
-      <section class="slova section" id="slova" data-flow-item="words" aria-labelledby="slova-title">
-        <div class="wrap">
-          <header class="slova__head">
-            <h2 id="slova-title" data-reveal="light">Что сказать, <em>когда…</em></h2>
-            <p class="lead">Слова для трудных разговоров — бери как есть или переделай под себя. Ничего никуда не уходит, пока ты сама не нажмёшь «отправить».</p>
-          </header>
-          <div class="book" data-words>
-            <div class="book__toc" role="tablist" aria-label="Кому" data-words-tabs>
-              <button type="button" role="tab" id="w-tab-partner" aria-controls="w-partner" aria-selected="true" data-words-tab="partner">Партнёру</button>
-              <button type="button" role="tab" id="w-tab-family" aria-controls="w-family" aria-selected="false" tabindex="-1" data-words-tab="family">Родным и гостям</button>
-              <button type="button" role="tab" id="w-tab-advice" aria-controls="w-advice" aria-selected="false" tabindex="-1" data-words-tab="advice">Советчикам</button>
-              <button type="button" role="tab" id="w-tab-work" aria-controls="w-work" aria-selected="false" tabindex="-1" data-words-tab="work">На работе</button>
-              <button type="button" role="tab" id="w-tab-loss" aria-controls="w-loss" aria-selected="false" tabindex="-1" data-words-tab="loss" data-loss-only>После утраты</button>
-              <button type="button" role="tab" id="w-tab-own" aria-controls="w-own" aria-selected="false" tabindex="-1" data-words-tab="own">Своя просьба</button>
-            </div>
-            <div class="book__pages">
-              <div class="words-panel" role="tabpanel" id="w-partner" aria-labelledby="w-tab-partner">
-                <figure class="words-photo" data-child-photo><img src="assets/family-embrace.webp" alt="Мама обнимает малыша" width="853" height="1280" loading="lazy"></figure>
-                <blockquote class="phrase" data-phrase data-stage-hint="postpartum"><p>Пожалуйста, возьми коляску и погуляй с малышом полтора часа. Мне нужно спокойно принять душ и полежать в тишине.</p><footer>вместо «мне никто не помогает»</footer></blockquote>
-                <blockquote class="phrase" data-phrase><p>Я тревожусь, что весь быт ляжет на меня. Мне важно знать, что мы разделим это время.</p><footer>вместо «ты вечно на работе»</footer></blockquote>
-                <blockquote class="phrase" data-phrase><p>Мне сейчас не нужно, чтобы ты искал решения или успокаивал меня. Мне нужно, чтобы ты обнял меня, посидел рядом и дал мне поплакать.</p></blockquote>
-                <blockquote class="phrase phrase--urgent" data-phrase><p>Мне плохо. Я не справляюсь. Пожалуйста, приезжай как можно скорее и побудь с малышом пару часов.</p><footer>если совсем на грани</footer></blockquote>
-              </div>
-              <div class="words-panel" role="tabpanel" id="w-family" aria-labelledby="w-tab-family">
-                <blockquote class="phrase" data-phrase><p>Мама, мы очень ценим твою заботу и опыт. Но мы следуем рекомендациям нашего врача. Если понадобится совет — обязательно спросим. А сейчас очень поможет, если ты посидишь с малышом, пока мы пообедаем.</p><footer>маме или свекрови</footer></blockquote>
-                <blockquote class="phrase" data-phrase><p>Это наша личная тема. Когда будет чем поделиться — мы расскажем сами.</p><footer>если спрашивают «ну когда уже?»</footer></blockquote>
-                <blockquote class="phrase" data-phrase><p>Мы будем рады видеть вас чуть позже. Сейчас больше всего поможет готовая еда у двери и сообщение вместо звонка.</p><footer>гостям в первые недели</footer></blockquote>
-                <div class="guest-menu js-only" data-guest-menu></div>
-              </div>
-              <div class="words-panel" role="tabpanel" id="w-advice" aria-labelledby="w-tab-advice">
-                <blockquote class="phrase" data-phrase data-firm="Спасибо за мнение. Мы с педиатром выбрали то, что подходит нашей семье. Эту тему я закрываю."><p>Спасибо за заботу. Мы с педиатром уже выбрали, как будем делать, — если понадобится совет, мы спросим.</p><footer>про кормление, сон, прививки</footer></blockquote>
-                <blockquote class="phrase" data-phrase><p>Мне неприятно, когда трогают мой живот без разрешения.</p></blockquote>
-                <blockquote class="phrase" data-phrase><p>Спасибо, но я не хочу обсуждать набранные килограммы.</p></blockquote>
-              </div>
-              <div class="words-panel" role="tabpanel" id="w-work" aria-labelledby="w-tab-work">
-                <blockquote class="phrase" data-phrase><p>Спасибо за беспокойство. У меня непредвиденные семейные обстоятельства, и я не готова это обсуждать. Давай вернёмся к проекту.</p><footer>на бестактный вопрос в коридоре</footer></blockquote>
-                <blockquote class="phrase" data-phrase><p>Про планы на декрет я пока говорить не готова. Когда будет понятно, я сама расскажу руководителю.</p></blockquote>
-              </div>
-              <div class="words-panel" role="tabpanel" id="w-loss" aria-labelledby="w-tab-loss" data-loss-only>
-                <blockquote class="phrase" data-phrase><p>Я знаю, что ты хочешь меня поддержать, но эти слова сейчас делают мне очень больно. Пожалуйста, не говори так. Мне лучше, чтобы мы просто помолчали.</p><footer>стоп-фраза для близких</footer></blockquote>
-                <blockquote class="phrase" data-phrase><p>У нас случилось несчастье, мы потеряли ребёнка. Нам сейчас очень тяжело. Пожалуйста, не звоните и не задавайте вопросов. Мы сами выйдем на связь, когда будем готовы.</p><footer>сообщение, которое может разослать кто-то один</footer></blockquote>
-                <blockquote class="phrase" data-phrase><p>У меня произошла тяжёлая личная утрата. Мне нужны больничный или отгулы до [дата], чтобы восстановиться. Очень прошу не рассказывать подробности коллективу.</p><footer>руководителю или в отдел кадров — подробности рассказывать не обязательно</footer></blockquote>
-                <blockquote class="phrase" data-phrase><p>Коллеги, моя беременность прервалась. Мне сейчас очень больно говорить об этом. Самая большая помощь для меня — не поднимать эту тему и дать мне просто работать. Спасибо за понимание.</p><footer>коллегам, если они знали</footer></blockquote>
-                <div class="help-memo" data-help-memo>
-                  <h3>Как мне помочь</h3>
-                  <ol><li>Не говорите «всё будет хорошо».</li><li>Не давайте советов по лечению.</li><li>Принесите еды.</li><li>Называйте моего малыша по имени, если оно было.</li><li>Просто будьте готовы выслушать.</li></ol>
-                </div>
-              </div>
-              <div class="words-panel" role="tabpanel" id="w-own" aria-labelledby="w-tab-own">
-                <div class="builder js-only" data-builder></div>
-                <p class="no-js-only">Схема просьбы: «Когда [что происходит], я чувствую [чувство], потому что мне важно [потребность]. Можешь, пожалуйста, [одно конкретное действие]?»</p>
-              </div>
-            </div>
-          </div>
-          <p class="next-line">Что дальше: <a href="#opory">вытянуть опору</a> · <a href="#vstrecha">написать Ирине</a></p>
-        </div>
-      </section>
-
-    </div><!-- /flow -->
-
-    <!-- Колода опор -->
-    <section class="opory section" id="opory" aria-labelledby="opory-title">
-      <div class="wrap opory__inner">
-        <figure class="opory__arch" aria-hidden="true"><img src="assets/tulips-interior.webp" alt="" width="853" height="1280" loading="lazy"></figure>
-        <div class="opory__main">
-          <header class="opory__head">
-            <h2 id="opory-title" data-reveal="light">Колода <em>опор.</em></h2>
-            <p class="lead">Короткие фразы, на которые можно опереться, когда своих слов не хватает. Вытяни одну — или столько, сколько нужно.</p>
-          </header>
-          <div class="deck js-only" data-deck></div>
-          <noscript><ul class="deck-static"><li>Тяжёлые дни тоже часть пути, и ты не одна в них.</li><li>Можно не разбираться во всём сразу.</li><li>Ты делаешь больше, чем замечаешь.</li><li>Ровный день — тоже хороший день.</li><li>Не нужно сдавать экзамен на умение говорить о себе.</li></ul></noscript>
-        </div>
-      </div>
-    </section>
-
-    <!-- Ирина -->
-    <section class="irina section" id="irina" aria-labelledby="irina-title">
-      <div class="wrap irina__inner">
-        <figure class="irina__photo">
-          <div class="irina__arch">
-            <img class="irina__img irina__img--day" src="assets/irina-window.webp" alt="Ирина Ошемёткова у окна с чашкой" width="853" height="1280" loading="lazy">
-            <img class="irina__img irina__img--night" data-src="assets/irina-portrait.webp" alt="Ирина Ошемёткова в светлой комнате" width="853" height="1280">
-          </div>
-        </figure>
-        <div class="irina__text">
-          <h2 id="irina-title" data-reveal="words">Я — Ирина. <em>И я на твоей стороне.</em></h2>
-          <p class="irina__drop">Я клинический, перинатальный и семейный психолог. Работала в центре планирования семьи «Медика» и в роддоме имени профессора Снегирёва. Отдельно училась помощи при бесплодии и ВРТ, работе с горем и утратой, с травмой отношений с родителями.</p>
-          <p>Ко мне можно прийти одной или вдвоём — очно в Петербурге или онлайн из любой страны. В моей работе нет одного сценария для всех: подход я подбираю в разговоре с тобой.</p>
-          <p>Всё, что есть на этой странице, — из моей практики и из моего бота: те же слова, те же упражнения, тот же темп.</p>
-        </div>
-      </div>
-      <div class="wrap">
-        <h3 class="principles__title" id="principles-title">Как я говорю — <em>и как не говорю.</em></h3>
-        <div class="principles" role="list" aria-labelledby="principles-title">
-          <div role="listitem"><button class="principle" type="button" aria-pressed="false" data-flip><span class="principle__face principle__front"><span class="principle__name">Не пугаю.</span><span class="principle__hint">перевернуть</span></span><span class="principle__face principle__back"><span class="principle__no">Не говорю: «стресс влияет на малыша».</span><span class="principle__yes">Говорю: «тревога — частый спутник ожидания; давай посмотрим, что сейчас в твоих силах».</span></span></button></div>
-          <div role="listitem"><button class="principle" type="button" aria-pressed="false" data-flip><span class="principle__face principle__front"><span class="principle__name">Не виню.</span><span class="principle__hint">перевернуть</span></span><span class="principle__face principle__back"><span class="principle__no">Не говорю: «надо было раньше».</span><span class="principle__yes">Говорю: «хорошо, что ты здесь сейчас».</span></span></button></div>
-          <div role="listitem"><button class="principle" type="button" aria-pressed="false" data-flip><span class="principle__face principle__front"><span class="principle__name">Сначала — чувство.</span><span class="principle__hint">перевернуть</span></span><span class="principle__face principle__back"><span class="principle__no">Не начинаю с советов.</span><span class="principle__yes">Сначала слышу, что с тобой, — и только потом, если нужно, ищем шаги.</span></span></button></div>
-          <div role="listitem"><button class="principle" type="button" aria-pressed="false" data-flip><span class="principle__face principle__front"><span class="principle__name">Без оценок и баллов.</span><span class="principle__hint">перевернуть</span></span><span class="principle__face principle__back"><span class="principle__no">Не говорю: «у тебя красная зона».</span><span class="principle__yes">Твоё ощущение важнее цифр. Диагнозов по анкетам я не ставлю.</span></span></button></div>
-          <div role="listitem"><button class="principle" type="button" aria-pressed="false" data-flip><span class="principle__face principle__front"><span class="principle__name">Один вопрос за раз.</span><span class="principle__hint">перевернуть</span></span><span class="principle__face principle__back"><span class="principle__no">Не устраиваю допрос.</span><span class="principle__yes">Можно отвечать коротко — или не отвечать вовсе. Разговор можно закончить, когда стало легче.</span></span></button></div>
-          <div role="listitem"><button class="principle" type="button" aria-pressed="false" data-flip><span class="principle__face principle__front"><span class="principle__name">Тело — к врачу.</span><span class="principle__hint">перевернуть</span></span><span class="principle__face principle__back"><span class="principle__no">Не гадаю о здоровье.</span><span class="principle__yes">Помогу сформулировать, что спросить у твоего врача.</span></span></button></div>
-        </div>
-
-        <h3 class="docs__title" id="docs-title">Где я училась</h3>
-        <p class="docs__sub">Нажми на документ, чтобы рассмотреть.</p>
-        <ul class="docs" role="list" aria-labelledby="docs-title">
-          <li><button class="doc" type="button" data-doc="0"><img src="assets/education-06.jpg" alt="Диплом о профессиональной переподготовке ВЕИП" width="908" height="1280" loading="lazy"><span class="doc__name">Психолог-консультант</span><span class="doc__where">ВЕИП, 2021</span></button></li>
-          <li><button class="doc" type="button" data-doc="1"><img src="assets/education-05.jpg" alt="Сертификат по перинатальной психологии" width="912" height="1280" loading="lazy"><span class="doc__name">Перинатальная психология</span><span class="doc__where">НИЦ ВЕИП, 72 часа</span></button></li>
-          <li><button class="doc" type="button" data-doc="2"><img src="assets/education-04.jpg" alt="Удостоверение о психологической помощи при бесплодии" width="922" height="1280" loading="lazy"><span class="doc__name">Помощь при бесплодии</span><span class="doc__where">ВГАППССС, 144 часа</span></button></li>
-          <li><button class="doc" type="button" data-doc="3"><img src="assets/education-01.jpg" alt="Сертификат о сопровождении при ВРТ" width="1280" height="912" loading="lazy"><span class="doc__name">Сопровождение при ВРТ</span><span class="doc__where">фонд «Свет в руках»</span></button></li>
-          <li><button class="doc" type="button" data-doc="4"><img src="assets/education-02.jpg" alt="Сертификат о работе с горем и утратой" width="1280" height="912" loading="lazy"><span class="doc__name">Работа с горем и утратой</span><span class="doc__where">фонд «Свет в руках»</span></button></li>
-          <li><button class="doc" type="button" data-doc="5"><img src="assets/education-09.jpg" alt="Сертификат о работе с травмой отношений с родителями" width="827" height="1280" loading="lazy"><span class="doc__name">Отношения с родителями</span><span class="doc__where">центр «Метафора»</span></button></li>
+        <ul class="formats" role="list">
+          <li><svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>Индивидуально</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-people"/></svg>Вдвоём с партнёром</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>Онлайн из любой страны</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-door"/></svg>Очно в Петербурге</li>
         </ul>
-        <p class="next-line">Что дальше: <a href="#vstrecha">записаться ко мне</a></p>
+        <p class="services__more">Не только о материнстве: усталость, границы, отношения с родителями и в паре — с этим тоже можно прийти.</p>
       </div>
     </section>
 
-    <!-- Карманная версия -->
-    <section class="karman section" id="bot" aria-labelledby="bot-title">
-      <div class="wrap karman__inner">
-        <div class="karman__copy">
-          <h2 id="bot-title" data-reveal="light">Карманная <em>версия.</em></h2>
-          <p class="lead">Мой Telegram-бот — для дней между встречами: дневник из пяти маячков, короткие практики, статьи по этапам и кнопка SOS.</p>
-          <p class="karman__honest"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span>В боте отвечает ИИ-ассистент, а не я лично. Он говорит в духе моего подхода, но он не я и не врач. Мне лично — в Telegram: <a class="link" href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer">@irinaoshemetkova</a>.</span></p>
-          <p class="karman__actions">
-            <a class="btn btn--primary" href="https://t.me/PerinatMama_bot" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg>Открыть @PerinatMama_bot</a>
-          </p>
+    <!-- ===== 4. Обо мне ===== -->
+    <section class="about section" id="obo-mne" aria-labelledby="about-title">
+      <div class="wrap about__inner">
+        <figure class="about__photo">
+          <div class="about__arch"><img src="assets/irina-window.webp" alt="Ирина Ошемёткова у окна с чашкой в руках" width="853" height="1280" loading="lazy"></div>
+          <figcaption class="about__sign">С теплом, Ирина</figcaption>
+        </figure>
+        <div class="about__text">
+          <h2 id="about-title" data-reveal>Я — Ирина. <em>И я на вашей стороне.</em></h2>
+          <p class="lead">Я клинический, перинатальный и семейный психолог. Помогаю женщинам и парам говорить о сложном, замечать свои потребности и находить собственные решения.</p>
+          <p>Работала в центре планирования семьи «Медика» и в роддоме имени профессора Снегирёва. Отдельно училась психологической помощи при бесплодии и ВРТ, работе с горем и утратой, с травмой отношений с родителями.</p>
+          <p>В моей работе нет одного сценария для всех. Подход и инструменты я подбираю в разговоре с вами — и в вашем темпе.</p>
+          <ul class="about__facts" role="list">
+            <li><b>Клиническая и перинатальная</b> психология</li>
+            <li><b>Центр «Медика»</b> — планирование семьи</li>
+            <li><b>Роддом им. проф. Снегирёва</b></li>
+            <li><b>Бесплодие и ВРТ, горе и утрата</b> — повышение квалификации</li>
+          </ul>
+          <a class="btn btn--primary" href="#zapis" data-action="write">Записаться ко мне<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
-        <div class="phone" data-bot-demo>
-          <div class="phone__screen">
-            <div class="phone__top"><span class="phone__avatar" aria-hidden="true"><svg class="icon"><use href="#i-flower"/></svg></span><span><b>PerinatMama</b><small>бот</small></span></div>
-            <ol class="phone__chat" aria-label="Пример диалога с ботом">
-              <li class="bubble bubble--bot"><span data-bot-greeting>Добрый вечер 🌿 Как ты к вечеру?</span></li>
-              <li class="bubble bubble--keys" aria-hidden="true"><span>хорошо</span><span>нормально</span><span class="is-picked">так себе</span><span>тяжело</span><span>очень тяжело</span></li>
-              <li class="bubble bubble--me">так себе</li>
-              <li class="bubble bubble--bot">«Так себе» — честный ответ, и это важно. Хочешь, подышим минуту?</li>
-              <li class="bubble bubble--keys" aria-hidden="true"><span class="is-picked">🌬 Подышать со мной</span></li>
-            </ol>
+      </div>
+
+      <div class="wrap">
+        <h3 class="principles__title" id="principles-title">Как я <em>работаю.</em></h3>
+        <ul class="principles" role="list" aria-labelledby="principles-title">
+          <li class="principle" data-reveal><span class="principle__name">Без оценок и «правильных» чувств.</span><p>Здесь можно чувствовать то, что чувствуется: радость и тревогу, любовь и усталость — одновременно.</p></li>
+          <li class="principle" data-reveal><span class="principle__name">Сначала — чувство.</span><p>Сначала слышу, что с вами происходит, и только потом, если нужно, ищем шаги.</p></li>
+          <li class="principle" data-reveal><span class="principle__name">Не пугаю.</span><p>Не связываю ваши переживания с риском для малыша. Смотрим на то, что сейчас в ваших силах.</p></li>
+          <li class="principle" data-reveal><span class="principle__name">Не виню.</span><p>Никаких «надо было раньше». Хорошо, что вы пришли сейчас.</p></li>
+          <li class="principle" data-reveal><span class="principle__name">В вашем темпе.</span><p>Рассказываете столько, сколько хочется. Решение о продолжении работы всегда за вами.</p></li>
+          <li class="principle" data-reveal><span class="principle__name">Тело — к врачу.</span><p>Я психолог, а не врач: не ставлю диагнозов. Помогу сформулировать вопросы для вашего врача.</p></li>
+        </ul>
+
+        <div class="docs-block">
+          <div class="docs-block__head">
+            <h3 class="docs__title" id="docs-title">Образование</h3>
+            <p class="docs__sub">Основное образование и программы повышения квалификации. Нажмите на документ, чтобы рассмотреть.</p>
           </div>
-          <button class="phone__pause link js-only" type="button" data-bot-pause hidden>Остановить анимацию</button>
+          <ul class="docs" role="list" aria-labelledby="docs-title">
+            <li><button class="doc" type="button" data-doc="0" data-caption="Восточно-Европейский институт психоанализа. Профессиональная переподготовка: психолог-консультант, 2021."><img src="assets/education-06.jpg" alt="Диплом о профессиональной переподготовке ВЕИП" width="908" height="1280" loading="lazy"><span class="doc__name">Психолог-консультант</span><span class="doc__where">ВЕИП, 2021</span></button></li>
+            <li><button class="doc" type="button" data-doc="1" data-caption="НИЦ ВЕИП. Основы перинатальной психологии и работы с беременными, 72 часа, 2021."><img src="assets/education-05.jpg" alt="Сертификат по перинатальной психологии" width="912" height="1280" loading="lazy"><span class="doc__name">Перинатальная психология</span><span class="doc__where">НИЦ ВЕИП, 72 часа</span></button></li>
+            <li><button class="doc" type="button" data-doc="2" data-caption="ВГАППССС. Психологическая помощь женщинам с бесплодием, 144 часа, 2021."><img src="assets/education-04.jpg" alt="Удостоверение о психологической помощи при бесплодии" width="922" height="1280" loading="lazy"><span class="doc__name">Помощь при бесплодии</span><span class="doc__where">ВГАППССС, 144 часа</span></button></li>
+            <li><button class="doc" type="button" data-doc="3" data-caption="Благотворительный фонд «Свет в руках». Сопровождение при бесплодии и вспомогательных репродуктивных технологиях, 2021."><img src="assets/education-01.jpg" alt="Сертификат о сопровождении при ВРТ" width="1280" height="912" loading="lazy"><span class="doc__name">Сопровождение при ВРТ</span><span class="doc__where">фонд «Свет в руках»</span></button></li>
+            <li><button class="doc" type="button" data-doc="4" data-caption="Благотворительный фонд «Свет в руках». Групповая работа с горем и утратой, 2021."><img src="assets/education-02.jpg" alt="Сертификат о работе с горем и утратой" width="1280" height="912" loading="lazy"><span class="doc__name">Работа с горем и утратой</span><span class="doc__where">фонд «Свет в руках»</span></button></li>
+            <li><button class="doc" type="button" data-doc="5" data-caption="Центр «Метафора». Работа с травмой отношений с родителями, 5 часов."><img src="assets/education-09.jpg" alt="Сертификат о работе с травмой отношений с родителями" width="827" height="1280" loading="lazy"><span class="doc__name">Отношения с родителями</span><span class="doc__where">центр «Метафора»</span></button></li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <!-- Встреча — письмо Ирине -->
-    <section class="vstrecha section" id="vstrecha" aria-labelledby="vstrecha-title">
-      <div class="wrap vstrecha__inner">
-        <div class="vstrecha__about">
-          <h2 id="vstrecha-title" data-reveal="words">Начнём <em>с разговора?</em></h2>
-          <p class="lead">Можно прийти без готового запроса. Со словами «мне непросто» — уже достаточно.</p>
+    <!-- ===== 5. Стоимость и как проходит ===== -->
+    <section class="pricing section" id="stoimost" aria-labelledby="pricing-title">
+      <div class="wrap">
+        <header class="section-head section-head--split">
+          <h2 id="pricing-title" data-reveal>Стоимость <em>и формат.</em></h2>
+          <p class="lead">Без пакетов и обязательств. Решение о каждой следующей встрече — за вами.</p>
+        </header>
+        <div class="plans">
+          <article class="plan plan--main" data-reveal>
+            <p class="plan__name">Индивидуальная консультация</p>
+            <p class="plan__price"><span class="plan__sum">4 000 ₽</span><span class="plan__per">50 минут</span></p>
+            <ul class="plan__list" role="list">
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Онлайн из любой страны или очно в Петербурге</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Можно прийти без готового запроса</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Конфиденциально — разговор остаётся между нами</li>
+            </ul>
+            <a class="btn btn--light btn--block" href="#zapis" data-action="write" data-format="online">Записаться на консультацию<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </article>
+          <article class="plan" data-reveal>
+            <p class="plan__name">Консультация для пары</p>
+            <p class="plan__price"><span class="plan__sum plan__sum--text">Стоимость — при записи</span></p>
+            <ul class="plan__list" role="list">
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>При планировании, после рождения малыша, после утраты</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Формат и длительность обсудим заранее</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Онлайн или очно в Петербурге</li>
+            </ul>
+            <button class="btn btn--ghost btn--block" type="button" data-action="write" data-topic="встреча для пары" data-format="pair">Узнать о встрече вдвоём</button>
+          </article>
+        </div>
+        <p class="note pricing__note">Стоимость и удобное время уточняются при записи — я отвечаю лично.</p>
+
+        <h3 class="steps__title" id="steps-title">Как проходит <em>первая встреча.</em></h3>
+        <ol class="steps" role="list" aria-labelledby="steps-title">
+          <li class="step" data-reveal><span class="step__num" aria-hidden="true">1</span><b>Вы пишете</b><p>В Telegram, по телефону или на почту. Достаточно пары слов — ниже есть готовый шаблон письма.</p></li>
+          <li class="step" data-reveal><span class="step__num" aria-hidden="true">2</span><b>Договариваемся</b><p>Подбираем время и формат: онлайн по удобной видеосвязи или очно в Петербурге.</p></li>
+          <li class="step" data-reveal><span class="step__num" aria-hidden="true">3</span><b>Знакомимся</b><p>50 минут. Вы рассказываете столько, сколько хочется. Вместе находим главное.</p></li>
+          <li class="step" data-reveal><span class="step__num" aria-hidden="true">4</span><b>Решаем, как дальше</b><p>Обсуждаем, нужна ли следующая встреча и как часто. Решение всегда за вами.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== 6. Практики — один блок ===== -->
+    <section class="practices" id="praktiki" aria-labelledby="practices-title">
+      <div class="practices__shell">
+        <div class="wrap">
+          <header class="practices__head">
+            <div>
+              <p class="practices__badge"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Без регистрации · ничего не сохраняется</p>
+              <h2 id="practices-title" data-reveal>Практики, которые <em>работают и&nbsp;ночью.</em></h2>
+            </div>
+            <p class="lead">Двенадцать упражнений из моей работы и моего Telegram-бота: подышать, вернуться в момент, разобрать тревожную мысль, найти слова для близких. Открываются прямо здесь, в любое время суток.</p>
+          </header>
+
+          <div class="practice-filter js-only" data-practice-filter>
+            <p class="practice-filter__q" id="filter-q">Что сейчас громче?</p>
+            <div class="practice-filter__chips" role="group" aria-labelledby="filter-q">
+              <button class="chip chip--small" type="button" data-filter="all" aria-pressed="true">Все практики</button>
+              <button class="chip chip--small" type="button" data-filter="anxiety" aria-pressed="false">Тревога</button>
+              <button class="chip chip--small" type="button" data-filter="loop" aria-pressed="false">Мысли по кругу</button>
+              <button class="chip chip--small" type="button" data-filter="tired" aria-pressed="false">Нет сил</button>
+              <button class="chip chip--small" type="button" data-filter="sleep" aria-pressed="false">Не спится</button>
+              <button class="chip chip--small" type="button" data-filter="words" aria-pressed="false">Нужны слова</button>
+              <button class="chip chip--small" type="button" data-filter="hard" aria-pressed="false">Очень тяжело</button>
+            </div>
+            <button class="link practice-filter__random" type="button" data-action="practice" data-practice="random"><svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg>Выберите за меня</button>
+          </div>
+          <div class="practice-alert" data-practice-alert hidden>
+            <svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg>
+            <p>Если вам или малышу опасно прямо сейчас — <a href="tel:112">позвоните 112</a>. Если нужен живой человек — <a href="tel:88002000122">8-800-2000-122</a>, телефон доверия, в том числе для родителей. Ниже — то, что может помочь переждать.</p>
+          </div>
+          <p class="visually-hidden" aria-live="polite" data-filter-status></p>
+
+          <ul class="practice-grid" role="list" data-practice-grid>
+            <li class="pcard pcard--breath pcard--wide" data-practice-card="breath" data-tags="anxiety sleep hard">
+              <div class="pcard__art" aria-hidden="true"><span class="pcard__orb"></span></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>1–3 минуты</span><span>с живым кругом</span></p>
+                <h3 class="pcard__title">Подышать со мной</h3>
+                <p class="pcard__text">Круг дышит — вы следуете за ним. Три ритма: длинный выдох, квадрат и 4–7–8.</p>
+                <p class="no-js-only pcard__static">Вдох через нос на 3 счёта — медленный выдох сквозь сомкнутые губы на 6. Повторите шесть-семь раз, как удобно.</p>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="breath"><span>Начать</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--grounding" data-practice-card="grounding" data-tags="anxiety loop hard">
+              <div class="pcard__art" aria-hidden="true"><span class="pcard__digits"><i>5</i><i>4</i><i>3</i><i>2</i><i>1</i></span></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>≈ 2 минуты</span><span>без слов</span></p>
+                <h3 class="pcard__title">5-4-3-2-1: вернуться в момент</h3>
+                <p class="pcard__text">Пять шагов, чтобы заметить то, что вокруг, и выйти из тревожного «а вдруг».</p>
+                <ol class="no-js-only pcard__static"><li>Найдите глазами пять вещей.</li><li>Прислушайтесь к четырём звукам.</li><li>Прикоснитесь к трём предметам.</li><li>Заметьте два запаха.</li><li>Почувствуйте один вкус.</li></ol>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="grounding"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--thought" data-practice-card="thought" data-tags="loop anxiety">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-cloud"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>≈ 5 минут</span><span>4 шага</span></p>
+                <h3 class="pcard__title">Разобрать тревожную мысль</h3>
+                <p class="pcard__text">Ситуация → мысль → чувство → взгляд со стороны. Приём из когнитивной терапии.</p>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="thought"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--feelings" data-practice-card="feelings" data-tags="tired">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-body"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>≈ 3 минуты</span><span>3 шага</span></p>
+                <h3 class="pcard__title">Контакт с чувствами</h3>
+                <p class="pcard__text">Найти, где в теле живёт усталость, и услышать, что она говорит.</p>
+                <ol class="no-js-only pcard__static"><li>Где в теле вы сейчас что-то чувствуете?</li><li>Положите туда ладонь и побудьте с этим ощущением.</li><li>Если бы оно могло говорить — что бы сказало?</li></ol>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="feelings"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--envelope" data-practice-card="envelope" data-tags="loop sleep">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-envelope"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>≈ 2 минуты</span><span>перед сном</span></p>
+                <h3 class="pcard__title">Отложить мысли до утра</h3>
+                <p class="pcard__text">Выписать всё, что крутится в голове, и запечатать в конверт до завтра.</p>
+                <ol class="no-js-only pcard__static"><li>Выпишите на листок всё, что крутится в голове.</li><li>Скажите себе: «Я вижу эти мысли. Я вернусь к ним завтра утром».</li><li>Отложите листок и разрешите себе отдыхать.</li></ol>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="envelope"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--noise" data-practice-card="noise" data-tags="sleep">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-wave"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>с таймером</span><span>играет при выключенном экране</span></p>
+                <h3 class="pcard__title">Шум для сна</h3>
+                <p class="pcard__text">Ровный, мягкий или глубокий — для малыша или для вас.</p>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="noise"><span>Включить</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--words" data-practice-card="words" data-tags="words">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-quote"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>готовые фразы</span><span>скопировать в один тап</span></p>
+                <h3 class="pcard__title">Что сказать близким</h3>
+                <p class="pcard__text">Партнёру, маме, советчикам, на работе. Мягко — и с границами.</p>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="words"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--request" data-practice-card="request" data-tags="words tired">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-hand"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>≈ 2 минуты</span><span>конструктор</span></p>
+                <h3 class="pcard__title">Попросить о помощи</h3>
+                <p class="pcard__text">Собрать просьбу без упрёков: факт, чувство, что важно, одно конкретное действие.</p>
+                <p class="no-js-only pcard__static">«Когда [что происходит], я чувствую [чувство], потому что мне важно [потребность]. Можешь, пожалуйста, [одно конкретное действие]?»</p>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="request"><span>Собрать</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--traps" data-practice-card="traps" data-tags="loop">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-cards"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>12 карточек</span><span>+ мини-игра</span></p>
+                <h3 class="pcard__title">Ловушки мышления</h3>
+                <p class="pcard__text">«Я всегда всё порчу», «Все думают, что я не справляюсь». Узнать привычные повороты мысли.</p>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="traps"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--deck" data-practice-card="deck" data-tags="tired hard anxiety">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-flower"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>54 фразы</span><span>можно сохранить картинкой</span></p>
+                <h3 class="pcard__title">Колода опор</h3>
+                <p class="pcard__text">Короткие фразы, на которые можно опереться, когда своих слов не хватает.</p>
+                <ul class="no-js-only pcard__static"><li>Тяжёлые дни тоже часть пути, и вы не одна в них.</li><li>Можно не разбираться во всём сразу.</li><li>Вы делаете больше, чем замечаете.</li></ul>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="deck"><span>Вытянуть карту</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--flashback" data-practice-card="flashback" data-tags="hard">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-candle"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>≈ 1 минута</span><span>тихо, без анимаций</span></p>
+                <h3 class="pcard__title">Если накрывает воспоминание</h3>
+                <p class="pcard__text">Для тех, кто пережил утрату. Вернуться в сегодняшний день.</p>
+                <ol class="no-js-only pcard__static"><li>Скажите себе: «Это воспоминание. Это было тогда. Сейчас я здесь».</li><li>Назовите сегодняшнюю дату и место, где вы сейчас.</li><li>Почувствуйте стопы на полу.</li></ol>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="flashback"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+            <li class="pcard pcard--stop" data-practice-card="stop" data-tags="hard">
+              <div class="pcard__art" aria-hidden="true"><svg class="icon"><use href="#i-anchor"/></svg></div>
+              <div class="pcard__body">
+                <p class="pcard__meta"><span>5 шагов</span><span>крупно, по одному</span></p>
+                <h3 class="pcard__title">Экстренная остановка</h3>
+                <p class="pcard__text">Если накрывает рядом с малышом и вы на грани. Пять шагов, чтобы переждать.</p>
+                <ol class="no-js-only pcard__static"><li>Положите малыша в кроватку на спину и выйдите на несколько минут.</li><li>Прохладная вода на лицо и руки, стакан воды.</li><li>Сядьте на пол: вдох на 3, выдох на 6.</li><li>Позовите своего человека.</li><li>Если рядом никого — номера помощи внизу страницы.</li></ol>
+                <button class="pcard__open js-only" type="button" data-action="practice" data-practice="stop"><span>Открыть</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </li>
+          </ul>
+
+          <div class="practices__foot">
+            <div class="bot-card">
+              <div class="bot-card__phone" aria-hidden="true">
+                <span class="bot-card__bubble bot-card__bubble--bot">Добрый вечер. Как вы сейчас?</span>
+                <span class="bot-card__bubble bot-card__bubble--me">так себе</span>
+                <span class="bot-card__bubble bot-card__bubble--bot">«Так себе» — честный ответ. Хотите, подышим минуту?</span>
+              </div>
+              <div class="bot-card__copy">
+                <h3>Карманная версия — <em>в Telegram.</em></h3>
+                <p>Мой бот @PerinatMama_bot — для дней между встречами: дневник самочувствия, практики, статьи по этапам и запись на консультацию.</p>
+                <p class="note">В боте отвечает ИИ-ассистент, а не я лично. Мне лично — в Telegram <a class="link" href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer">@irinaoshemetkova</a>.</p>
+                <a class="btn btn--ghost btn--small" href="https://t.me/PerinatMama_bot" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg>Открыть бота</a>
+              </div>
+            </div>
+            <div class="bridge-card">
+              <p class="bridge-card__lead">Практика помогает в моменте.</p>
+              <p>Понять, откуда берётся тревога или усталость, и что поможет именно вам, — это то, чем мы занимаемся на встречах.</p>
+              <a class="btn btn--primary" href="#zapis" data-action="write">Записаться на консультацию<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div>
+          </div>
+          <p class="practices__disclaimer">Практики не заменяют консультацию специалиста и не являются медицинской помощью. Если кружится голова или неприятно — остановитесь и дышите в своём ритме.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 7. Вопросы ===== -->
+    <section class="faq-section section" id="voprosy" aria-labelledby="faq-title">
+      <div class="wrap faq-section__inner">
+        <div class="faq-section__aside">
+          <h2 id="faq-title" data-reveal>Что обычно <em>спрашивают.</em></h2>
+          <p class="lead">Если вашего вопроса нет — просто напишите. Отвечу лично.</p>
+          <figure class="faq-section__arch" aria-hidden="true"><img src="assets/tulips-interior.webp" alt="" width="853" height="1280" loading="lazy"></figure>
+        </div>
+        <div class="faq" data-faq>
+          <details open><summary>Я не знаю, с чего начать. Так можно?</summary><div><p>Да. Не нужно готовить речь или формулировать «идеальный» запрос. Можно начать с «мне трудно об этом говорить» — на первой встрече мы вместе найдём, с чего удобно начать.</p></div></details>
+          <details><summary>Как проходит онлайн-консультация?</summary><div><p>Мы заранее договариваемся о времени и удобной видеосвязи. Нужны 50 минут, спокойное место, где можно говорить свободно, и стабильный интернет. Онлайн можно встречаться из любой страны.</p></div></details>
+          <details><summary>Это конфиденциально?</summary><div><p>Да. То, что вы рассказываете на встрече, остаётся между нами. Конфиденциальность — основа работы психолога.</p></div></details>
+          <details><summary>Можно прийти вдвоём?</summary><div><p>Да. Я работаю с парами — при планировании, после рождения малыша и после утраты. Формат, длительность и стоимость совместной встречи обсудим при записи.</p></div></details>
+          <details><summary>Обязательно говорить только о материнстве?</summary><div><p>Нет. Отношения, личные границы, усталость, отношения с родителями — это тоже про вас. Можно прийти с темой, которая волнует, и мы обсудим, смогу ли я быть полезна.</p></div></details>
+          <details><summary>Сколько понадобится встреч?</summary><div><p>Зависит от запроса и комфортного для вас темпа. Иногда достаточно одной-двух встреч, иногда нужна более долгая работа. На первой встрече обсудим ожидания и возможный план. Решение о продолжении всегда за вами.</p></div></details>
+          <details><summary>Вы ставите диагнозы или назначаете лечение?</summary><div><p>Нет. Я психолог, а не врач. Если увижу, что вам может понадобиться помощь врача, скажу об этом прямо и помогу сформулировать вопросы к нему.</p></div></details>
+          <details><summary>А если мне плохо ночью?</summary><div><p>Написать можно в любое время, но я не на дежурстве и могу ответить не сразу. Практики на этой странице работают и ночью. Если плохо прямо сейчас — вот номера, где ответят сразу.</p><p><a class="link" href="#help-now" data-open-sheet="sheet-help"><svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg>Номера помощи</a></p></div></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 8. Запись ===== -->
+    <section class="booking section" id="zapis" aria-labelledby="booking-title">
+      <div class="wrap booking__inner">
+        <div class="booking__about">
+          <h2 id="booking-title" data-reveal>Начнём <em>с разговора?</em></h2>
+          <p class="lead">Соберите письмо за минуту — я отвечу лично и предложу ближайшее свободное время.</p>
           <p class="facts"><span>50 минут</span><span>4 000 ₽</span><span>онлайн или очно в Петербурге</span><span>можно вдвоём</span></p>
-          <p class="note">Стоимость и формат уточняются при записи — в том числе для встречи вдвоём.</p>
-          <ol class="first-steps" role="list">
-            <li><b>Знакомимся.</b> Ты рассказываешь столько, сколько хочется.</li>
-            <li><b>Находим главное.</b> Вместе формулируем, с чем хочется работать.</li>
-            <li><b>Решаем, как дальше.</b> Формат и частоту. Решение о продолжении всегда за тобой.</li>
-          </ol>
+          <ul class="contacts" role="list">
+            <li><a href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg><span><b>Telegram</b>@irinaoshemetkova</span></a></li>
+            <li><a href="tel:+79217557171"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span><b>Телефон</b>+7 (921) 755-71-71</span></a></li>
+            <li><a href="mailto:irinaoshemetkova@gmail.com"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><span><b>Почта</b>irinaoshemetkova@gmail.com</span></a></li>
+            <li><a href="https://t.me/PerinatMama_bot" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span><b>Свободные окошки</b>видны в боте @PerinatMama_bot</span></a></li>
+          </ul>
           <div class="calm-card js-only" data-calm-card>
-            <p class="calm-card__cap">Перед встречей</p>
+            <p class="calm-card__cap">Перед первой встречей</p>
             <p class="calm-card__text" data-calm-text aria-live="polite">Не нужно сдавать экзамен на умение говорить о себе.</p>
-            <button class="link" type="button" data-calm-next>Ещё одна<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <button class="link" type="button" data-calm-next>Ещё одна мысль<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
           </div>
         </div>
 
         <div class="letter" data-letter>
-          <div class="letter__flap" aria-hidden="true"></div>
-          <h3 class="letter__title">Письмо <em>Ирине.</em></h3>
+          <h3 class="letter__title">Письмо <em>Ирине</em></h3>
           <div class="letter__fields js-only">
             <div class="field">
-              <label for="letter-name">Как к тебе обращаться?</label>
-              <input class="input input--line" id="letter-name" name="name" autocomplete="given-name" maxlength="60" placeholder="Имя — можно без фамилии">
+              <label for="letter-name">Как к вам обращаться?</label>
+              <input class="input" id="letter-name" name="name" autocomplete="given-name" maxlength="60" placeholder="Имя — можно без фамилии">
             </div>
             <fieldset class="field">
-              <legend class="label">Как удобнее?</legend>
-              <div class="chips-row" data-letter-format>
+              <legend class="label">Как удобнее встретиться?</legend>
+              <div class="chips-row" role="radiogroup" aria-label="Формат" data-letter-format>
                 <button class="chip chip--small" type="button" role="radio" aria-checked="true" data-value="online">онлайн</button>
-                <button class="chip chip--small" type="button" role="radio" aria-checked="false" data-value="spb">в Петербурге</button>
-                <button class="chip chip--small" type="button" role="radio" aria-checked="false" data-value="pair">вдвоём</button>
-                <button class="chip chip--small" type="button" role="radio" aria-checked="false" data-value="unknown">пока не знаю</button>
+                <button class="chip chip--small" type="button" role="radio" aria-checked="false" data-value="spb" tabindex="-1">очно в Петербурге</button>
+                <button class="chip chip--small" type="button" role="radio" aria-checked="false" data-value="pair" tabindex="-1">вдвоём</button>
+                <button class="chip chip--small" type="button" role="radio" aria-checked="false" data-value="unknown" tabindex="-1">пока не знаю</button>
               </div>
             </fieldset>
             <fieldset class="field">
               <legend class="label">С чем хочется прийти? <span class="optional">необязательно</span></legend>
               <div class="chips-row" data-letter-topics></div>
               <label class="visually-hidden" for="letter-topic">Своими словами</label>
-              <textarea class="textarea textarea--line" id="letter-topic" maxlength="600" rows="2" placeholder="Или своими словами — как получится"></textarea>
+              <textarea class="textarea" id="letter-topic" maxlength="600" rows="2" placeholder="Или своими словами — как получится"></textarea>
             </fieldset>
             <fieldset class="field">
               <legend class="label">Когда обычно удобно? <span class="optional">необязательно</span></legend>
               <div class="chips-row" data-letter-days>
-                <button class="chip chip--small" type="button" aria-pressed="false" data-value="будни">будни</button>
-                <button class="chip chip--small" type="button" aria-pressed="false" data-value="выходные">выходные</button>
-              </div>
-              <div class="chips-row" data-letter-times>
+                <button class="chip chip--small" type="button" aria-pressed="false" data-value="по будням">будни</button>
+                <button class="chip chip--small" type="button" aria-pressed="false" data-value="по выходным">выходные</button>
+                <span class="chips-row__gap" aria-hidden="true"></span>
                 <button class="chip chip--small" type="button" aria-pressed="false" data-value="утром">утро</button>
                 <button class="chip chip--small" type="button" aria-pressed="false" data-value="днём">день</button>
                 <button class="chip chip--small" type="button" aria-pressed="false" data-value="вечером">вечер</button>
               </div>
-              <p class="micro muted" data-letter-tz></p>
             </fieldset>
-            <button class="toggle-row toggle-row--small" type="button" role="switch" aria-checked="false" data-letter-tried hidden><span>Добавить, что я уже попробовала здесь</span></button>
           </div>
           <div class="letter__preview">
             <p class="letter__cap" id="letter-preview-cap">Так увидит Ирина</p>
-            <p class="letter__text" data-letter-preview aria-labelledby="letter-preview-cap">Ирина, здравствуйте! Хотела бы записаться на консультацию. Подскажите, пожалуйста, ближайшие свободные даты?</p>
+            <p class="letter__text" data-letter-preview aria-labelledby="letter-preview-cap">Ирина, здравствуйте! Хочу записаться на консультацию онлайн. Подскажите, пожалуйста, ближайшее свободное время?</p>
           </div>
           <div class="letter__send">
-            <a class="btn btn--primary letter__main" href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer" data-letter-telegram><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg>Скопировать и открыть Telegram</a>
+            <a class="btn btn--primary btn--block letter__main" href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer" data-letter-telegram><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg>Скопировать и открыть Telegram</a>
             <div class="letter__alt">
               <a class="btn btn--ghost btn--small" href="sms:+79217557171" data-letter-sms><svg class="icon" aria-hidden="true"><use href="#i-sms"/></svg>SMS</a>
-              <a class="btn btn--ghost btn--small" href="mailto:irinaoshemetkova@gmail.com?subject=%D0%97%D0%B0%D0%BF%D0%B8%D1%81%D1%8C%20%D0%BD%D0%B0%20%D0%BA%D0%BE%D0%BD%D1%81%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%86%D0%B8%D1%8E" data-letter-mail><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Почта</a>
+              <a class="btn btn--ghost btn--small" href="mailto:irinaoshemetkova@gmail.com" data-letter-mail><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Почта</a>
               <a class="btn btn--ghost btn--small" href="tel:+79217557171"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Позвонить</a>
             </div>
             <p class="letter__status" data-letter-status role="status"></p>
           </div>
-          <p class="privacy-line"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>Сообщение уйдёт, только когда ты сама нажмёшь «отправить». Я отвечаю сама, между встречами, — не мгновенно. Если плохо прямо сейчас — <a href="#help-now" data-open-sheet="sheet-help">номера помощи здесь</a>.</span></p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Вопросы -->
-    <section class="voprosy section" id="voprosy" aria-labelledby="voprosy-title">
-      <div class="wrap voprosy__inner">
-        <div class="voprosy__aside">
-          <h2 id="voprosy-title" data-reveal="light">Что обычно <em>спрашивают.</em></h2>
-          <figure class="voprosy__arch" aria-hidden="true">
-            <img class="voprosy__img voprosy__img--child" data-child-photo src="assets/family-beach.webp" alt="" width="1186" height="790" loading="lazy">
-            <img class="voprosy__img voprosy__img--calm" src="assets/tulips-interior.webp" alt="" width="853" height="1280" loading="lazy">
-          </figure>
-        </div>
-        <div class="faq" data-faq>
-          <details open data-faq-item="start"><summary>Я не знаю, с чего начать. Так можно?</summary><div><p>Да. Не нужно готовить речь или «правильный» запрос. Можно начать с «мне трудно об этом говорить» — дальше разберёмся вместе.</p></div></details>
-          <details data-faq-item="online"><summary>Как проходит онлайн-встреча?</summary><div><p>Договариваемся о времени и удобной видеосвязи. Нужны 50 минут и место, где можно говорить свободно.</p></div></details>
-          <details data-faq-item="pair"><summary>Можно прийти вдвоём?</summary><div><p>Да. Я работаю с парами — и при планировании, и после рождения малыша, и после утраты. Формат и стоимость обсудим при записи.</p></div></details>
-          <details data-faq-item="topic"><summary>Обязательно говорить только о материнстве?</summary><div><p>Нет. Отношения, границы, усталость, родители — это тоже про тебя.</p></div></details>
-          <details data-faq-item="count"><summary>Сколько понадобится встреч?</summary><div><p>Зависит от запроса и твоего темпа. На первой встрече обсудим ожидания. Решение о продолжении — всегда за тобой.</p></div></details>
-          <details data-faq-item="night"><summary>А если мне плохо ночью?</summary><div><p>Написать можно в любое время, но я не на дежурстве и могу ответить не сразу. Если плохо прямо сейчас — вот номера, где ответят сразу.</p><p><a class="link" href="#help-now" data-open-sheet="sheet-help"><svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg>Номера помощи</a></p></div></details>
-          <details data-faq-item="data"><summary>Что сайт знает обо мне?</summary><div><p>Ничего, пока ты сама не включишь память. Даже тогда — только в этом браузере, и стереть всё можно одной кнопкой внизу страницы.</p></div></details>
+          <p class="privacy-line"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>Сайт ничего не отправляет: письмо уйдёт, только когда вы сами нажмёте «отправить» в мессенджере или почте. Если плохо прямо сейчас — <a href="#help-now" data-open-sheet="sheet-help">номера помощи здесь</a>.</span></p>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Подвал -->
-  <footer class="svet" id="svet" aria-labelledby="svet-title">
-    <div class="svet__lamp" aria-hidden="true"><svg class="icon"><use href="#i-flower"/></svg></div>
+  <!-- ===== Подвал ===== -->
+  <footer class="footer" id="kontakty" aria-labelledby="footer-title">
     <div class="wrap">
-      <div class="svet__head">
-        <h2 id="svet-title">Свет здесь <em>не гаснет.</em></h2>
-        <p>Возвращайся, когда захочется. Без повода, без отчёта, без «надо».</p>
-        <a class="btn btn--light" href="#vstrecha" data-action="write">Написать Ирине<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <div class="footer__cta">
+        <svg class="icon footer__flower" aria-hidden="true"><use href="#i-flower"/></svg>
+        <h2 id="footer-title">Вам не обязательно проходить это <em>одной.</em></h2>
+        <a class="btn btn--light btn--large" href="#zapis" data-action="write">Записаться на консультацию<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
-      <div class="svet__cols">
-        <div class="svet__col">
+      <div class="footer__cols">
+        <div class="footer__col">
+          <h3>Ирина Ошемёткова</h3>
+          <p>Клинический, перинатальный и семейный психолог. Санкт-Петербург и онлайн по всему миру.</p>
+        </div>
+        <div class="footer__col">
           <h3>Связаться</h3>
           <ul role="list">
             <li><a href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer">Telegram — @irinaoshemetkova</a></li>
@@ -832,74 +690,75 @@
             <li><a href="https://t.me/PerinatMama_bot" target="_blank" rel="noopener noreferrer">Бот — @PerinatMama_bot</a></li>
           </ul>
         </div>
-        <div class="svet__col" id="help-now">
+        <div class="footer__col" id="help-now">
           <h3>Помощь сейчас</h3>
           <ul role="list">
             <li><a href="tel:112"><b>112</b> — если опасно прямо сейчас</a></li>
             <li><a href="tel:103"><b>103</b> — если что-то с телом</a></li>
             <li><a href="tel:88002000122"><b>8-800-2000-122</b> — телефон доверия, в том числе для родителей</a></li>
-            <li><button class="link link--light js-only" type="button" data-open-sheet="sheet-help">Все номера и шаги</button></li>
           </ul>
-          <p class="svet__honest">Этот сайт и я — не экстренная служба. Я не на дежурстве и могу ответить не сразу.</p>
-        </div>
-        <div class="svet__col js-only">
-          <h3>На этом устройстве</h3>
-          <p data-footer-data>Сейчас здесь ничего не хранится.</p>
-          <p class="svet__row">
-            <button class="link link--light" type="button" data-action="settings" data-focus="data">Посмотреть</button>
-            <button class="link link--light" type="button" data-action="forget" data-forget-inline>Стереть всё</button>
-          </p>
-          <div class="forget-confirm" data-forget-confirm hidden></div>
-        </div>
-        <div class="svet__col js-only">
-          <h3>Как тебе удобнее</h3>
-          <p data-footer-prefs>Ночник сам по времени · обычный текст · спокойное движение</p>
-          <p class="svet__row"><button class="link link--light" type="button" data-action="settings"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg>Настроить</button></p>
+          <p class="footer__honest">Этот сайт и я — не экстренная служба. Я не на дежурстве и могу ответить не сразу.</p>
         </div>
       </div>
-      <p class="svet__bottom">
-        <span>© <span data-year>2026</span> Ирина Ошемёткова · Петербург и онлайн</span>
-        <span>Я пишу здесь на «ты» — как пишут близкому человеку. На встрече договоримся, как удобно тебе.</span>
-        <span>Сайт не использует cookies и аналитику и ничего не отправляет. Это не медицинская и не экстренная служба. <button class="link link--light js-only" type="button" data-open-sheet="sheet-privacy">Конфиденциальность</button></span>
+      <p class="footer__bottom">
+        <span>© <span data-year>2026</span> Ирина Ошемёткова</span>
+        <span>Сайт не использует cookies и аналитику и ничего не отправляет. <button class="link link--light js-only" type="button" data-open-sheet="sheet-privacy">Конфиденциальность</button></span>
       </p>
     </div>
   </footer>
 
-  <!-- Phone dock -->
-  <nav class="dock js-only" aria-label="Быстрый доступ">
-    <a href="#pogoda" data-spy><svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg><span>Сейчас</span></a>
-    <a href="#polka" data-spy><svg class="icon" aria-hidden="true"><use href="#i-leaf"/></svg><span>Практики</span></a>
-    <a href="#slova" data-spy><svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg><span>Слова</span></a>
-    <a href="#vstrecha" data-spy><svg class="icon" aria-hidden="true"><use href="#i-envelope"/></svg><span>Встреча</span></a>
-    <a href="#help-now" class="dock__help" data-open-sheet="sheet-help"><svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg><span>Помощь</span></a>
-  </nav>
+  <!-- Phone: the booking button is always one thumb away. -->
+  <div class="mbar js-only" data-mbar>
+    <a class="mbar__icon" href="#praktiki" aria-label="Практики"><svg class="icon" aria-hidden="true"><use href="#i-leaf"/></svg><span>Практики</span></a>
+    <a class="btn btn--primary mbar__cta" href="#zapis" data-action="write">Записаться</a>
+    <a class="mbar__icon mbar__icon--help" href="#help-now" data-open-sheet="sheet-help" aria-label="Помощь сейчас"><svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg><span>Помощь</span></a>
+  </div>
 
   <!-- ===== Sheets ===== -->
+
+  <dialog class="sheet sheet--side sheet--menu" id="sheet-menu" aria-labelledby="menu-title" closedby="any">
+    <div class="sheet__scroll">
+      <div class="sheet__bar"><p class="sheet__kicker" id="menu-title">Меню</p><button class="sheet__close" type="button" data-close aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+      <nav class="menu-nav" aria-label="Разделы">
+        <a href="#pomogayu" data-close-nav>С чем помогаю</a>
+        <a href="#obo-mne" data-close-nav>Обо мне</a>
+        <a href="#stoimost" data-close-nav>Стоимость</a>
+        <a href="#praktiki" data-close-nav>Практики</a>
+        <a href="#voprosy" data-close-nav>Вопросы</a>
+        <a href="#zapis" data-close-nav>Запись</a>
+      </nav>
+      <a class="btn btn--primary btn--block" href="#zapis" data-action="write">Записаться на консультацию</a>
+      <ul class="menu-contacts" role="list">
+        <li><a href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg>@irinaoshemetkova</a></li>
+        <li><a href="tel:+79217557171"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>+7 (921) 755-71-71</a></li>
+      </ul>
+    </div>
+  </dialog>
 
   <dialog class="sheet sheet--side sheet--help" id="sheet-help" aria-labelledby="help-title" closedby="any">
     <div class="sheet__scroll">
       <div class="sheet__bar"><button class="sheet__close" type="button" data-close aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
-      <h2 class="sheet__title" id="help-title" tabindex="-1">Ты не одна. <em>Помощь рядом.</em></h2>
+      <h2 class="sheet__title" id="help-title" tabindex="-1">Вы не одна. <em>Помощь рядом.</em></h2>
       <p class="help__lead">Этот сайт и я — не экстренная служба. Я не на дежурстве и могу ответить не сразу. Здесь — те, кто ответит сейчас.</p>
       <ol class="help-layers" role="list">
         <li class="help-layer">
-          <h3>Если тебе или малышу опасно прямо сейчас</h3>
+          <h3>Если вам или малышу опасно прямо сейчас</h3>
           <div class="help-layer__actions"><a class="btn btn--danger" href="tel:112"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Позвонить 112</a></div>
         </li>
         <li class="help-layer">
           <h3>Если очень тяжело и нужно поговорить с человеком</h3>
-          <div class="number-row"><a class="btn btn--ghost" href="tel:88002000122"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>8-800-2000-122</a><button class="btn btn--ghost btn--small" type="button" data-copy-number="8-800-2000-122" aria-label="Скопировать номер 8-800-2000-122"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>Скопировать</button></div>
+          <div class="help-layer__actions"><a class="btn btn--ghost" href="tel:88002000122"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>8-800-2000-122</a><button class="btn btn--ghost btn--small" type="button" data-copy-number="8-800-2000-122"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>Скопировать номер</button></div>
           <p class="note">Телефон доверия, в том числе для родителей.</p>
         </li>
         <li class="help-layer">
           <h3>Если что-то с телом</h3>
-          <p>Если резко или сильно — <a href="tel:103">103</a> или <a href="tel:112">112</a>. Если тревожит, но терпит — позвони своему врачу сегодня.</p>
+          <p>Если резко или сильно — <a href="tel:103">103</a> или <a href="tel:112">112</a>. Если тревожит, но терпит — позвоните своему врачу сегодня.</p>
         </li>
         <li class="help-layer">
-          <h3>Если накрывает, но ты в безопасности</h3>
+          <h3>Если накрывает, но вы в безопасности</h3>
           <div class="help-layer__actions">
-            <button class="btn btn--soft" type="button" data-action="stop"><svg class="icon" aria-hidden="true"><use href="#i-anchor"/></svg>Экстренная остановка — 5 шагов</button>
-            <button class="btn btn--soft" type="button" data-action="breathe" data-pattern="36" data-length="60" data-start="true"><svg class="icon" aria-hidden="true"><use href="#i-wave"/></svg>Подышать: длинный выдох</button>
+            <button class="btn btn--soft" type="button" data-action="practice" data-practice="stop"><svg class="icon" aria-hidden="true"><use href="#i-anchor"/></svg>Экстренная остановка</button>
+            <button class="btn btn--soft" type="button" data-action="practice" data-practice="breath"><svg class="icon" aria-hidden="true"><use href="#i-wave"/></svg>Подышать минуту</button>
           </div>
         </li>
         <li class="help-layer">
@@ -908,146 +767,22 @@
           <div class="help-layer__actions"><button class="btn btn--ghost btn--small" type="button" data-copy-text="#help-message"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>Скопировать</button><button class="btn btn--ghost btn--small" type="button" data-share-text="#help-message"><svg class="icon" aria-hidden="true"><use href="#i-share"/></svg>Отправить</button></div>
         </li>
       </ol>
-      <p class="help__irina"><a class="link" href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg>Написать Ирине в Telegram</a> — я отвечу, когда буду на связи.</p>
+      <p class="help__irina"><a class="link" href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg>Написать Ирине в Telegram</a> — отвечу, когда буду на связи.</p>
       <p class="sheet__status" role="status" data-help-status></p>
     </div>
   </dialog>
 
-  <dialog class="sheet sheet--full sheet--stop" id="sheet-stop" aria-labelledby="stop-title" closedby="any">
-    <div class="sheet__scroll stop" data-stop>
-      <div class="stop__bar">
-        <p class="stop__progress" data-stop-progress>Шаг 1 из 5</p>
-        <button class="btn btn--ghost btn--on-dark btn--small" type="button" data-open-sheet="sheet-help">Номера помощи</button>
-        <button class="sheet__close sheet__close--dark" type="button" data-close aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
-      </div>
-      <h2 class="visually-hidden" id="stop-title">Экстренная остановка</h2>
-      <div class="stop__steps">
-        <section class="stop-step" data-stop-step="1" aria-labelledby="stop-1">
-          <span class="stop-step__num" aria-hidden="true">1</span>
-          <h3 id="stop-1" tabindex="-1">Малыш в безопасности.</h3>
-          <p>Если чувствуешь, что теряешь контроль, положи малыша в кроватку на спину, без лишних предметов рядом, и выйди из комнаты на несколько минут. Так можно. Это безопаснее, чем оставаться рядом, когда накрывает.</p>
-        </section>
-        <section class="stop-step" data-stop-step="2" aria-labelledby="stop-2" hidden>
-          <span class="stop-step__num" aria-hidden="true">2</span>
-          <h3 id="stop-2" tabindex="-1">Прохладная вода.</h3>
-          <p>Умой лицо прохладной водой или подержи руки под струёй. Выпей стакан воды медленными глотками.</p>
-        </section>
-        <section class="stop-step" data-stop-step="3" aria-labelledby="stop-3" hidden>
-          <span class="stop-step__num" aria-hidden="true">3</span>
-          <h3 id="stop-3" tabindex="-1">Пол под тобой.</h3>
-          <p>Сядь на пол, обопрись спиной. Вдох на 3 — медленный выдох на 6, сквозь сомкнутые губы.</p>
-          <div class="mini-breath" data-mini-breath>
-            <div class="mini-breath__circle" aria-hidden="true"></div>
-            <p class="mini-breath__text" data-mini-text aria-live="polite">Вдох… 3</p>
-          </div>
-        </section>
-        <section class="stop-step" data-stop-step="4" aria-labelledby="stop-4" hidden>
-          <span class="stop-step__num" aria-hidden="true">4</span>
-          <h3 id="stop-4" tabindex="-1">Позови своего человека.</h3>
-          <p class="stop-step__message" id="stop-message">Мне плохо. Я не справляюсь. Пожалуйста, приезжай как можно скорее и побудь с малышом пару часов.</p>
-          <div class="stop-step__actions">
-            <button class="btn btn--light" type="button" data-copy-text="#stop-message"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>Скопировать</button>
-            <a class="btn btn--ghost btn--on-dark" href="https://t.me/share/url?text=" target="_blank" rel="noopener noreferrer" data-share-telegram="#stop-message"><svg class="icon" aria-hidden="true"><use href="#i-telegram"/></svg>В Telegram</a>
-            <a class="btn btn--ghost btn--on-dark" href="sms:" data-share-sms="#stop-message"><svg class="icon" aria-hidden="true"><use href="#i-sms"/></svg>SMS</a>
-          </div>
-        </section>
-        <section class="stop-step" data-stop-step="5" aria-labelledby="stop-5" hidden>
-          <span class="stop-step__num" aria-hidden="true">5</span>
-          <h3 id="stop-5" tabindex="-1">Если рядом никого.</h3>
-          <p>Позвони на линию помощи — там ответят сейчас.</p>
-          <div class="stop-step__actions"><a class="btn btn--light" href="tel:88002000122"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>8-800-2000-122</a></div>
-          <p>Если есть мысли навредить себе или малышу — звони <a href="tel:112">112</a> прямо сейчас.</p>
-        </section>
-        <section class="stop-step" data-stop-step="6" aria-labelledby="stop-6" hidden>
-          <h3 id="stop-6" tabindex="-1">Когда станет тише.</h3>
-          <p>Срыв — не приговор и не характеристика тебя как мамы. Это сигнал, что сил осталось слишком мало и нагрузку важно делить. Если хочется, можно сказать малышу: «Мама очень устала и испугалась, но сейчас всё хорошо. Я люблю тебя».</p>
-          <div class="stop-step__actions">
-            <button class="btn btn--light" type="button" data-action="write" data-topic="как разделить нагрузку, когда сил совсем мало">Обсудить с Ириной, как разделить нагрузку</button>
-            <button class="btn btn--ghost btn--on-dark" type="button" data-close>Закрыть</button>
-          </div>
-        </section>
-      </div>
-      <div class="stop__nav">
-        <button class="btn btn--ghost btn--on-dark" type="button" data-stop-prev>Назад</button>
-        <button class="btn btn--light" type="button" data-stop-next>Дальше</button>
-      </div>
-      <p class="sheet__status sheet__status--dark" role="status" data-stop-status></p>
-    </div>
-  </dialog>
-
-  <dialog class="sheet sheet--full sheet--room" id="sheet-room" aria-labelledby="room-title" closedby="any">
+  <dialog class="sheet sheet--room" id="sheet-room" aria-labelledby="room-title" closedby="any">
     <div class="sheet__scroll room" data-room>
       <div class="room__bar">
-        <p class="room__progress" data-room-progress></p>
-        <button class="btn btn--ghost btn--small" type="button" data-room-enough>Достаточно</button>
-        <button class="btn btn--ghost btn--small room__help" type="button" data-open-sheet="sheet-help"><svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg>Помощь</button>
+        <button class="room__back" type="button" data-room-back><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"/></svg><span>Все практики</span></button>
+        <p class="room__progress" data-room-progress aria-live="polite"></p>
+        <button class="room__help" type="button" data-open-sheet="sheet-help"><svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg><span>Помощь</span></button>
+        <button class="sheet__close" type="button" data-close aria-label="Закрыть практику"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
       </div>
-      <h2 class="room__title" id="room-title" tabindex="-1" data-room-title></h2>
-      <div class="room__body" data-room-body></div>
-    </div>
-  </dialog>
-
-  <dialog class="sheet sheet--threshold" id="sheet-threshold" aria-labelledby="threshold-title" closedby="any">
-    <div class="sheet__scroll">
-      <div class="sheet__bar"><button class="sheet__close" type="button" data-close aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
-      <svg class="icon threshold__candle" aria-hidden="true"><use href="#i-candle"/></svg>
-      <h2 class="sheet__title" id="threshold-title" tabindex="-1">Перед тем как читать дальше</h2>
-      <p class="threshold__text">Ниже — практики и слова для тех, кто проживает утрату беременности или малыша. Они могут поднимать слёзы и воспоминания. Можно читать понемногу и остановиться в любой момент. Ты не обязана проходить это одна.</p>
-      <div class="threshold__actions">
-        <button class="btn btn--ghost" type="button" data-threshold="read">Я готова читать</button>
-        <button class="btn btn--ghost" type="button" data-threshold="support">Мне сейчас нужна поддержка</button>
-        <button class="btn btn--ghost" type="button" data-threshold="breathe">Просто подышать</button>
-      </div>
-      <p class="note">Анимации и яркие эффекты на странице выключены.</p>
-    </div>
-  </dialog>
-
-  <dialog class="sheet sheet--stage" id="sheet-stage" aria-labelledby="stage-title" closedby="any">
-    <div class="sheet__scroll">
-      <div class="sheet__bar"><button class="sheet__close" type="button" data-close aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
-      <h2 class="sheet__title" id="stage-title" tabindex="-1">Что сейчас <em>про тебя?</em></h2>
-      <p class="note">Ответ меняет только тексты на этой странице и никуда не уходит.</p>
-      <div class="stage-list" role="group" aria-labelledby="stage-title">
-        <button class="stage-option" type="button" data-action="stage" data-stage="planning" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-sprout"/></svg>Планирую</button>
-        <button class="stage-option" type="button" data-action="stage" data-stage="pregnancy" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-rings"/></svg>Жду малыша</button>
-        <button class="stage-option" type="button" data-action="stage" data-stage="postpartum" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg>Малыш родился</button>
-        <button class="stage-option" type="button" data-action="stage" data-stage="loss" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-candle"/></svg>Пережила потерю</button>
-        <button class="stage-option" type="button" data-action="stage" data-stage="close" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-people"/></svg>Я близкий человек</button>
-        <button class="stage-option" type="button" data-action="stage" data-stage="none" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg>Не хочу отвечать</button>
-      </div>
-    </div>
-  </dialog>
-
-  <dialog class="sheet sheet--side sheet--settings" id="sheet-settings" aria-labelledby="settings-title" closedby="any">
-    <div class="sheet__scroll" data-settings>
-      <div class="sheet__bar"><button class="sheet__close" type="button" data-close aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
-      <h2 class="sheet__title" id="settings-title" tabindex="-1">Как мне <em>удобнее.</em></h2>
-      <div class="settings-group">
-        <p class="settings-group__label" id="set-theme-label">Ночник</p>
-        <div class="seg" role="group" aria-labelledby="set-theme-label" data-set-theme>
-          <button type="button" data-action="theme" data-theme-value="auto" aria-pressed="true">Сам по времени</button>
-          <button type="button" data-action="theme" data-theme-value="night" aria-pressed="false">Всегда</button>
-          <button type="button" data-action="theme" data-theme-value="day" aria-pressed="false">Никогда</button>
-        </div>
-        <p class="note">С 22:00 до 6:00 или когда в системе включена тёмная тема.</p>
-      </div>
-      <div class="settings-group">
-        <button class="toggle-row" type="button" role="switch" aria-checked="false" data-set="textLarge"><svg class="icon" aria-hidden="true"><use href="#i-text"/></svg><span>Крупный текст</span></button>
-        <button class="toggle-row" type="button" role="switch" aria-checked="false" data-set="motion"><svg class="icon" aria-hidden="true"><use href="#i-wave"/></svg><span>Меньше движения</span></button>
-        <button class="toggle-row" type="button" role="switch" aria-checked="false" data-set="sound"><svg class="icon" aria-hidden="true"><use href="#i-sound"/></svg><span>Звук в практиках</span></button>
-        <button class="toggle-row" type="button" role="switch" aria-checked="false" data-set="vibration" hidden><svg class="icon" aria-hidden="true"><use href="#i-vibrate"/></svg><span>Вибрация</span></button>
-        <button class="toggle-row" type="button" role="switch" aria-checked="false" data-set="noBreathing"><svg class="icon" aria-hidden="true"><use href="#i-leaf"/></svg><span>Не предлагать дыхательные практики<small>Буду предлагать заземление и другие практики</small></span></button>
-      </div>
-      <div class="settings-group settings-data" id="settings-data">
-        <h3 class="settings-group__title">Что знает <em>этот сайт.</em></h3>
-        <p>По умолчанию — ничего. Всё, что ты выбираешь и пишешь, живёт, только пока открыта страница. Если включить память, этап, опоры, конверт до утра и настройки будут храниться в этом браузере. Они никуда не отправляются, и их не видит даже Ирина.</p>
-        <button class="toggle-row" type="button" role="switch" aria-checked="false" data-set="memory"><svg class="icon" aria-hidden="true"><use href="#i-memory"/></svg><span>Запоминать на этом устройстве<small>Если устройство общее или чужое — лучше не включать.</small></span></button>
-        <ul class="data-list" role="list" data-data-list></ul>
-        <div class="settings-data__actions">
-          <button class="btn btn--danger-ghost btn--small" type="button" data-action="forget"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg>Стереть всё</button>
-          <button class="btn btn--soft btn--small" type="button" data-close>Готово</button>
-        </div>
-        <p class="sheet__status" role="status" data-settings-status></p>
+      <div class="room__inner">
+        <h2 class="room__title" id="room-title" tabindex="-1" data-room-title></h2>
+        <div class="room__body" data-room-body></div>
       </div>
     </div>
   </dialog>
@@ -1060,9 +795,9 @@
         <figcaption class="lightbox__caption" id="doc-caption" data-lightbox-caption tabindex="-1"></figcaption>
       </figure>
       <div class="lightbox__nav">
-        <button class="btn btn--ghost btn--small" type="button" data-lightbox-prev><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"/></svg>Предыдущий</button>
+        <button class="btn btn--ghost btn--small" type="button" data-lightbox-prev><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"/></svg>Назад</button>
         <span class="lightbox__count" data-lightbox-count></span>
-        <button class="btn btn--ghost btn--small" type="button" data-lightbox-next>Следующий<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button class="btn btn--ghost btn--small" type="button" data-lightbox-next>Дальше<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
       </div>
     </div>
   </dialog>
@@ -1072,16 +807,15 @@
       <div class="sheet__bar"><button class="sheet__close" type="button" data-close aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
       <h2 class="sheet__title" id="privacy-title" tabindex="-1">Личное остаётся <em>личным.</em></h2>
       <div class="prose">
-        <p>Этот сайт ничего не отправляет: нет форм, серверов, cookies, аналитики и внешних шрифтов. Всё, что ты выбираешь и пишешь в практиках, живёт только на открытой странице.</p>
-        <p>Память на устройстве включается только переключателем «Запоминать на этом устройстве». Тогда этап, сохранённые опоры, конверт до утра и настройки хранятся в этом браузере. Стереть их можно одной кнопкой в «Как мне удобнее».</p>
-        <p>Письмо Ирине, фразы для близких и картинки уходят только твоим действием: через Telegram, SMS, почту, системное «Поделиться» или копирование. Там действуют правила этих сервисов.</p>
+        <p>Этот сайт ничего не отправляет и не сохраняет: нет форм на сервер, cookies, аналитики и внешних шрифтов. Всё, что вы выбираете и пишете в практиках и в письме, живёт только на открытой странице и исчезает, когда вы её закрываете.</p>
+        <p>Письмо Ирине, фразы для близких и картинки уходят только вашим действием: через Telegram, SMS, почту, системное «Поделиться» или копирование. Там действуют правила этих сервисов.</p>
         <p>По вопросам о личных данных можно написать Ирине Ошемётковой: <a class="link" href="mailto:irinaoshemetkova@gmail.com">irinaoshemetkova@gmail.com</a>.</p>
       </div>
     </div>
   </dialog>
 
   <noscript>
-    <div class="noscript-note">Интерактивные практики работают с включённым JavaScript. Тексты, номера помощи и контакты доступны и без него.</div>
+    <div class="noscript-note">Интерактивные практики работают с включённым JavaScript. Тексты, номера помощи и контакты доступны и без него. Записаться: +7 (921) 755-71-71 или Telegram @irinaoshemetkova.</div>
   </noscript>
 </body>
 </html>
