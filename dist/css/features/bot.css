@@ -1,0 +1,38 @@
+/* «Карманная версия» — a CSS phone with the bot's real lines. */
+.karman { background: var(--paper-3); }
+.karman__inner { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(40px, 6vw, 96px); align-items: center; }
+.karman__copy { display: grid; gap: 22px; align-content: start; }
+.karman__honest { display: flex; gap: 12px; align-items: flex-start; max-width: 36em; padding: 16px 18px; border-radius: var(--radius); background: var(--surface); font-size: var(--text-small); line-height: 1.6; color: var(--ink-soft); }
+.karman__honest .icon { width: 22px; height: 22px; color: var(--sage-500); margin-top: 2px; }
+.karman__honest .link { display: inline; min-height: 0; }
+.karman__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.phone { display: grid; justify-items: center; gap: 12px; }
+.phone__screen {
+  width: min(300px, 82vw); min-height: 560px; padding: 14px 12px 18px; border-radius: 44px;
+  border: 10px solid #2f3b31; background: #eef2ea; box-shadow: var(--shadow-lg); transform: rotate(-4deg);
+  display: flex; flex-direction: column; gap: 12px; color: #2f3b31;
+}
+html[data-theme='night'] .phone__screen { border-color: #0d110f; background: #1f2622; color: #e6e4da; }
+.phone__top { display: flex; align-items: center; gap: 10px; padding: 6px 8px 10px; border-bottom: 1px solid rgba(47, 59, 49, .12); }
+.phone__top span:last-child { display: grid; line-height: 1.2; }
+.phone__top b { font-size: 15px; }
+.phone__top small { font-size: 12px; opacity: .7; }
+.phone__avatar { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: #4b624d; color: #fbfbf6; }
+.phone__avatar .icon { width: 24px; height: 24px; stroke-width: 1.2; }
+.phone__chat { display: grid; gap: 8px; align-content: start; margin: 0; padding: 0; list-style: none; font-size: 14.5px; line-height: 1.4; }
+.bubble { max-width: 86%; padding: 9px 12px; border-radius: 16px; transition: opacity .4s var(--ease-out), transform .4s var(--ease-settle); }
+.bubble--bot { justify-self: start; background: #fff; border-bottom-left-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, .06); }
+.bubble--me { justify-self: end; background: #d8e5cf; border-bottom-right-radius: 4px; }
+html[data-theme='night'] .bubble--bot { background: #2b342e; }
+html[data-theme='night'] .bubble--me { background: #3d5243; }
+.bubble--keys { display: flex; flex-wrap: wrap; gap: 4px; max-width: 100%; padding: 0; }
+.bubble--keys span { padding: 6px 10px; border-radius: 10px; background: rgba(75, 98, 77, .12); font-size: 13px; }
+.bubble--keys .is-picked { background: #4b624d; color: #fbfbf6; }
+.phone.is-animated .bubble.is-waiting { opacity: 0; transform: translateY(8px); }
+.phone__pause { font-size: var(--text-small); }
+
+@media (max-width: 860px) {
+  .karman__inner { grid-template-columns: 1fr; }
+  .phone__screen { transform: none; min-height: 500px; }
+}
