@@ -27,6 +27,8 @@ function autosizeFallback() {
 }
 
 function boot() {
+  // Sheets push a history entry so «Назад» closes them; keep the browser from jumping the page when it pops.
+  try { history.scrollRestoration = 'manual'; } catch { /* old browsers */ }
   safely('prefs', initPrefs);
   safely('sheets', initSheets);
   safely('actions', initActions);
