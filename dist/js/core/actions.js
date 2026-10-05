@@ -2,6 +2,7 @@
 // Markup: <button data-action="practice" data-practice="grounding">…</button>
 // Code:   registerAction('practice', (el, detail) => …); runAction('practice', { practice: 'grounding' });
 import { on } from './dom.js';
+import { jumpTo, focusTarget } from './motion.js';
 
 const handlers = new Map();
 const queued = [];
@@ -30,17 +31,14 @@ export function initActions() {
   });
 }
 
-/** Smoothly bring a section into view and move focus to its heading. */
-export function goTo(selector, { focus = true } = {}) {
+/** Bring a section into view (a calm dissolve when it is far) and move focus to its heading. */
+export function goTo(selector, { focus = true, onDone } = {}) {
   const target = document.querySelector(selector);
   if (!target) return;
-  const reduced = document.documentElement.classList.contains('motion-reduced');
-  target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
-  if (focus) {
-    const heading = target.matches('h1, h2, h3') ? target : target.querySelector('h2, h3');
-    if (heading) {
-      heading.setAttribute('tabindex', '-1');
-      setTimeout(() => heading.focus({ preventScroll: true }), reduced ? 0 : 500);
-    }
-  }
+  jumpTo(target, {
+    onDone: () => {
+      if (focus) focusTarget(target);
+      onDone?.(target);
+    },
+  });
 }

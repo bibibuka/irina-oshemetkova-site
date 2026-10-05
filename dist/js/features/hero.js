@@ -5,14 +5,13 @@ import { $, $$, h, announce } from '../core/dom.js';
 import { prefs, STAGES } from '../core/prefs.js';
 import { store } from '../core/store.js';
 import { registerAction, runAction, goTo } from '../core/actions.js';
-import { openSheet, closeSheet, isOpen } from '../core/sheets.js';
+import { openSheet, closeSheet } from '../core/sheets.js';
 import { isNightLightHours } from '../core/time.js';
 import { pick } from '../core/phrases.js';
 import {
   SALUTES, GREETING_LINES, NIGHT_POSTPARTUM, LOSS_LINES, BADGE, PART_ICON, HERO, STAGE_REPLIES, WELCOME_BACK, COMEBACK,
 } from '../content/greetings.js';
 
-const STAGE_ICON = { planning: 'sprout', pregnancy: 'rings', postpartum: 'sun', loss: 'candle', close: 'people' };
 const FLOW = {
   default: ['doors', 'breath', 'shelf', 'thought', 'words'],
   planning: ['thought', 'words', 'doors', 'breath', 'shelf'],
@@ -61,10 +60,18 @@ function renderTitle() {
   titleKey = variant;
   const { title: [plain, accent], lead: text } = HERO[variant];
   const update = () => {
-    title.replaceChildren(plain, h('em', {}, accent));
+    title.replaceChildren(
+      h('span', { class: 'line' }, h('span', { class: 'line__i' }, plain.trim())), ' ',
+      h('em', { class: 'line' }, h('span', { class: 'line__i' }, accent)));
     lead.textContent = text;
   };
-  if (first || prefs.reducedMotion) { update(); return; }
+  if (first) {
+    // The page already shows these words and the intro may be animating them: leave them be.
+    if (title.textContent.replace(/\s+/g, ' ').trim() !== `${plain.trim()} ${accent}`) update();
+    else if (lead.textContent !== text) lead.textContent = text;
+    return;
+  }
+  if (prefs.reducedMotion) { update(); return; }
   title.classList.remove('is-relit');
   update();
   void title.offsetWidth;
@@ -100,11 +107,6 @@ function renderWindow() {
 function renderStageControls() {
   const stage = prefs.stage;
   $$('[data-action="stage"]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.stage === stage)));
-  const label = $('[data-stage-label]');
-  if (label) label.textContent = stage && stage !== 'none' ? STAGES[stage].label : 'Мой этап';
-  const use = $('[data-stage-icon]');
-  if (use) use.setAttribute('href', `#i-${STAGE_ICON[stage] || 'door'}`);
-  $('.stage-chip')?.setAttribute('aria-label', stage && stage !== 'none' ? `Мой этап: ${STAGES[stage].label}. Изменить` : 'Мой этап');
 }
 
 function arrangeFlow() {
@@ -162,23 +164,23 @@ function renderAll() {
 function chooseStage(el, { stage }) {
   if (!STAGES[stage]) return;
   const fromSheet = el?.closest('dialog.sheet');
+  const lossChip = $('[data-stage-pick] [data-stage="loss"]');
   prefs.setStage(stage);
   arrangeFlow();
   renderAll();
   showReply(stage);
   document.dispatchEvent(new CustomEvent('stage:change', { detail: { stage } }));
   if (stage === 'loss') {
-    openSheet('sheet-threshold', { opener: el && !fromSheet ? el : $('.stage-chip') });
+    openSheet('sheet-threshold', { opener: el && !fromSheet ? el : lossChip });
     return;
   }
-  if (fromSheet && isOpen(fromSheet)) closeSheet(fromSheet);
   announce(STAGE_REPLIES[stage]?.text || '');
 }
 
 function initThreshold() {
   $$('[data-threshold]').forEach((button) => button.addEventListener('click', () => {
     const choice = button.dataset.threshold;
-    if (choice === 'support') { openSheet('sheet-help', { opener: $('.stage-chip') }); return; }
+    if (choice === 'support') { openSheet('sheet-help', { opener: $('[data-stage-pick] [data-stage="loss"]') }); return; }
     closeSheet('sheet-threshold');
     if (choice === 'breathe') { runAction('breathe', { pattern: '36' }); return; }
     const first = $('[data-flow] > [data-flow-item]');

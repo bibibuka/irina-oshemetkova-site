@@ -3,7 +3,9 @@
 import { initPrefs } from './core/prefs.js';
 import { initSheets } from './core/sheets.js';
 import { initActions } from './core/actions.js';
-import { initReveals, initHeader, initSectionSpy, initKeyboardAwareDock } from './core/motion.js';
+import {
+  initReveals, initHeader, initSectionSpy, initNavPill, initRipples, initJumps, initKeyboardAwareDock,
+} from './core/motion.js';
 import { $$ } from './core/dom.js';
 
 const FEATURES = [
@@ -35,7 +37,12 @@ function boot() {
   safely('header', initHeader);
   safely('reveals', initReveals);
   safely('spy', initSectionSpy);
+  safely('nav-pill', initNavPill);
+  safely('ripples', initRipples);
+  safely('jumps', initJumps);
   safely('dock', initKeyboardAwareDock);
+  // The first-screen intro is started by the inline script before the first paint; let it go once it has played.
+  setTimeout(() => document.documentElement.classList.remove('intro'), 3400);
   safely('autosize', autosizeFallback);
   safely('year', () => $$('[data-year]').forEach((el) => { el.textContent = String(new Date().getFullYear()); }));
 

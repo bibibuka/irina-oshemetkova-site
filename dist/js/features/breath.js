@@ -335,13 +335,10 @@ export function init() {
     if (openSheets().length) closeSheet();
     if (detail.pattern) setPattern(detail.pattern);
     if (detail.length) setLength(detail.length);
-    setTimeout(() => {
-      goTo('#dyhanie', { focus: false });
-      const go = () => {
-        if (detail.start === 'true' && !s.running) start();
-        focusQuietly(el.start);
-      };
-      setTimeout(go, prefs.reducedMotion ? 30 : 650);
-    }, 60);
+    const go = () => {
+      if (detail.start === 'true' && !s.running) start();
+      focusQuietly(el.start);
+    };
+    setTimeout(() => goTo('#dyhanie', { focus: false, onDone: go }), 60);
   });
 }

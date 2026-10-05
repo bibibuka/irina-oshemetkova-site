@@ -36,6 +36,9 @@
       if (stage === 'loss') d.classList.add('is-quiet');
       if (saved('textLarge')) d.classList.add('text-large');
       if (saved('motion') === 'reduced') d.classList.add('motion-reduced');
+      var calm = saved('motion') === 'reduced';
+      try { calm = calm || matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+      if (!calm) d.classList.add('intro');
       var meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.setAttribute('content', night ? '#171d19' : '#f8f7f2');
     })();
@@ -136,6 +139,7 @@
   </div>
 
   <header class="site-header">
+    <span class="site-progress" aria-hidden="true"></span>
     <div class="site-header__inner">
       <a class="brand" href="#okno">
         <svg class="icon brand__flower" aria-hidden="true"><use href="#i-flower"/></svg>
@@ -148,19 +152,15 @@
         <a href="#vstrecha" data-spy>Встреча</a>
       </nav>
       <div class="site-header__tools">
-        <button class="stage-chip js-only" type="button" data-open-sheet="sheet-stage" aria-haspopup="dialog">
-          <svg class="icon" aria-hidden="true"><use href="#i-door" data-stage-icon/></svg>
-          <span data-stage-label>Мой этап</span>
+        <button class="theme-toggle js-only" type="button" data-action="theme-toggle" aria-pressed="false" title="Ночник: тёмная тема">
+          <svg class="icon theme-toggle__sun" aria-hidden="true"><use href="#i-sun"/></svg>
+          <svg class="icon theme-toggle__moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <span class="visually-hidden">Ночник</span>
         </button>
-        <div class="theme-switch js-only" role="group" aria-label="Ночник">
-          <button type="button" data-action="theme" data-theme-value="auto" aria-pressed="true" title="Ночник сам по времени: с 22:00 до 6:00"><svg class="icon" aria-hidden="true"><use href="#i-auto"/></svg><span class="theme-switch__label">авто</span></button>
-          <button type="button" data-action="theme" data-theme-value="day" aria-pressed="false" title="Всегда светлая страница"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg><span class="visually-hidden">день</span></button>
-          <button type="button" data-action="theme" data-theme-value="night" aria-pressed="false" title="Ночник включён"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg><span class="visually-hidden">ночь</span></button>
-        </div>
         <a class="help-link" href="#help-now" data-open-sheet="sheet-help">
-          <svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg><span>Помощь <span class="help-link__more">сейчас</span></span>
+          <svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg><span>Помощь<span class="visually-hidden"> сейчас</span></span>
         </a>
-        <a class="btn btn--primary btn--small header-cta" href="#vstrecha" data-action="write">Написать Ирине</a>
+        <a class="btn btn--primary btn--small header-cta" href="#vstrecha" data-action="write">Написать Ирине<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
     </div>
   </header>
@@ -175,7 +175,7 @@
       </div>
       <div class="nochnik__copy">
         <p class="nochnik__margin">— на случай бессонной ночи</p>
-        <h2 id="nochnik-title" data-night-title>Для ночной смены — <em>ночник.</em></h2>
+        <h2 id="nochnik-title" data-night-title>Для ночной смены&nbsp;— <em>ночник.</em></h2>
         <p class="nochnik__lead" data-night-lead>Если не спится, если малыш никак не засыпает, если накрывает — здесь всё под одной рукой: тёмный экран, тихий звук, крупные кнопки. С 22:00 до 6:00 сайт включает ночник сам.</p>
       </div>
       <div class="night-tiles" role="list">
@@ -239,7 +239,7 @@
       <div class="wrap okno__inner">
         <div class="okno__copy">
           <p class="okno__greeting"><svg class="icon" aria-hidden="true"><use href="#i-leaf" data-part-icon/></svg><span data-greeting>Здравствуй. Здесь можно выдохнуть.</span></p>
-          <h1 id="okno-title" class="okno__title" data-hero-title>Быть мамой. <em>Быть собой.</em></h1>
+          <h1 id="okno-title" class="okno__title" data-hero-title><span class="line"><span class="line__i">Быть мамой.</span></span> <em class="line"><span class="line__i">Быть собой.</span></em></h1>
           <p class="lead okno__lead" data-hero-lead>Я Ирина, перинатальный психолог. Здесь можно выдохнуть, разобраться с мыслью, которая не отпускает, и найти слова для близких — в любое время суток. А когда захочется поговорить с живым человеком, напиши мне.</p>
           <p class="okno__night-note" data-night-note hidden><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg>Сейчас я, скорее всего, сплю — но всё здесь работает и в три часа ночи.</p>
           <p class="okno__welcome" data-welcome hidden></p>
@@ -275,13 +275,16 @@
         </figure>
       </div>
       <p class="wrap next-line"><a href="#pogoda">Дальше — как ты сейчас?<svg class="icon" aria-hidden="true"><use href="#i-arrow-down"/></svg></a></p>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track"><div class="marquee__set"><span>планирование</span><svg class="icon"><use href="#i-flower"/></svg><span>ожидание</span><svg class="icon"><use href="#i-flower"/></svg><span>беременность</span><svg class="icon"><use href="#i-flower"/></svg><span>роды</span><svg class="icon"><use href="#i-flower"/></svg><span>первые месяцы</span><svg class="icon"><use href="#i-flower"/></svg><span>усталость</span><svg class="icon"><use href="#i-flower"/></svg><span>тревога</span><svg class="icon"><use href="#i-flower"/></svg><span>вдвоём</span><svg class="icon"><use href="#i-flower"/></svg><span>границы с родными</span><svg class="icon"><use href="#i-flower"/></svg><span>утрата</span><svg class="icon"><use href="#i-flower"/></svg><span>слова для близких</span><svg class="icon"><use href="#i-flower"/></svg></div><div class="marquee__set"><span>планирование</span><svg class="icon"><use href="#i-flower"/></svg><span>ожидание</span><svg class="icon"><use href="#i-flower"/></svg><span>беременность</span><svg class="icon"><use href="#i-flower"/></svg><span>роды</span><svg class="icon"><use href="#i-flower"/></svg><span>первые месяцы</span><svg class="icon"><use href="#i-flower"/></svg><span>усталость</span><svg class="icon"><use href="#i-flower"/></svg><span>тревога</span><svg class="icon"><use href="#i-flower"/></svg><span>вдвоём</span><svg class="icon"><use href="#i-flower"/></svg><span>границы с родными</span><svg class="icon"><use href="#i-flower"/></svg><span>утрата</span><svg class="icon"><use href="#i-flower"/></svg><span>слова для близких</span><svg class="icon"><use href="#i-flower"/></svg></div></div>
+      </div>
     </section>
 
     <!-- 2. Как ты сейчас? -->
     <section class="pogoda" id="pogoda" aria-labelledby="pogoda-title">
       <div class="wrap pogoda__inner">
         <header class="pogoda__head">
-          <h2 id="pogoda-title" data-reveal="light">Как ты сейчас? <em>Честно.</em></h2>
+          <h2 id="pogoda-title" data-reveal="words">Как ты сейчас? <em>Честно.</em></h2>
           <p class="pogoda__sub">Один выбор. Ничего не сохраняется и не оценивается.</p>
         </header>
         <div class="weather js-only" role="radiogroup" aria-labelledby="pogoda-title" data-weather>
@@ -330,7 +333,7 @@
       <section class="dveri section" id="dveri" data-flow-item="doors" aria-labelledby="dveri-title">
         <div class="wrap">
           <header class="dveri__head">
-            <h2 id="dveri-title" data-reveal="light">С чем ко мне <em>приходят.</em></h2>
+            <h2 id="dveri-title" data-reveal="words">С&nbsp;чем ко&nbsp;мне <em>приходят.</em></h2>
             <p class="lead">Можно прийти с готовым вопросом — или просто со словами «мне непросто». Выбери дверь, которая ближе.</p>
           </header>
           <div class="doors" data-doors>
@@ -406,7 +409,7 @@
       <section class="dyhanie band" id="dyhanie" data-flow-item="breath" aria-labelledby="dyhanie-title">
         <div class="wrap dyhanie__inner">
           <div class="dyhanie__copy">
-            <h2 id="dyhanie-title" data-reveal="light">Подыши <em>со мной.</em></h2>
+            <h2 id="dyhanie-title" data-reveal="words">Подыши <em>со&nbsp;мной.</em></h2>
             <p class="dyhanie__lead" data-breath-lead>Минута, чтобы вернуться в тело. Дыши, как удобно: остановиться можно в любой момент.</p>
             <div class="breath-settings js-only">
               <p class="breath-settings__label" id="breath-pattern-label">Ритм</p>
@@ -483,7 +486,7 @@
         <div class="wrap">
           <div class="morning-envelope" data-morning-envelope hidden></div>
           <header class="polka__head">
-            <h2 id="polka-title" data-reveal="light">Полка <em>практик.</em></h2>
+            <h2 id="polka-title" data-reveal="words">Полка <em>практик.</em></h2>
             <p class="lead" data-practice-intro>Практика — возможность, а не ещё одно задание.</p>
           </header>
           <div class="helped-shelf" data-helped-shelf hidden></div>
@@ -546,7 +549,7 @@
       <section class="razbor section" id="razbor" data-flow-item="thought" aria-labelledby="razbor-title">
         <div class="wrap razbor__inner">
           <header class="razbor__head">
-            <h2 id="razbor-title" data-reveal="light">Мысль не отпускает? <em>Разберём её.</em></h2>
+            <h2 id="razbor-title" data-reveal="words">Мысль не отпускает? <em>Разберём её.</em></h2>
             <p class="lead">Три минуты, четыре шага. Это не тест и не диагноз — просто способ посмотреть на мысль чуть со стороны. Всё остаётся в этом окне.</p>
           </header>
           <div class="notebook" data-thought>
@@ -564,8 +567,10 @@
               </noscript>
             </div>
           </div>
+        </div>
+        <div class="wrap">
           <div class="traps" data-traps>
-            <h3 class="traps__title">Ловушки, в которые <em>попадают все.</em></h3>
+            <h3 class="traps__title">Ловушки, в&nbsp;которые <em>попадают все.</em></h3>
             <p class="traps__sub">Двенадцать привычных поворотов мысли. Нажми на карточку, чтобы перевернуть.</p>
             <div class="traps__fan" data-traps-fan></div>
             <div class="trap-game" data-trap-game></div>
@@ -578,7 +583,7 @@
       <section class="slova section" id="slova" data-flow-item="words" aria-labelledby="slova-title">
         <div class="wrap">
           <header class="slova__head">
-            <h2 id="slova-title" data-reveal="light">Что сказать, <em>когда…</em></h2>
+            <h2 id="slova-title" data-reveal="words">Что сказать, <em>когда…</em></h2>
             <p class="lead">Слова для трудных разговоров — бери как есть или переделай под себя. Ничего никуда не уходит, пока ты сама не нажмёшь «отправить».</p>
           </header>
           <div class="book" data-words>
@@ -641,7 +646,7 @@
         <figure class="opory__arch" aria-hidden="true"><img src="assets/tulips-interior.webp" alt="" width="853" height="1280" loading="lazy"></figure>
         <div class="opory__main">
           <header class="opory__head">
-            <h2 id="opory-title" data-reveal="light">Колода <em>опор.</em></h2>
+            <h2 id="opory-title" data-reveal="words">Колода <em>опор.</em></h2>
             <p class="lead">Короткие фразы, на которые можно опереться, когда своих слов не хватает. Вытяни одну — или столько, сколько нужно.</p>
           </header>
           <div class="deck js-only" data-deck></div>
@@ -660,14 +665,14 @@
           </div>
         </figure>
         <div class="irina__text">
-          <h2 id="irina-title" data-reveal="words">Я — Ирина. <em>И я на твоей стороне.</em></h2>
+          <h2 id="irina-title" data-reveal="words">Я&nbsp;— Ирина. <em>И&nbsp;я на&nbsp;твоей стороне.</em></h2>
           <p class="irina__drop">Я клинический, перинатальный и семейный психолог. Работала в центре планирования семьи «Медика» и в роддоме имени профессора Снегирёва. Отдельно училась помощи при бесплодии и ВРТ, работе с горем и утратой, с травмой отношений с родителями.</p>
           <p>Ко мне можно прийти одной или вдвоём — очно в Петербурге или онлайн из любой страны. В моей работе нет одного сценария для всех: подход я подбираю в разговоре с тобой.</p>
           <p>Всё, что есть на этой странице, — из моей практики и из моего бота: те же слова, те же упражнения, тот же темп.</p>
         </div>
       </div>
       <div class="wrap">
-        <h3 class="principles__title" id="principles-title">Как я говорю — <em>и как не говорю.</em></h3>
+        <h3 class="principles__title" id="principles-title">Как я&nbsp;говорю&nbsp;— <em>и&nbsp;как не&nbsp;говорю.</em></h3>
         <div class="principles" role="list" aria-labelledby="principles-title">
           <div role="listitem"><button class="principle" type="button" aria-pressed="false" data-flip><span class="principle__face principle__front"><span class="principle__name">Не пугаю.</span><span class="principle__hint">перевернуть</span></span><span class="principle__face principle__back"><span class="principle__no">Не говорю: «стресс влияет на малыша».</span><span class="principle__yes">Говорю: «тревога — частый спутник ожидания; давай посмотрим, что сейчас в твоих силах».</span></span></button></div>
           <div role="listitem"><button class="principle" type="button" aria-pressed="false" data-flip><span class="principle__face principle__front"><span class="principle__name">Не виню.</span><span class="principle__hint">перевернуть</span></span><span class="principle__face principle__back"><span class="principle__no">Не говорю: «надо было раньше».</span><span class="principle__yes">Говорю: «хорошо, что ты здесь сейчас».</span></span></button></div>
@@ -680,12 +685,12 @@
         <h3 class="docs__title" id="docs-title">Где я училась</h3>
         <p class="docs__sub">Нажми на документ, чтобы рассмотреть.</p>
         <ul class="docs" role="list" aria-labelledby="docs-title">
-          <li><button class="doc" type="button" data-doc="0"><img src="assets/education-06.jpg" alt="Диплом о профессиональной переподготовке ВЕИП" width="908" height="1280" loading="lazy"><span class="doc__name">Психолог-консультант</span><span class="doc__where">ВЕИП, 2021</span></button></li>
-          <li><button class="doc" type="button" data-doc="1"><img src="assets/education-05.jpg" alt="Сертификат по перинатальной психологии" width="912" height="1280" loading="lazy"><span class="doc__name">Перинатальная психология</span><span class="doc__where">НИЦ ВЕИП, 72 часа</span></button></li>
-          <li><button class="doc" type="button" data-doc="2"><img src="assets/education-04.jpg" alt="Удостоверение о психологической помощи при бесплодии" width="922" height="1280" loading="lazy"><span class="doc__name">Помощь при бесплодии</span><span class="doc__where">ВГАППССС, 144 часа</span></button></li>
-          <li><button class="doc" type="button" data-doc="3"><img src="assets/education-01.jpg" alt="Сертификат о сопровождении при ВРТ" width="1280" height="912" loading="lazy"><span class="doc__name">Сопровождение при ВРТ</span><span class="doc__where">фонд «Свет в руках»</span></button></li>
-          <li><button class="doc" type="button" data-doc="4"><img src="assets/education-02.jpg" alt="Сертификат о работе с горем и утратой" width="1280" height="912" loading="lazy"><span class="doc__name">Работа с горем и утратой</span><span class="doc__where">фонд «Свет в руках»</span></button></li>
-          <li><button class="doc" type="button" data-doc="5"><img src="assets/education-09.jpg" alt="Сертификат о работе с травмой отношений с родителями" width="827" height="1280" loading="lazy"><span class="doc__name">Отношения с родителями</span><span class="doc__where">центр «Метафора»</span></button></li>
+          <li><button class="doc" type="button" data-doc="0"><span class="doc__img"><img src="assets/education-06.jpg" alt="Диплом о профессиональной переподготовке ВЕИП" width="908" height="1280" loading="lazy"></span><span class="doc__name">Психолог-консультант</span><span class="doc__where">ВЕИП, 2021</span></button></li>
+          <li><button class="doc" type="button" data-doc="1"><span class="doc__img"><img src="assets/education-05.jpg" alt="Сертификат по перинатальной психологии" width="912" height="1280" loading="lazy"></span><span class="doc__name">Перинатальная психология</span><span class="doc__where">НИЦ ВЕИП, 72 часа</span></button></li>
+          <li><button class="doc" type="button" data-doc="2"><span class="doc__img"><img src="assets/education-04.jpg" alt="Удостоверение о психологической помощи при бесплодии" width="922" height="1280" loading="lazy"></span><span class="doc__name">Помощь при бесплодии</span><span class="doc__where">ВГАППССС, 144 часа</span></button></li>
+          <li><button class="doc" type="button" data-doc="3"><span class="doc__img"><img src="assets/education-01.jpg" alt="Сертификат о сопровождении при ВРТ" width="1280" height="912" loading="lazy"></span><span class="doc__name">Сопровождение при ВРТ</span><span class="doc__where">фонд «Свет в руках»</span></button></li>
+          <li><button class="doc" type="button" data-doc="4"><span class="doc__img"><img src="assets/education-02.jpg" alt="Сертификат о работе с горем и утратой" width="1280" height="912" loading="lazy"></span><span class="doc__name">Работа с горем и утратой</span><span class="doc__where">фонд «Свет в руках»</span></button></li>
+          <li><button class="doc" type="button" data-doc="5"><span class="doc__img"><img src="assets/education-09.jpg" alt="Сертификат о работе с травмой отношений с родителями" width="827" height="1280" loading="lazy"></span><span class="doc__name">Отношения с родителями</span><span class="doc__where">центр «Метафора»</span></button></li>
         </ul>
         <p class="next-line">Что дальше: <a href="#vstrecha">записаться ко мне</a></p>
       </div>
@@ -695,7 +700,7 @@
     <section class="karman section" id="bot" aria-labelledby="bot-title">
       <div class="wrap karman__inner">
         <div class="karman__copy">
-          <h2 id="bot-title" data-reveal="light">Карманная <em>версия.</em></h2>
+          <h2 id="bot-title" data-reveal="words">Карманная <em>версия.</em></h2>
           <p class="lead">Мой Telegram-бот — для дней между встречами: дневник из пяти маячков, короткие практики, статьи по этапам и кнопка SOS.</p>
           <p class="karman__honest"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span>В боте отвечает ИИ-ассистент, а не я лично. Он говорит в духе моего подхода, но он не я и не врач. Мне лично — в Telegram: <a class="link" href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer">@irinaoshemetkova</a>.</span></p>
           <p class="karman__actions">
@@ -722,7 +727,7 @@
     <section class="vstrecha section" id="vstrecha" aria-labelledby="vstrecha-title">
       <div class="wrap vstrecha__inner">
         <div class="vstrecha__about">
-          <h2 id="vstrecha-title" data-reveal="words">Начнём <em>с разговора?</em></h2>
+          <h2 id="vstrecha-title" data-reveal="words">Начнём <em>с&nbsp;разговора?</em></h2>
           <p class="lead">Можно прийти без готового запроса. Со словами «мне непросто» — уже достаточно.</p>
           <p class="facts"><span>50 минут</span><span>4 000 ₽</span><span>онлайн или очно в Петербурге</span><span>можно вдвоём</span></p>
           <p class="note">Стоимость и формат уточняются при записи — в том числе для встречи вдвоём.</p>
@@ -739,7 +744,8 @@
         </div>
 
         <div class="letter" data-letter>
-          <div class="letter__flap" aria-hidden="true"></div>
+          <svg class="letter__flap" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 50 10 100 0"/></svg>
+          <span class="letter__seal" aria-hidden="true"><svg class="icon"><use href="#i-flower"/></svg></span>
           <h3 class="letter__title">Письмо <em>Ирине.</em></h3>
           <div class="letter__fields js-only">
             <div class="field">
@@ -798,7 +804,7 @@
     <section class="voprosy section" id="voprosy" aria-labelledby="voprosy-title">
       <div class="wrap voprosy__inner">
         <div class="voprosy__aside">
-          <h2 id="voprosy-title" data-reveal="light">Что обычно <em>спрашивают.</em></h2>
+          <h2 id="voprosy-title" data-reveal="words">Что обычно <em>спрашивают.</em></h2>
           <figure class="voprosy__arch" aria-hidden="true">
             <img class="voprosy__img voprosy__img--child" data-child-photo src="assets/family-beach.webp" alt="" width="1186" height="790" loading="lazy">
             <img class="voprosy__img voprosy__img--calm" src="assets/tulips-interior.webp" alt="" width="853" height="1280" loading="lazy">
@@ -822,7 +828,7 @@
     <div class="svet__lamp" aria-hidden="true"><svg class="icon"><use href="#i-flower"/></svg></div>
     <div class="wrap">
       <div class="svet__head">
-        <h2 id="svet-title">Свет здесь <em>не гаснет.</em></h2>
+        <h2 id="svet-title">Свет здесь <em>не&nbsp;гаснет.</em></h2>
         <p>Возвращайся, когда захочется. Без повода, без отчёта, без «надо».</p>
         <a class="btn btn--light" href="#vstrecha" data-action="write">Написать Ирине<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
@@ -1006,26 +1012,22 @@
     </div>
   </dialog>
 
-  <dialog class="sheet sheet--stage" id="sheet-stage" aria-labelledby="stage-title" closedby="any">
-    <div class="sheet__scroll">
+  <dialog class="sheet sheet--side sheet--settings" id="sheet-settings" aria-labelledby="settings-title" closedby="any">
+    <div class="sheet__scroll" data-settings>
       <div class="sheet__bar"><button class="sheet__close" type="button" data-close aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
-      <h2 class="sheet__title" id="stage-title" tabindex="-1">Что сейчас <em>про тебя?</em></h2>
-      <p class="note">Ответ меняет только тексты на этой странице и никуда не уходит.</p>
-      <div class="stage-list" role="group" aria-labelledby="stage-title">
+      <h2 class="sheet__title" id="settings-title" tabindex="-1">Как мне <em>удобнее.</em></h2>
+      <div class="settings-group settings-stage">
+        <p class="settings-group__label" id="set-stage-label">Что сейчас про тебя</p>
+        <div class="stage-list" role="group" aria-labelledby="set-stage-label">
         <button class="stage-option" type="button" data-action="stage" data-stage="planning" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-sprout"/></svg>Планирую</button>
         <button class="stage-option" type="button" data-action="stage" data-stage="pregnancy" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-rings"/></svg>Жду малыша</button>
         <button class="stage-option" type="button" data-action="stage" data-stage="postpartum" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg>Малыш родился</button>
         <button class="stage-option" type="button" data-action="stage" data-stage="loss" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-candle"/></svg>Пережила потерю</button>
         <button class="stage-option" type="button" data-action="stage" data-stage="close" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-people"/></svg>Я близкий человек</button>
         <button class="stage-option" type="button" data-action="stage" data-stage="none" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg>Не хочу отвечать</button>
+        </div>
+        <p class="note">Ответ меняет только тексты на этой странице и никуда не уходит.</p>
       </div>
-    </div>
-  </dialog>
-
-  <dialog class="sheet sheet--side sheet--settings" id="sheet-settings" aria-labelledby="settings-title" closedby="any">
-    <div class="sheet__scroll" data-settings>
-      <div class="sheet__bar"><button class="sheet__close" type="button" data-close aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
-      <h2 class="sheet__title" id="settings-title" tabindex="-1">Как мне <em>удобнее.</em></h2>
       <div class="settings-group">
         <p class="settings-group__label" id="set-theme-label">Ночник</p>
         <div class="seg" role="group" aria-labelledby="set-theme-label" data-set-theme>

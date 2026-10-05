@@ -305,10 +305,13 @@ function renderTraps() {
       card.setAttribute('aria-pressed', String(card.getAttribute('aria-pressed') !== 'true'));
     },
   },
-  h('span', { class: 'trap__face trap__front' }, h('span', { class: 'trap__name' }, trap.name), h('span', { class: 'trap__hint' }, 'перевернуть')),
+  // Front: the name and how the thought sounds; back: how to notice it and the question that helps.
+  h('span', { class: 'trap__face trap__front' },
+    h('span', { class: 'trap__name' }, trap.name),
+    h('span', { class: 'trap__example' }, `«${trap.example.replace(/\.$/, '')}»`),
+    h('span', { class: 'trap__hint' }, 'перевернуть')),
   h('span', { class: 'trap__face trap__back' },
     h('span', { class: 'trap__row' }, h('b', {}, 'Как узнать: '), trap.how, '.'),
-    h('span', { class: 'trap__row trap__example' }, `«${trap.example.replace(/\.$/, '')}»`),
     h('span', { class: 'trap__row' }, h('b', {}, 'Вопрос, который помогает: '), trap.ask)))));
 }
 
@@ -345,7 +348,6 @@ export function init() {
   stepSituation();
   document.addEventListener('stage:change', () => { if ($('#situation-text', el.page) && !s.situation) stepSituation(); });
   registerAction('thought', () => {
-    goTo('#razbor', { focus: false });
-    setTimeout(() => focusQuietly($('textarea, .notebook__q', el.page)), prefs.reducedMotion ? 30 : 650);
+    goTo('#razbor', { focus: false, onDone: () => focusQuietly($('textarea, .notebook__q', el.page)) });
   });
 }

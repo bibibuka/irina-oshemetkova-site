@@ -42,12 +42,16 @@ function visibleTabs() { return tabs.filter((tab) => getComputedStyle(tab).displ
 function selectTab(key, { focus = false } = {}) {
   const tab = tabs.find((item) => item.dataset.wordsTab === key && getComputedStyle(item).display !== 'none') || visibleTabs()[0];
   if (!tab) return;
+  const changed = tab.getAttribute('aria-selected') !== 'true';
   tabs.forEach((other) => {
     const on = other === tab;
     other.setAttribute('aria-selected', String(on));
     other.tabIndex = on ? 0 : -1;
     const panel = document.getElementById(other.getAttribute('aria-controls'));
-    if (panel) panel.hidden = !on;
+    if (!panel) return;
+    panel.hidden = !on;
+    // A new page of the book: its phrases arrive one after another.
+    if (on && changed) { panel.classList.remove('appear-kids'); void panel.offsetWidth; panel.classList.add('appear-kids'); }
   });
   if (focus) tab.focus();
 }

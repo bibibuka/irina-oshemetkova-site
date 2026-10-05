@@ -88,6 +88,8 @@
   --t-fast: 200ms;
   --t-mid: 480ms;
   --t-slow: 900ms;
+  --lift: -3px;              /* hover lift; zero with «меньше движения» */
+  --press: .97;              /* press squeeze; 1 with «меньше движения» */
 
   --header-h: 84px;
   --dock-h: 0px;

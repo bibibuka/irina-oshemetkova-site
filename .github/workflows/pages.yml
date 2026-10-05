@@ -4,7 +4,7 @@ name: Publish site to GitHub Pages
 
 on:
   push:
-    branches: [main, claude/adoring-mccarthy-r21cow]
+    branches: [main, claude/adoring-mccarthy-r21cow, claude/site-buttons-animations-6anqj9]
     paths: ['dist/**']
   workflow_dispatch:
 

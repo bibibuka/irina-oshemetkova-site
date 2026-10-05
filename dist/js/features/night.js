@@ -328,14 +328,10 @@ export function init() {
       runAction('theme', { themeValue: previousTheme || 'auto' }, button);
     }
     place();
-    setTimeout(() => goTo('#nochnik', { focus: false }), 60);
-    setTimeout(() => focusQuietly($('[data-night-preview]', el.section)), prefs.reducedMotion ? 80 : 700);
+    setTimeout(() => goTo('#nochnik', { focus: false, onDone: () => focusQuietly($('[data-night-preview]', el.section)) }), 60);
   });
   registerAction('noise-focus', () => {
     if (openSheets().length) closeSheet();
-    setTimeout(() => {
-      goTo('#noise', { focus: false });
-      setTimeout(() => focusQuietly($('[data-noise-toggle]', el.section)), prefs.reducedMotion ? 30 : 650);
-    }, 60);
+    setTimeout(() => goTo('#noise', { focus: false, onDone: () => focusQuietly($('[data-noise-toggle]', el.section)) }), 60);
   });
 }

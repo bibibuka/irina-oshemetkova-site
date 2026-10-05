@@ -4,7 +4,8 @@
 import { $, $$, h, announce, focusQuietly } from '../core/dom.js';
 import { prefs } from '../core/prefs.js';
 import { store } from '../core/store.js';
-import { registerAction, goTo } from '../core/actions.js';
+import { registerAction } from '../core/actions.js';
+import { jumpTo } from '../core/motion.js';
 import { closeSheet, openSheets } from '../core/sheets.js';
 import { copyText } from '../core/share.js';
 import { pick } from '../core/phrases.js';
@@ -58,9 +59,22 @@ function compose() {
   return parts.join(' ');
 }
 
+let lastText = '';
+let lastFlash = 0;
 function update() {
   const text = compose();
-  if (el.preview) el.preview.textContent = text;
+  if (el.preview) {
+    el.preview.textContent = text;
+    // The preview «takes the ink» when the letter changes; typing does not make it flicker.
+    const box = el.preview.parentElement;
+    if (lastText && text !== lastText && Date.now() - lastFlash > 700) {
+      lastFlash = Date.now();
+      box.classList.remove('is-updated');
+      void box.offsetWidth;
+      box.classList.add('is-updated');
+    }
+    lastText = text;
+  }
   if (el.sms) el.sms.href = `sms:${PHONE}?&body=${encodeURIComponent(text)}`;
   if (el.mail) el.mail.href = `mailto:${MAIL}?subject=${encodeURIComponent(SUBJECT)}&body=${encodeURIComponent(text)}`;
   const tried = store.temp.get('tried');
@@ -160,6 +174,9 @@ function initCalm() {
     let next = pick(CALM, 'calm');
     if (next === current) next = pick(CALM, 'calm');
     text.textContent = next;
+    text.classList.remove('is-new');
+    void text.offsetWidth;
+    text.classList.add('is-new');
   });
 }
 
@@ -195,13 +212,22 @@ export function init() {
   bind();
   setFormat('online');
 
+  let arriving = 0;
+  // «Написать Ирине» from anywhere: the page brings the letter itself into view (not the section
+  // top), the letter greets the visitor with a soft glow and the cursor waits in the name field.
   registerAction('write', (button, detail = {}) => {
     if (openSheets().length) closeSheet();
     if (detail.format === 'pair') setFormat('pair');
     if (detail.topic) addTopic(detail.topic);
-    setTimeout(() => {
-      goTo('#vstrecha', { focus: false });
-      setTimeout(() => focusQuietly(el.name || $('#vstrecha-title')), prefs.reducedMotion ? 30 : 650);
-    }, 60);
+    setTimeout(() => jumpTo(root, {
+      onDone: () => {
+        root.classList.remove('is-arriving');
+        void root.offsetWidth;
+        root.classList.add('is-arriving');
+        clearTimeout(arriving);
+        arriving = setTimeout(() => root.classList.remove('is-arriving'), 2200);
+        focusQuietly(el.name || $('#vstrecha-title'));
+      },
+    }), 60);
   });
 }

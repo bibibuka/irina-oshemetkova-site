@@ -1,6 +1,6 @@
 /* «Начнём с разговора?» — how it works on the left, a paper letter on the right. Plus the FAQ. */
 .vstrecha__inner { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(40px, 6vw, 96px); align-items: start; }
-.vstrecha__about { display: grid; gap: 22px; align-content: start; position: sticky; top: calc(var(--header-h) + 24px); }
+.vstrecha__about { display: grid; gap: 22px; align-content: start; }
 .facts { display: flex; flex-wrap: wrap; gap: 6px 0; font-family: var(--serif); font-size: clamp(22px, 1vw + 16px, 28px); line-height: 1.3; color: var(--ink); }
 .facts span:not(:last-child)::after { content: '·'; margin-inline: 12px; color: var(--terracotta); }
 .first-steps { display: grid; gap: 0; margin-top: 8px; position: relative; }
@@ -8,24 +8,45 @@
 .first-steps li::before { content: ''; position: absolute; left: 6px; top: 23px; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--sage-500); background: var(--paper); }
 .first-steps li:not(:last-child)::after { content: ''; position: absolute; left: 11px; top: 35px; bottom: -12px; width: 1px; background: var(--line-strong); }
 .first-steps b { font-weight: 600; }
-.calm-card { display: grid; gap: 10px; justify-items: start; margin-top: 10px; padding: 22px 24px; border-radius: var(--radius); background: var(--peach); transform: rotate(-1deg); max-width: 26rem; box-shadow: var(--shadow-sm); }
+.calm-card { display: grid; gap: 10px; justify-items: start; margin-top: 10px; padding: 22px 24px; border-radius: var(--radius); background: var(--peach); max-width: 26rem; box-shadow: var(--shadow-sm); }
+.calm-card__text.is-new { animation: rise-in .6s var(--ease-settle); }
 .calm-card__cap { font-size: var(--text-micro); color: var(--muted); }
 .calm-card__text { font-family: var(--serif); font-style: italic; font-size: clamp(22px, .8vw + 16px, 26px); line-height: 1.3; min-height: 2.6em; }
 
 .letter {
-  position: relative; display: grid; gap: 26px; padding: clamp(44px, 5vw, 64px) clamp(22px, 4vw, 52px) clamp(28px, 4vw, 44px);
-  border-radius: 6px 6px var(--radius) var(--radius); background: #fbf9f3; color: #2f3b31; box-shadow: var(--shadow-md);
+  position: relative; display: grid; gap: 26px; padding: 88px clamp(22px, 4vw, 52px) clamp(28px, 4vw, 44px);
+  border-radius: var(--radius) var(--radius) var(--radius-lg) var(--radius-lg); background: #fbf9f3; color: #2f3b31; box-shadow: var(--shadow-md);
   --ink: #2f3b31; --ink-soft: #3f4c41; --muted: #5f675b; --faint: #7d8576; --line: #dcdfd2; --line-strong: #c4cdb8; --surface: #fffefa;
 }
 html[data-theme='night'] .letter { background: #262f29; color: var(--ink); --ink: #ece8dd; --ink-soft: #ddd8cb; --muted: #b5b8ad; --faint: #8e9488; --line: #333e36; --line-strong: #46534a; --surface: #2c3630; }
-.letter__flap { position: absolute; left: 0; right: 0; top: 0; height: 38px; pointer-events: none; background: color-mix(in srgb, var(--line-strong) 45%, transparent); clip-path: polygon(0 0, 100% 0, 50% 100%); border-radius: 6px 6px 0 0; }
-.letter__flap::after { content: ''; position: absolute; left: 50%; top: 22px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--terracotta); opacity: .55; }
+/* The envelope: a thin V of the flap and a wax seal where it meets. */
+.letter__flap { position: absolute; left: 0; top: 0; width: 100%; height: 46px; overflow: visible; pointer-events: none; fill: color-mix(in srgb, var(--line) 45%, transparent); stroke: var(--line-strong); stroke-width: 1; }
+.letter__flap path { vector-effect: non-scaling-stroke; }
+.letter__seal {
+  position: absolute; left: 50%; top: 46px; z-index: 1; display: grid; place-items: center; width: 46px; height: 46px; margin: -23px 0 0 -23px;
+  border-radius: 50%; color: #fbf3ea; pointer-events: none;
+  background: radial-gradient(circle at 35% 30%, #c88f73, var(--terracotta) 55%, #9c6450);
+  box-shadow: 0 6px 14px -6px rgba(143, 90, 67, .7), inset 0 0 0 3px rgba(255, 255, 255, .14);
+}
+.letter__seal .icon { width: 24px; height: 24px; stroke-width: 1.2; }
+/* Arriving from «Написать Ирине»: a soft ring spreads from the letter and the seal stamps. */
+.letter::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.letter.is-arriving::after { animation: letter-ring 1.6s var(--ease-out) .1s; }
+.letter.is-arriving .letter__seal { animation: seal-stamp .9s var(--ease-settle) .15s backwards; }
+@keyframes letter-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--terracotta) 45%, transparent); }
+  100% { box-shadow: 0 0 0 28px transparent; }
+}
+@keyframes seal-stamp { 0% { transform: scale(1.6); opacity: 0; } 60% { transform: scale(.92); opacity: 1; } 100% { transform: none; } }
+html.motion-reduced .letter.is-arriving::after { animation: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--terracotta) 40%, transparent); }
 .letter__title { font-size: clamp(32px, 2.4vw + 14px, 44px); }
 .letter__fields { display: grid; gap: 24px; }
 .letter .chip { background: var(--surface); }
 .letter .chip[aria-pressed='true'], .letter .chip[aria-checked='true'] { background: var(--green); color: var(--on-green); }
 .letter .textarea { margin-top: 8px; }
-.letter__preview { padding: 20px 22px; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--line) 40%, transparent); }
+.letter__preview { padding: 20px 22px; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--line) 40%, transparent); transition: background-color .6s var(--ease-out); }
+.letter__preview.is-updated { animation: preview-ink .9s var(--ease-out); }
+@keyframes preview-ink { 0% { background-color: color-mix(in srgb, var(--sage-200) 85%, transparent); } 100% { background-color: color-mix(in srgb, var(--line) 40%, transparent); } }
 .letter__cap { font-size: var(--text-micro); color: var(--muted); margin-bottom: 6px; }
 .letter__text { font-family: var(--serif); font-style: italic; font-size: clamp(20px, .6vw + 16px, 23px); line-height: 1.45; color: var(--ink); white-space: pre-line; }
 .letter__send { display: grid; gap: 12px; }
@@ -37,11 +58,6 @@ html[data-theme='night'] .letter__status { color: var(--sage-500); }
 
 @media (max-width: 960px) {
   .vstrecha__inner { grid-template-columns: minmax(0, 1fr); }
-  .vstrecha__about { position: static; }
-}
-@media (max-width: 767px) {
-  /* The main send button stays under the thumb while the letter is on screen. */
-  .letter__main { position: sticky; bottom: calc(var(--dock-h) + 10px); z-index: 3; box-shadow: var(--shadow-md); }
 }
 
 /* ---------- FAQ ---------- */

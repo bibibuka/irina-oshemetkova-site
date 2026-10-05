@@ -15,10 +15,14 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--sky) 90%, transparent), transparent);
   opacity: 0; transition: opacity var(--t-mid) var(--ease-out);
 }
-.door__frame .icon { position: relative; z-index: 1; width: 30px; height: 30px; color: var(--sage-500); }
+.door__frame .icon { position: relative; z-index: 1; width: 30px; height: 30px; color: var(--sage-500); transition: transform .6s var(--ease-settle), color .3s var(--ease-out); }
 .door__label { font-family: var(--serif); font-size: clamp(21px, 1vw + 14px, 26px); line-height: 1.15; }
 .door__sub { font-size: var(--text-micro); color: var(--muted); }
-.door:hover .door__frame { border-color: var(--sage-500); transform: translateY(-3px); }
+.door:hover .door__frame { border-color: var(--sage-500); transform: translateY(calc(var(--lift) * 2)); }
+.door:hover .door__frame::after { opacity: .2; } /* the door opens a crack and light leaks out */
+.door:hover .door__frame .icon { transform: translateY(-4px) scale(1.08); }
+.door:active .door__frame { transform: scale(var(--press)); transition-duration: .1s; }
+.door__label { transition: color .3s var(--ease-out); }
 .door[aria-selected='true'] { border-bottom: 2px solid var(--green); }
 .door[aria-selected='true'] .door__frame { background: var(--green); border-color: var(--green); }
 .door[aria-selected='true'] .door__frame::after { opacity: .28; }
@@ -36,11 +40,22 @@ html.js .door-panel + .door-panel { margin-top: 0; }
 .door-panel__feel li::before { content: ''; position: absolute; left: 4px; top: .62em; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--terracotta); }
 .door-panel__work li::before { content: ''; position: absolute; left: 2px; top: .78em; width: 12px; height: 1px; background: var(--sage-500); }
 .door-panel .btn { justify-self: start; }
+/* Opening a door: the room fills in — heading, then the two lists line by line, then the button. */
+.door-panel.appear { animation: fade-in .35s var(--ease-out) both; }
+.door-panel.appear > h3, .door-panel.appear .door-panel__cap, .door-panel.appear li, .door-panel.appear > .btn { animation: rise-in .7s var(--ease-settle) backwards; }
+.door-panel.appear .door-panel__cols > div:nth-child(2) .door-panel__cap { animation-delay: .1s; }
+.door-panel.appear li:nth-child(1) { animation-delay: .1s; }
+.door-panel.appear li:nth-child(2) { animation-delay: .16s; }
+.door-panel.appear li:nth-child(3) { animation-delay: .22s; }
+.door-panel.appear li:nth-child(4) { animation-delay: .28s; }
+.door-panel.appear > .btn { animation-delay: .34s; }
+html.is-quiet .door-panel.appear * { animation-name: fade-in; }
 
 @media (max-width: 860px) {
   .doors__row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 4px; margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scrollbar-width: none; }
   .doors__row::-webkit-scrollbar { display: none; }
-  .door { flex: 0 0 132px; scroll-snap-align: start; }
-  .door__frame { width: 92px; }
+  .door { flex: 0 0 auto; min-width: 118px; padding-inline: 8px; scroll-snap-align: start; }
+  .door__frame { width: 84px; }
+  .door__label, .door__sub { white-space: nowrap; }
   .door-panel__cols { grid-template-columns: minmax(0, 1fr); }
 }

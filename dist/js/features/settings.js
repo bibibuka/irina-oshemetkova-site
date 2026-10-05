@@ -77,6 +77,10 @@ function syncSwitches() {
   };
   $$('[data-set]').forEach((button) => button.setAttribute('aria-checked', String(Boolean(values[button.dataset.set]))));
   $$('[data-action="theme"]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.themeValue === prefs.theme)));
+  $$('[data-action="theme-toggle"]').forEach((button) => {
+    button.setAttribute('aria-pressed', String(prefs.isNight));
+    button.title = prefs.isNight ? 'Ночник включён — сделать светлее' : 'Включить ночник';
+  });
 }
 
 function renderAll() { syncSwitches(); renderDataList(); renderFooter(); }
@@ -109,8 +113,13 @@ function setTheme(value, origin) {
   const root = document.documentElement;
   if (document.startViewTransition && !prefs.reducedMotion && origin) {
     const rect = origin.getBoundingClientRect();
-    root.style.setProperty('--vt-x', `${rect.left + rect.width / 2}px`);
-    root.style.setProperty('--vt-y', `${rect.top + rect.height / 2}px`);
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    root.style.setProperty('--vt-x', `${x}px`);
+    root.style.setProperty('--vt-y', `${y}px`);
+    // The header bar is its own layer in the transition: the same point in its coordinates.
+    const bar = document.querySelector('.site-header__inner')?.getBoundingClientRect();
+    if (bar) { root.style.setProperty('--vt-hx', `${x - bar.left}px`); root.style.setProperty('--vt-hy', `${y - bar.top}px`); }
     root.classList.add('vt-reveal');
     const transition = document.startViewTransition(run);
     transition.finished.finally(() => root.classList.remove('vt-reveal'));
@@ -151,6 +160,8 @@ export function init() {
   registerAction('theme', (button, { themeValue }) => {
     if (['auto', 'day', 'night'].includes(themeValue)) setTheme(themeValue, button);
   });
+  // The header moon: one tap for night or day. «Сам по времени» lives in «Как мне удобнее».
+  registerAction('theme-toggle', (button) => setTheme(prefs.isNight ? 'day' : 'night', button));
   registerAction('settings', (button, { focus }) => {
     renderAll();
     openSheet('sheet-settings', { opener: button, focus: focus === 'data' ? '#settings-data .settings-group__title' : undefined });

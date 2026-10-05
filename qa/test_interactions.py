@@ -167,6 +167,49 @@ with session("interactions") as (run, browser):
 
     run.check("Phone: practice rooms are full screen", full_rooms, mobile)
 
+    print("Motion")
+    moving = new_context(browser, run, reduced_motion="no-preference")
+    lively = open_page(moving, run, "/?tod=day")
+
+    def headings_reveal():
+        # Every heading and block that waits to rise must arrive once it has been scrolled to.
+        lively.evaluate("""async () => {
+            for (let y = 0; y < document.documentElement.scrollHeight; y += 400) {
+                window.scrollTo({ top: y, behavior: 'instant' });
+                await new Promise((resolve) => setTimeout(resolve, 70));
+            }
+        }""")
+        lively.wait_for_timeout(2500)
+        stuck = lively.evaluate("""() => [...document.querySelectorAll('[data-reveal]')]
+            .filter((el) => el.getClientRects().length && !el.classList.contains('is-in'))
+            .map((el) => el.id || el.className)""")
+        assert not stuck, stuck
+        hidden = lively.evaluate("""() => [...document.querySelectorAll('main h2, footer h2')]
+            .filter((el) => el.getClientRects().length)
+            .filter((el) => { const word = el.querySelector('.w__i') || el; const style = getComputedStyle(word);
+                return Number(style.opacity) < 0.99 || style.transform !== 'none'; })
+            .map((el) => el.id || el.textContent.slice(0, 30))""")
+        assert not hidden, hidden
+
+    run.check("Motion on: every heading and block arrives after scrolling, none stays hidden", headings_reveal, lively)
+
+    def header_is_light():
+        tools = lively.locator(".site-header a, .site-header button").count()
+        assert tools <= 8, tools
+        expect(lively.locator(".site-header .theme-toggle")).to_have_count(1)
+        expect(lively.locator(".site-header .stage-chip")).to_have_count(0)
+
+    run.check("Header: brand, four links, the night toggle, help and the letter — nothing more", header_is_light, lively)
+
+    def write_lands_on_letter():
+        lively.evaluate("window.scrollTo({ top: 0, behavior: 'instant' })")
+        lively.locator(".header-cta").click()
+        expect(lively.locator("#letter-name")).to_be_focused(timeout=4000)
+        top = lively.evaluate("document.querySelector('[data-letter]').getBoundingClientRect().top")
+        assert 60 < top < 160, top
+
+    run.check("«Написать Ирине» brings the letter itself under the header and focuses the name", write_lands_on_letter, lively)
+
     print("Without JavaScript")
     nojs = new_context(browser, run, java_script_enabled=False)
     plain = nojs.new_page()

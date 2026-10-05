@@ -24,16 +24,20 @@ fieldset.field legend { padding: 0; margin-bottom: 8px; }
 /* Tiny JS autosize fallback hook (field-sizing not supported) */
 .is-autosize { overflow: hidden; }
 
+/* Ripple hosts: the soft circle stays inside the control (motion.css draws it). */
+:is(.seg button, .weather__tile, .night-tile, .pebbles button, .bubble-chip, .icon-btn, .step, .door__frame, .book__toc [role='tab']) { position: relative; isolation: isolate; overflow: hidden; }
+
 /* ---------- Segmented control ---------- */
 .seg { display: inline-flex; flex-wrap: wrap; gap: 6px; }
 .seg button {
   min-height: 44px; padding: 8px 16px; border-radius: 999px;
   border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
   font-size: var(--text-small); line-height: 1.3;
-  transition: background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+  transition: background-color .25s var(--ease-out), border-color .25s var(--ease-out), color .25s var(--ease-out), transform .3s var(--ease-settle);
 }
-.seg button:hover { border-color: var(--sage-500); }
-.seg button[aria-pressed='true'] { background: var(--green); border-color: var(--green); color: var(--on-green); }
+.seg button:hover { border-color: var(--sage-500); transform: translateY(calc(var(--lift) * .5)); }
+.seg button:active { transform: scale(var(--press)); transition-duration: .09s; }
+.seg button[aria-pressed='true'] { background: var(--green); border-color: var(--green); color: var(--on-green); animation: pop .45s var(--ease-settle); }
 .seg--dark button { background: transparent; color: var(--on-band); border-color: color-mix(in srgb, var(--on-band) 28%, transparent); }
 .seg--dark button:hover { border-color: color-mix(in srgb, var(--on-band) 60%, transparent); }
 .seg--dark button[aria-pressed='true'] { background: var(--on-band); color: var(--band); border-color: var(--on-band); }
@@ -54,6 +58,7 @@ fieldset.field legend { padding: 0; margin-bottom: 8px; }
   background-position: 0 0;
 }
 .toggle-row[aria-checked='true']::after { background-color: var(--green); background-position: 18px 0; }
+.toggle-row[role='switch']::after { transition: background-color .3s var(--ease-out), background-position .45s var(--ease-settle); }
 .toggle-row:hover > span { color: var(--ink); }
 .toggle-row--small { min-height: 48px; font-size: var(--text-small); border-bottom: 0; }
 .band .toggle-row { border-bottom-color: color-mix(in srgb, var(--on-band) 14%, transparent); }
@@ -157,9 +162,11 @@ html.is-quiet dialog.sheet, html.motion-reduced dialog.sheet { transition-durati
 
 /* ---------- Shared «copy / share» action bar ---------- */
 .actions-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.icon-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border-radius: 999px; font-size: var(--text-small); color: var(--ink-soft); transition: background-color var(--t-fast), color var(--t-fast); }
-.icon-btn .icon { width: 18px; height: 18px; }
+.icon-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border-radius: 999px; font-size: var(--text-small); color: var(--ink-soft); transition: background-color .25s var(--ease-out), color .25s var(--ease-out), transform .3s var(--ease-settle); }
+.icon-btn .icon { width: 18px; height: 18px; transition: transform .45s var(--ease-settle); }
 .icon-btn:hover { background: var(--sage-100); color: var(--ink); }
+.icon-btn:hover .icon { transform: scale(1.12); }
+.icon-btn:active { transform: scale(var(--press)); transition-duration: .09s; }
 .status-line { min-height: 1.5em; font-size: var(--text-small); color: var(--muted); }
 
 /* Phrase quote — words, help sheet, deck back */

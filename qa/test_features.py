@@ -33,7 +33,7 @@ with session("features") as (run, browser):
         page.locator("#okno [data-stage='postpartum']").click()
         expect(page.locator("#okno [data-stage='postpartum']")).to_have_attribute("aria-pressed", "true")
         expect(page.locator("[data-stage-reply]")).to_contain_text("Начнём с тебя")
-        expect(page.locator("[data-stage-label]")).to_have_text("Малыш родился")
+        expect(page.locator("#sheet-settings [data-stage='postpartum']")).to_have_attribute("aria-pressed", "true")
         order = page.eval_on_selector_all("[data-flow-item]", "els => els.map(e => e.dataset.flowItem)")
         assert order[:2] == ["shelf", "words"], order
         assert page.eval_on_selector("[data-shelf-track] [data-shelf-item]", "e => e.dataset.shelfItem") == "stop"
@@ -61,15 +61,18 @@ with session("features") as (run, browser):
 
     run.check("Loss: threshold sheet, quiet mode, calm title, loss-only blocks", threshold, page)
 
-    def stage_sheet():
-        page.locator(".stage-chip").click()
-        expect(page.locator("#sheet-stage")).to_be_visible()
-        page.locator("#sheet-stage [data-stage='pregnancy']").click()
-        expect(page.locator("#sheet-stage")).to_be_hidden()
-        expect(page.locator("[data-stage-label]")).to_have_text("Жду малыша")
+    def stage_in_settings():
+        page.locator(".svet__col [data-action='settings']:not([data-focus])").click()
+        expect(page.locator("#sheet-settings")).to_be_visible()
+        page.locator("#sheet-settings [data-stage='pregnancy']").click()
+        expect(page.locator("#sheet-settings [data-stage='pregnancy']")).to_have_attribute("aria-pressed", "true")
+        expect(page.locator("#okno [data-stage='pregnancy']")).to_have_attribute("aria-pressed", "true")
+        expect(page.locator("#sheet-settings")).to_be_visible()
         expect(page.locator("[data-breath-safety]")).to_contain_text("Ориентируйся на свой комфорт")
+        page.keyboard.press("Escape")
+        expect(page.locator("#sheet-settings")).to_be_hidden()
 
-    run.check("Stage sheet from the header changes stage and closes", stage_sheet, page)
+    run.check("Stage in «Как мне удобнее» changes the page; the sheet stays open", stage_in_settings, page)
 
     print("Check-in")
 
@@ -354,13 +357,22 @@ with session("features") as (run, browser):
     run.check("Memory: off by default, on writes only io.v1.*, «Стереть всё» erases", memory, page)
 
     def theme():
-        page.locator(".theme-switch [data-theme-value='night']").click()
-        expect(html).to_have_attribute("data-theme", "night", timeout=3000)
-        page.locator(".theme-switch [data-theme-value='day']").click()
-        expect(html).to_have_attribute("data-theme", "day", timeout=3000)
+        # «Сам по времени» is night after 22:00, so the first tap may go either way.
+        toggle = page.locator(".site-header .theme-toggle")
+        start = page.evaluate("document.documentElement.dataset.theme")
+        other = "day" if start == "night" else "night"
+        toggle.click()
+        expect(html).to_have_attribute("data-theme", other, timeout=3000)
+        expect(toggle).to_have_attribute("aria-pressed", "true" if other == "night" else "false")
+        toggle.click()
+        expect(html).to_have_attribute("data-theme", start, timeout=3000)
+        if start == "night":
+            toggle.click()
+            expect(html).to_have_attribute("data-theme", "day", timeout=3000)
+        expect(toggle).to_have_attribute("aria-pressed", "false")
         expect(page.locator("[data-footer-prefs]")).to_contain_text("Без ночника")
 
-    run.check("Theme switch: night and day, footer summary", theme, page)
+    run.check("Night toggle in the header: night and day, footer summary", theme, page)
 
     print("Night and bot")
 
