@@ -1,7 +1,7 @@
 # Handoff: редизайн v2 — «Свет в окне»
 
 Дата: 5 октября 2026. Работать **без субагентов и воркфлоу**: один агент, последовательно, по плану ниже.
-`HANDOFF.md` описывает **старую** версию сайта (она до сих пор отдаётся из `dist/` и работает). Этот файл — про новую.
+`HANDOFF.md` описывает **старую** версию сайта (она есть только в истории git, коммит `052a3e1`). Этот файл — про новую, которая теперь отдаётся из `dist/`.
 
 ## Запрос пользователя
 
@@ -16,29 +16,67 @@
 - **Не проверять UI в браузере самому**: без скриншотов, preview- и browser-тулов. Дев-сервер поднимать можно. После правки сказать «готово» и ждать отзыва. Тесты, линтер и типы гонять можно и нужно (функциональные Playwright-тесты без скриншотов — можно).
 - Финальный ответ после кода: **«Итог»** (1–3 предложения простым языком) + блок **«Заметки»** (`Баг:` / `Предложение:` / `Риск:` / `Вопрос:` / `Дальше:`) только если есть что сказать.
 
-## Что уже сделано (не закоммичено)
+## Состояние на конец сессии 3 (5 октября, ночь) — читать первым
+
+**Редизайн v2 собран целиком и работает.** Всё, что подключает `dist/index.html`, создано. Фичи P1, P2 и P3 готовы, включая необязательный «Ночник на экран Домой». Старые файлы удалены, QA переписан, README обновлён. Обе сюиты проходят: `qa/test_features.py` 24/24, `qa/test_interactions.py` 14/14, без ошибок на странице и без внешних запросов. Все коммиты запушены в ветку `claude/adoring-mccarthy-r21cow` (`bibibuka/irina-oshemetkova-site`). Pull request не создавался.
+
+UI в браузере глазами **не проверялся** (правило пользователя): скриншотов и превью не было. Проверено только функционально, через Playwright. Первое, что нужно сделать в следующей сессии, — дождаться отзыва пользователя о внешнем виде.
+
+### Что где лежит
 
 | Путь | Что |
 | --- | --- |
-| `dist/assets/*.webp` | WebP-копии фото: 1,4 МБ PNG → 40–75 КБ. Старые png/jpg оставлены |
-| `dist/assets/fonts/*.woff2` | Cormorant 400/500/600 + italic 400/500, подмножество кириллица+латиница (5×~25 КБ вместо 5×290 КБ TTF) + Inter |
-| `dist/css/tokens.css` | Токены: дневная палитра, ночная («ночник»), оттенок света по времени суток, тихий режим, шрифты, шкала типографики, отступы, радиусы, кривые движения |
-| `dist/css/base.css` | Сброс, типографика, `.btn` (`--primary/--ghost/--soft/--light/--small/--block`), `.link`, `.chip` (aria-pressed), поля, `.kicker` (вместо капсовых эйбрау), `.grain`, reduced-motion |
-| `dist/js/core/*.js` | Ядро на ES-модулях, API ниже |
-| `docs/research/bot-content/*.md` | Весь контент бота, извлечённый дословно: 181 единица, с пометками CAUTION |
-| `docs/research/concepts/*.md` | Две полные концепции (`companion.md` — «Свет в окне», `night-mobile.md` — «Ночник») + `tech.md` (поддержка браузерами на октябрь 2026 и анти-«нейрослоп» список) |
+| `dist/index.html` | Разметка v2 из сессии 2. В этой сессии добавлены `<link rel="manifest">`, `apple-touch-icon` и класс `night-hours` в inline-скрипте темы (чтобы до загрузки JS ночная полоса стояла наверху только ночью) |
+| `dist/css/layout.css` | Переключатели видимости (`.js-only`, `[data-child-photo]`, `[data-loss-only]`, `[data-loud-only]`), свет из окна и лампа (`html.lamp-on`), шапка, док (<768px), полосы, «Что дальше», подвал, печать |
+| `dist/css/components.css` | Шторки (снизу на телефоне, панель справа для `--side`, `--full`), `@starting-style`, `.seg`, `.toggle-row` (role=switch), `.stepper`, `.crisis-hint`, `.celebration`, `.data-list`, `.forget-confirm`, `.mini-breath` |
+| `dist/css/motion.css` | Появления `light` и `words`, вращение бейджа, дыхание света, `animation-timeline: scroll()` под `@supports`, круговой view transition темы |
+| `dist/css/features/*.css` | 14 файлов, по одному на секцию |
+| `dist/js/main.js` | Ядро, затем 14 фич через `import()`, каждая в своём try/catch. После загрузки ставит `html[data-features="ready"]` (на это опираются тесты). `history.scrollRestoration = 'manual'` |
+| `dist/js/core/minibreath.js` | **Новый.** Мини-круг 3–6 для «Остановки» и ответа «очень тяжело» |
+| `dist/js/core/share.js` | `renderCard` получил `size: 'phone'` (1170×2532, фраза ниже часов) — для экрана блокировки |
+| `dist/js/features/*.js` | `hero`, `checkin`, `doors`, `breath`, `help`, `letter`, `irina` (+ лайтбокс), `settings`, `practices`, `thought`, `words`, `deck`, `night` (+ шум, установка), `bot` |
+| `dist/js/content/*.js` | `greetings`, `checkin`, `practices`, `letter`, `thought`, `words`, `deck` — все тексты |
+| `dist/sw.js`, `dist/manifest.webmanifest`, `dist/assets/icon-*.png`, `apple-touch-icon.png` | Офлайн-ночник. SW регистрируется **только** по ссылке «Ночник на экран „Домой“» и работает по схеме network-first |
+| `server.py` | Добавлены MIME-типы `.webmanifest`, `.js`, `.woff2` |
+| `qa/_harness.py`, `qa/test_features.py`, `qa/test_interactions.py` | Функциональные проверки без скриншотов. `visual_check.py` (со скриншотами) удалён |
 
-**Ещё не сделано:** `main.js`, `layout.css`, `components.css`, `motion.css`, все фичи, контентные файлы, тесты, удаление старых файлов, README.
+### Кто регистрирует действия (`data-action`)
 
-## Прогресс, сессия 2 (5 октября, вечер) — читать первым
+`stage` → hero · `checkin` → checkin (камешки ночника отвечают на месте) · `breathe` → breath (закрывает шторку, настраивает ритм и длительность, `data-start="true"` запускает) · `stop`, `very-hard` → help (`very-hard`: после родов открывает «Остановку», при потере — комнату «воспоминание», иначе лист помощи) · `practice`, `choose-practice`, `helped` → practices · `write` → letter (закрывает шторку, подставляет тему и `data-format="pair"`, ставит фокус в имя) · `theme`, `settings`, `forget` → settings · `night-preview`, `noise-focus` → night · `thought` → thought. Ссылки с `data-words-open="family"` открывают нужную вкладку «Слов».
+
+События между фичами: `stage:change`, `mood:change`, `practice:done`, а также события ядра (`prefs:apply`, `theme:change`, `store:change`, `sheet:open`, `sheet:close`). В `store.temp` лежат `mood` и `tried` (Set) — «что я уже попробовала» для письма.
+
+### Решения этой сессии
+
+- **Заголовок по этапу** взят из концепции: «Ждать. *И оставаться собой.*», «Быть мамой. *И не исчезнуть.*», «Здесь можно *просто быть.*», «Быть рядом. *Даже без нужных слов.*», ночью после родов — «Ночная смена? *Здесь светло.*». По умолчанию и для «Жду малыша» остаётся «Быть мамой. *Быть собой.*». *Вопрос: пользователь просил оставить этот заголовок — согласовать, можно ли менять его по этапу.*
+- **Ночник наверху** только в часы 22–6 при ночной теме (или по «Посмотреть, как это выглядит ночью»). Ручная ночная тема днём даёт тёмную страницу, а полоса ночника остаётся посередине.
+- **Письмо** написано нейтрально по роду («Хочу записаться», «Мы хотим записаться вдвоём»): пишут и партнёры. Часовой пояс добавляется, если он не московский.
+- **Тексты практик для экрана** («Вернуться в момент» и др.) взяты из бота дословно. Фразы «я рядом» убраны: сайт не присутствует в реальном времени.
+- **Колода:** 73 фразы. Фраза «Пусть путь к мечте будет бережным» заменена на «Можно ответить про себя, а не про планы» (из того же пула бота), потому что CAUTION — это обещание. Карты «беременность» и «после утраты» показываются только своим этапам, «хорошо» скрывается в тихом режиме.
+- **Ловушки:** 5 подсказок бота дословно, 7 — новые формулировки. В игре нет примеров с «плохой матерью». Во время потери вина не называется ловушкой.
+- **Разбор мысли:** сила 9–10 («невыносимо») останавливает упражнение и включает тихий режим. Цифры нигде не показываются, только слова.
+- **Конверт до утра** сохраняется только при включённой памяти. Без неё — честное объяснение и ссылка на настройки. Конверт удаляется через 48 часов.
+- **Шум:** WAV 22 кГц, 24 с, петля с кроссфейдом. Громкость вшита в сэмплы. Затухание в последние 2 минуты через `audio.volume` — на iOS оно не работает, там шум просто останавливается по таймеру.
+- **«Помощь сейчас»** включает тихий режим на визит, а при включённой памяти — на 24 часа (`quietUntil`).
+- **«Волна света» 15 октября не сделана.** Это черновик на утверждение Ирины. До даты 10 дней, и решать, нужна ли она, должны Ирина и пользователь.
+
+### Известные ограничения и риски
+
+- Внешний вид не проверялся глазами: возможны визуальные огрехи (отступы, перенос заголовков, контраст на фото). Горизонтальной прокрутки на 320–1440 px нет — это проверено тестом.
+- `og:image` указан относительным путём (`assets/irina-portrait.png`). Соцсетям нужен абсолютный URL, его нужно поставить после выбора домена.
+- `icon-512.png` весит ~240 КБ: радиальный градиент плохо сжимается. Скачивается только при установке.
+- В Safari нет `closedby`: закрытие по клику на фон сделано в JS (`sheets.js`). Под Firefox у шторок нет анимации выхода — это допустимо.
+- Номера помощи по-прежнему не перепроверены (см. раздел ниже). На сайте только 112, 103 и 8-800-2000-122.
+
+### Как продолжить
+
+1. Дождаться отзыва пользователя о внешнем виде и поправить точечно. Проверки — `python qa/test_features.py` и `python qa/test_interactions.py` при запущенном `python server.py`.
+2. Согласовать с Ириной тексты из «Открытых вопросов» и новые тексты этой сессии: ловушки 6–12, примеры в игре, фразы ночного экрана, пресеты конструктора.
+3. По желанию — «Волна света» (только этап «потеря», 14–16 октября, без счётчиков).
+
+## Сессия 2: разметка index.html v2 (справочно)
 
 **Сделано:** `dist/index.html` v2 переписан целиком: вся статичная разметка секций и шторок, SVG-спрайт (`#i-*`), inline-скрипт темы в `<head>` (ставит `data-theme`, `data-part`, `data-stage`, `.is-quiet`, `.text-large`, `.motion-reduced`, `theme-color`; читает память только при `io.v1.memory = on`), класс `no-js` → `js`. Старый сайт — в истории git (коммит `052a3e1`).
-
-**Сейчас сайт временно сломан:** `index.html` уже подключает файлы, которых ещё нет. Их нужно создать:
-- `css/layout.css`, `css/components.css`, `css/motion.css`;
-- `css/features/{hero,checkin,doors,breath,practices,thought,words,deck,irina,night,bot,letter,help,settings}.css`;
-- `js/main.js` (`type="module"`) → `initPrefs`, `initSheets`, `initActions`, `initReveals/initHeader/initSectionSpy/initKeyboardAwareDock`, затем `import()` фич из `js/features/*.js`, каждая в своём try/catch;
-- тексты — в `js/content/*.js` (пулы из `4-voice.md`: приветствия, бейдж, ответы по этапам, чек-ин, `practice_intro/done`, `booking_confirmed`, 73 опоры; ловушки; конструктор просьбы).
 
 **Порядок секций в разметке:** `#nochnik` (ночник; в DOM стоит до `<main>`, чтобы ночью быть первым экраном «Ночная смена»; днём `night.js` переносит его в середину страницы, после `#irina`, и показывает как тёмную полосу), `#okno`, `#pogoda`, `[data-flow]` с переставляемыми `#dveri`, `#dyhanie`, `#polka`, `#razbor`, `#slova`, затем `#opory`, `#irina`, `#bot`, `#vstrecha`, `#voprosy`, подвал `#svet` (в нём статичный `#help-now` с номерами — работает без JS). Нижний док `.dock`. Шторки: `sheet-help`, `sheet-stop`, `sheet-room`, `sheet-threshold`, `sheet-stage`, `sheet-settings`, `sheet-doc`, `sheet-privacy`.
 
@@ -103,23 +141,26 @@
 
 ## API ядра (`dist/js/core/`)
 
-- **dom.js:** `$`, `$$`, `h(tag, attrs, ...children)` — безопасный конструктор: строки становятся текстом; `attrs`: `class`, `dataset`, `aria`, `onclick`, `text`. Ещё `append`, `icon(name)` (берёт `#i-<name>` из спрайта — **спрайт ещё не создан**), `on(root, type, selector, fn)` — делегирование. Утилиты: `uid`, `focusQuietly`, `announce` (общий live-region), `clamp`, `wait`.
+- **dom.js:** `$`, `$$`, `h(tag, attrs, ...children)` — безопасный конструктор: строки становятся текстом; `attrs`: `class`, `dataset`, `aria`, `onclick`, `text`. Ещё `append`, `icon(name)` (берёт `#i-<name>` из спрайта в `index.html`), `on(root, type, selector, fn)` — делегирование. Утилиты: `uid`, `focusQuietly`, `announce` (общий live-region), `clamp`, `wait`.
 - **store.js:** `store.get/set`, `store.temp` (Map только на визит), `memory`, `enableMemory()`, `disableMemory()`, `snapshot()`, `forgetAll()`, `subscribe(fn)`. Префикс `io.v1.`. В `localStorage` пишет только при включённой памяти.
 - **time.js:** `now()` (понимает `?tod=morning|day|evening|night`), `partOfDay()`, `isNightLightHours()` (22–6), `humanTime()`, `watchTime(fn)` (раз в 30 с и на `visibilitychange`).
 - **phrases.js:** `pick(list, kind)` — без повтора последних 12. Ещё `pickFrom(kind, ...pools)`, `shuffled`.
 - **sheets.js:** `initSheets()`, `openSheet(id, { opener, focus })` (закрывает другие шторки, блокирует прокрутку, `pushState` — «Назад» на телефоне закрывает шторку), `closeSheet()`, `isOpen()`. Разметка: `<dialog class="sheet" id="sheet-help">`, внутри `[data-close]`; открытие кнопкой `[data-open-sheet="sheet-help"]`. События `sheet:open` и `sheet:close`. Закрытие кликом по фону работает, если у dialog `padding: 0` и контент лежит во внутренней обёртке.
 - **prefs.js:** `STAGES` (`planning`, `pregnancy`, `postpartum`, `loss`, `close`, `none`), `prefs.stage/setStage`, `theme/setTheme` (`auto`/`day`/`night`), `isNight`, `part`, `reducedMotion`, `setMotion`, `textLarge/setTextLarge`, `sound`, `vibration`, `quiet`, `enterQuiet(reason)`. `apply()` ставит на `<html>`: `data-theme`, `data-part`, `data-stage`, `.motion-reduced`, `.text-large`, `.is-quiet` и обновляет `theme-color`. События `theme:change`, `prefs:apply`. Превью: `?stage=loss&theme=night&tod=night`.
-- **celebrate.js:** `canCelebrate()`, `celebrate('sprout' | 'petals', anchorEl)` — нужен CSS `.celebration`, `__sprout`, `__petal` (**не написан**).
-- **safety.js:** `hasCrisisWords(text)`, `watchField(field, anchor)` — неблокирующая карточка `.crisis-hint` (CSS не написан, нужна иконка `lifebuoy`), открывает `sheet-help` и включает тихий режим.
-- **share.js:** `copyText(text, selectNode)`, `shareText({ title, text })`, `fileFromBlob`, `canShareFile`, `shareOrDownload(file)` (File готовить **до** тапа — требование iOS), `download`, `renderCard({ text, caption, footer, theme: 'day' | 'night' | 'peach', size: 'story' | 'square' })` → PNG Blob 1080×1350, ждёт загрузки шрифтов.
+- **celebrate.js:** `canCelebrate()`, `celebrate('sprout' | 'petals', anchorEl)` — CSS — в `components.css`.
+- **safety.js:** `hasCrisisWords(text)`, `watchField(field, anchor)` — неблокирующая карточка `.crisis-hint` (CSS в `components.css`), открывает `sheet-help` и включает тихий режим.
+- **share.js:** `copyText(text, selectNode)`, `shareText({ title, text })`, `fileFromBlob`, `canShareFile`, `shareOrDownload(file)` (File готовить **до** тапа — требование iOS), `download`, `renderCard({ text, caption, footer, theme: 'day' | 'night' | 'peach', size: 'story' | 'square' | 'phone' })` → PNG Blob (1080×1350, 1080×1080 или 1170×2532 для экрана блокировки), ждёт загрузки шрифтов.
 - **audio.js:** `ensureAudio()` (вызывать синхронно в обработчике клика), `createNoise('white' | 'pink' | 'brown' | 'waves')` → `{ start(level), setVolume, stop, playing }` (для дыхания и превью; для ночного шума нужен `<audio>`-вариант, см. выше), `glide(from, to, sec)` — тон вдоха и выдоха, `bell()`, `buzz()`, `vibrationSupported()` (на iOS вибрации нет).
 - **wakelock.js:** `keepAwake('breath', true / false)` — по причинам, чтобы одна фича не выключила экран другой.
 - **actions.js:** `registerAction(name, fn)`, `runAction(name, detail)` (ставит в очередь, если фича ещё не загрузилась), `initActions()` — делегирует `[data-action]`; `goTo('#section')` — прокрутка и фокус на заголовок. **Фичи общаются только через действия**, например `data-action="practice" data-practice="grounding"`, `data-action="breathe" data-pattern="478"`, `data-action="write" data-topic="…"`.
+- **minibreath.js:** `startMiniBreath(root)` → `stop()`. В `root` должны быть `.mini-breath__circle` и `[data-mini-text]`. Посекундный счёт скрыт от скринридера, ритм описан один раз.
 - **motion.js:** `initReveals()` — `[data-reveal]` и `[data-reveal="words"]` (разбивка на слова) добавляют `html.reveals-on` и `.is-in`; контент виден по умолчанию. Ещё `initHeader()` (`.site-header.is-scrolled`, `--scroll`), `initSectionSpy()` (`[data-spy]` → `aria-current`), `initKeyboardAwareDock()`.
 
 Токены — в `tokens.css`. Ключевые: `--paper`, `--paper-2`, `--surface`, `--ink`, `--muted`, `--line`, `--sage-50…500`, `--green`, `--green-deep`, `--on-green`, `--terracotta` (только крупный текст от 24px), `--terracotta-ink` (мелкий акцент и фокус), `--band` / `--on-band` (тёмная полоса), `--lamp`, `--sky`, `--danger` (только SOS и «Стереть»). Также шкала `--h1…--h4`, `--text`, `--text-lead`, `--text-small`, `--text-micro` (минимум 13px), `--ease-breath`, `--ease-settle`. Тема ночи — `html[data-theme='night']`.
 
-## План работ (один агент, по порядку)
+## План работ (один агент, по порядку) — выполнен в сессии 3
+
+Все пункты 1–5 сделаны. Не сделано только «Волна света» 15 октября (по плану — по желанию). Коммиты шли по блокам и пушились сразу: пользователь в этой сессии разрешил коммитить и пушить.
 
 1. **Каркас.** `index.html` v2: вся статичная разметка секций и шторок, SVG-спрайт (`i-arrow`, `i-flower`, `i-lifebuoy`, `i-moon`, `i-sun`, `i-leaf`, `i-heart`, `i-lock`, `i-telegram`, `i-copy`, `i-share`, `i-close`, `i-sound`, `i-play`, `i-pause` и т. п.). Inline-скрипт в `<head>` до CSS ставит `data-theme` и `data-part`, чтобы не было белой вспышки ночью (учитывает память, если она включена). Подключение: `tokens → base → layout → components → motion → features/*.css`, `<script type="module" src="js/main.js">`. Без JS страница читается полностью: практики — списками, помощь — в подвале.
 2. **`main.js`:** `initPrefs`, `initSheets`, `initActions`, motion-инициализации; затем фичи через `import()`, каждая в своём try/catch, чтобы одна ошибка не валила остальные.
@@ -145,6 +186,9 @@
 
 - Утвердить «ты» и тексты от первого лица Ирины («Сейчас я, скорее всего, сплю…»).
 - Финальный список телефонов помощи.
-- Публиковать ли телефон в шапке (сейчас он в подвале старого сайта).
-- Нужны ли «Волна света» 15 октября и PWA.
-- Push в git: remote по-прежнему не настроен.
+- Публиковать ли телефон в шапке (сейчас он только в подвале и у письма — кнопка «Позвонить»).
+- Оставлять ли «Ночник на экран Домой» (сделан; включается только по ссылке в «Ночнике»).
+- Можно ли менять заголовок «Быть мамой. Быть собой.» по этапу (сейчас меняется, см. «Решения этой сессии»).
+- Тексты на утверждение Ирины: 7 новых ловушек и игра, ночные заголовки по этапу, пресеты конструктора просьбы, «Ночник на экран Домой», строка про шум («метра на два»).
+- Нужна ли «Волна света» 15 октября.
+- Домен для абсолютного `og:image`.
