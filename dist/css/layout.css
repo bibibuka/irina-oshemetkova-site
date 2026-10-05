@@ -257,7 +257,7 @@ html.is-quiet .svet__lamp .icon { animation-play-state: paused; }
 
 /* ---------- Print: just the words ---------- */
 @media print {
-  .site-header, .dock, .daylight, .grain::after, .nochnik, .skip-link, .marquee { display: none !important; }
+  .site-header, .dock, .daylight, .grain::after, .skip-link, .marquee { display: none !important; }
   body { padding: 0; background: #fff; color: #000; }
   .band, .svet { background: #fff !important; color: #000 !important; }
 }

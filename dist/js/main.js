@@ -10,7 +10,7 @@ import { $$ } from './core/dom.js';
 
 const FEATURES = [
   'help', 'settings', 'hero', 'checkin', 'doors', 'breath', 'letter', 'irina',
-  'practices', 'thought', 'words', 'deck', 'night', 'bot',
+  'practices', 'thought', 'words', 'deck', 'bot',
 ];
 
 function safely(name, fn) {

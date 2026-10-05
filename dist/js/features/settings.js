@@ -7,14 +7,14 @@ import { registerAction } from '../core/actions.js';
 import { openSheet } from '../core/sheets.js';
 import { vibrationSupported } from '../core/audio.js';
 
-const THEME_LABEL = { auto: 'ночник сам по времени', night: 'ночник всегда', day: 'без ночника' };
+const THEME_LABEL = { day: 'светлая тема', night: 'тёмная тема' };
 const PRACTICE_LABEL = { breath: 'дыхание', grounding: '5-4-3-2-1', feelings: 'контакт с чувствами', envelope: 'конверт до утра', flashback: 'возвращение в сегодня' };
 
 /** Every key the site may know, in plain words. */
 function describe(key, value) {
   switch (key) {
     case 'stage': return value ? ['Этап', STAGES[value]?.long || value] : null;
-    case 'theme': return value && value !== 'auto' ? ['Ночник', THEME_LABEL[value]] : null;
+    case 'theme': return value === 'night' ? ['Тема', THEME_LABEL.night] : null;
     case 'textLarge': return value ? ['Текст', 'крупный'] : null;
     case 'motion': return value && value !== 'auto' ? ['Движение', value === 'reduced' ? 'меньше' : 'полное'] : null;
     case 'sound': return value ? ['Звук в практиках', 'включён'] : null;
@@ -23,7 +23,6 @@ function describe(key, value) {
     case 'helped': return value ? ['Помогло', PRACTICE_LABEL[value] || value] : null;
     case 'opory': return Array.isArray(value) && value.length ? ['Опоры', String(value.length)] : null;
     case 'envelope': return value ? ['Конверт до утра', '1'] : null;
-    case 'noise': return value ? ['Шум для сна', 'запомнен'] : null;
     case 'lastVisit': return value ? ['Последний визит', new Date(value).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })] : null;
     case 'quietUntil': return value > Date.now() ? ['Тихий режим', `до ${new Date(value).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}`] : null;
     default: return null;
@@ -62,7 +61,7 @@ function renderFooter() {
   const comfort = $('[data-footer-prefs]');
   if (comfort) {
     comfort.textContent = [
-      THEME_LABEL[prefs.theme] ? THEME_LABEL[prefs.theme].replace(/^./, (c) => c.toUpperCase()) : 'Ночник сам по времени',
+      THEME_LABEL[prefs.theme].replace(/^./, (c) => c.toUpperCase()),
       prefs.textLarge ? 'крупный текст' : 'обычный текст',
       prefs.reducedMotion ? 'меньше движения' : 'спокойное движение',
       prefs.sound ? 'звук в практиках' : null,
@@ -79,7 +78,7 @@ function syncSwitches() {
   $$('[data-action="theme"]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.themeValue === prefs.theme)));
   $$('[data-action="theme-toggle"]').forEach((button) => {
     button.setAttribute('aria-pressed', String(prefs.isNight));
-    button.title = prefs.isNight ? 'Ночник включён — сделать светлее' : 'Включить ночник';
+    button.title = prefs.isNight ? 'Тёмная тема — сделать светлой' : 'Включить тёмную тему';
   });
 }
 
@@ -158,9 +157,9 @@ export function init() {
     renderAll();
   });
   registerAction('theme', (button, { themeValue }) => {
-    if (['auto', 'day', 'night'].includes(themeValue)) setTheme(themeValue, button);
+    if (['day', 'night'].includes(themeValue)) setTheme(themeValue, button);
   });
-  // The header moon: one tap for night or day. «Сам по времени» lives in «Как мне удобнее».
+  // The header moon: one tap for dark or light.
   registerAction('theme-toggle', (button) => setTheme(prefs.isNight ? 'day' : 'night', button));
   registerAction('settings', (button, { focus }) => {
     renderAll();

@@ -20,7 +20,7 @@ with session("interactions") as (run, browser):
 
     def no_overflow():
         problems = []
-        for path in ["/", "/?tod=night&stage=postpartum", "/?stage=loss"]:
+        for path in ["/", "/?theme=night&stage=postpartum", "/?stage=loss"]:
             page.goto(BASE + path)
             page.wait_for_selector("html[data-features='ready']")
             for width in WIDTHS:
@@ -35,7 +35,7 @@ with session("interactions") as (run, browser):
         page.set_viewport_size({"width": 1440, "height": 1000})
         assert not problems, problems
 
-    run.check("No horizontal scroll at 320–1440 px by day, at night and in the loss stage", no_overflow)
+    run.check("No horizontal scroll at 320–1440 px: light, dark theme and the loss stage", no_overflow)
 
     def text_large_320():
         page.goto(BASE + "/")
@@ -199,7 +199,7 @@ with session("interactions") as (run, browser):
         expect(lively.locator(".site-header .theme-toggle")).to_have_count(1)
         expect(lively.locator(".site-header .stage-chip")).to_have_count(0)
 
-    run.check("Header: brand, four links, the night toggle, help and the letter — nothing more", header_is_light, lively)
+    run.check("Header: brand, four links, the dark-theme moon, help and the letter — nothing more", header_is_light, lively)
 
     def write_lands_on_letter():
         lively.evaluate("window.scrollTo({ top: 0, behavior: 'instant' })")
@@ -225,7 +225,6 @@ with session("interactions") as (run, browser):
         for panel in plain.locator(".door-panel").all():
             expect(panel).to_be_visible()
         expect(plain.locator(".js-only").first).to_be_hidden()
-        expect(plain.locator("#nochnik")).to_be_hidden()
         expect(plain.locator(".dock")).to_be_hidden()
 
     run.check("No JS: help numbers, practice steps and all doors are readable; tools hidden", readable_without_js, plain)
@@ -236,7 +235,6 @@ with session("interactions") as (run, browser):
         assert page.request.get(BASE + "/.env").status == 404
         assert page.request.get(BASE + "/assets/").status == 404
         assert page.request.get(BASE + "/../server.py").status == 404
-        response = page.request.get(BASE + "/manifest.webmanifest")
-        assert response.ok and "manifest" in response.headers.get("content-type", ""), response.headers
+        assert page.request.get(BASE + "/manifest.webmanifest").status == 404
 
-    run.check("Server: no .env, no directory listing, nothing outside dist; manifest served", server_safety)
+    run.check("Server: no .env, no directory listing, nothing outside dist; no web-app manifest", server_safety)

@@ -12,7 +12,7 @@ import re
 
 from playwright.sync_api import expect
 
-from _harness import new_context, open_page, session, storage
+from _harness import BASE, new_context, open_page, session, storage
 
 EMPTY = {"local": {}, "session": {}, "cookies": ""}
 
@@ -357,54 +357,41 @@ with session("features") as (run, browser):
     run.check("Memory: off by default, on writes only io.v1.*, «Стереть всё» erases", memory, page)
 
     def theme():
-        # «Сам по времени» is night after 22:00, so the first tap may go either way.
+        # The light version is the start; the moon turns the dark theme on and off.
         toggle = page.locator(".site-header .theme-toggle")
-        start = page.evaluate("document.documentElement.dataset.theme")
-        other = "day" if start == "night" else "night"
-        toggle.click()
-        expect(html).to_have_attribute("data-theme", other, timeout=3000)
-        expect(toggle).to_have_attribute("aria-pressed", "true" if other == "night" else "false")
-        toggle.click()
-        expect(html).to_have_attribute("data-theme", start, timeout=3000)
-        if start == "night":
-            toggle.click()
-            expect(html).to_have_attribute("data-theme", "day", timeout=3000)
+        expect(html).to_have_attribute("data-theme", "day")
         expect(toggle).to_have_attribute("aria-pressed", "false")
-        expect(page.locator("[data-footer-prefs]")).to_contain_text("Без ночника")
+        toggle.click()
+        expect(html).to_have_attribute("data-theme", "night", timeout=3000)
+        expect(toggle).to_have_attribute("aria-pressed", "true")
+        expect(page.locator("[data-footer-prefs]")).to_contain_text("Тёмная тема")
+        toggle.click()
+        expect(html).to_have_attribute("data-theme", "day", timeout=3000)
+        expect(toggle).to_have_attribute("aria-pressed", "false")
+        expect(page.locator("[data-footer-prefs]")).to_contain_text("Светлая тема")
 
-    run.check("Night toggle in the header: night and day, footer summary", theme, page)
+    run.check("Moon in the header: dark theme on and off, footer summary", theme, page)
 
-    print("Night and bot")
+    print("Light by default, no night band")
 
-    def night_day_band():
-        assert page.evaluate("document.getElementById('nochnik').previousElementSibling.id") == "irina"
-        expect(page.locator("#nochnik")).to_have_class(re.compile("is-band"))
-        page.locator("[data-noise-toggle]").click()
-        expect(page.locator("[data-noise-status]")).to_contain_text("Мягкий шум")
-        page.locator("[data-noise-type='brown']").click()
-        expect(page.locator("[data-noise-status]")).to_contain_text("Глубокий шум")
-        page.locator("[data-noise-toggle]").click()
-        expect(page.locator("[data-noise-status]")).to_be_empty()
+    late = new_context(browser, run, reduced_motion="reduce", color_scheme="dark")
+    late_page = open_page(late, run, "/?tod=night&stage=postpartum")
 
-    run.check("Night band by day; sleep noise starts, changes and stops", night_day_band, page)
+    def light_by_default():
+        # 3 a.m. and a dark system theme: still the light version, and nothing of the night band is left.
+        assert late_page.evaluate("document.documentElement.dataset.theme") == "day"
+        assert late_page.evaluate("document.documentElement.classList.contains('night-hours')") is False
+        expect(late_page.locator("#nochnik, [data-noise], .night-tile, [data-human-time]")).to_have_count(0)
+        expect(late_page.locator("link[rel='manifest']")).to_have_count(0)
+        assert late_page.evaluate("document.querySelector('main').previousElementSibling.tagName") != "SECTION"
+        assert storage(late_page) == EMPTY
+        late_page.goto(BASE + "/?theme=night")
+        late_page.wait_for_selector("html[data-features='ready']")
+        assert late_page.evaluate("document.documentElement.dataset.theme") == "night"
 
-    night = new_context(browser, run, reduced_motion="reduce")
-    night_page = open_page(night, run, "/?tod=night&stage=postpartum")
+    run.check("Light at 3 a.m. and with a dark system; no night band, noise or install; dark only on request", light_by_default, late_page)
 
-    def night_first():
-        assert night_page.evaluate("document.documentElement.dataset.theme") == "night"
-        assert night_page.evaluate("document.getElementById('nochnik').nextElementSibling.id") == "main"
-        expect(night_page.locator("#nochnik")).to_have_class(re.compile("is-top"))
-        expect(night_page.locator("[data-human-time]")).to_have_text("Начало четвёртого")
-        expect(night_page.locator("[data-night-title]")).to_have_text("Ночная смена? Ты не одна в ней.")
-        expect(night_page.locator("[data-night-note]")).to_be_hidden()
-        night_page.locator("[data-night-moods] [data-mood='hard']").click()
-        expect(night_page.locator(".nochnik__answer")).to_be_visible()
-        night_page.locator("[data-night-hard]").click()
-        expect(night_page.locator("#sheet-stop")).to_be_visible()
-        assert storage(night_page) == EMPTY
-
-    run.check("Night 3 a.m.: «Ночная смена» first, human clock, tiles route to the stop", night_first, night_page)
+    print("Bot")
 
     def bot():
         expect(page.locator("[data-bot-greeting]")).not_to_be_empty()

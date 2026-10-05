@@ -14,9 +14,8 @@
   <meta property="og:url" content="https://bibibuka.github.io/irina-oshemetkova-site/">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="manifest" href="manifest.webmanifest">
   <script>
-    /* Before the first paint: theme, part of day and stage, so there is no white flash at night. */
+    /* Before the first paint: theme, part of day and stage, so a chosen dark theme does not flash white. */
     (function () {
       var d = document.documentElement, q = new URLSearchParams(location.search), mem = null;
       d.classList.remove('no-js'); d.classList.add('js');
@@ -25,11 +24,8 @@
       var h = new Date().getHours(), tod = { morning: 8, day: 14, evening: 20, night: 3 }[q.get('tod')];
       if (tod != null) h = tod;
       var part = h >= 5 && h < 11 ? 'morning' : h >= 11 && h < 17 ? 'day' : h >= 17 && h < 23 ? 'evening' : 'night';
-      var theme = q.get('theme') || saved('theme') || 'auto', dark = false;
-      try { dark = matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {}
-      var night = theme === 'night' || (theme === 'auto' && (h >= 22 || h < 6 || dark));
+      var night = (q.get('theme') || saved('theme')) === 'night';
       d.setAttribute('data-theme', night ? 'night' : 'day');
-      if (night && (h >= 22 || h < 6)) d.classList.add('night-hours');
       d.setAttribute('data-part', part);
       var stage = q.get('stage') || saved('stage');
       d.setAttribute('data-stage', stage || 'unset');
@@ -60,7 +56,6 @@
   <link rel="stylesheet" href="css/features/words.css">
   <link rel="stylesheet" href="css/features/deck.css">
   <link rel="stylesheet" href="css/features/irina.css">
-  <link rel="stylesheet" href="css/features/night.css">
   <link rel="stylesheet" href="css/features/bot.css">
   <link rel="stylesheet" href="css/features/letter.css">
   <link rel="stylesheet" href="css/features/help.css">
@@ -152,10 +147,10 @@
         <a href="#vstrecha" data-spy>Встреча</a>
       </nav>
       <div class="site-header__tools">
-        <button class="theme-toggle js-only" type="button" data-action="theme-toggle" aria-pressed="false" title="Ночник: тёмная тема">
+        <button class="theme-toggle js-only" type="button" data-action="theme-toggle" aria-pressed="false" title="Тёмная тема">
           <svg class="icon theme-toggle__sun" aria-hidden="true"><use href="#i-sun"/></svg>
           <svg class="icon theme-toggle__moon" aria-hidden="true"><use href="#i-moon"/></svg>
-          <span class="visually-hidden">Ночник</span>
+          <span class="visually-hidden">Тёмная тема</span>
         </button>
         <a class="help-link" href="#help-now" data-open-sheet="sheet-help">
           <svg class="icon" aria-hidden="true"><use href="#i-lifebuoy"/></svg><span>Помощь<span class="visually-hidden"> сейчас</span></span>
@@ -164,73 +159,6 @@
       </div>
     </div>
   </header>
-
-  <!-- Night band. By day it lives in the middle of the page; at night it moves to the top as «Ночная смена». -->
-  <section class="nochnik" id="nochnik" aria-labelledby="nochnik-title">
-    <div class="nochnik__glow" aria-hidden="true"></div>
-    <div class="wrap nochnik__inner">
-      <div class="nochnik__clock" aria-hidden="true">
-        <p class="nochnik__time" data-human-time>Ночь</p>
-        <p class="nochnik__date" data-clock-line></p>
-      </div>
-      <div class="nochnik__copy">
-        <p class="nochnik__margin">— на случай бессонной ночи</p>
-        <h2 id="nochnik-title" data-night-title>Для ночной смены&nbsp;— <em>ночник.</em></h2>
-        <p class="nochnik__lead" data-night-lead>Если не спится, если малыш никак не засыпает, если накрывает — здесь всё под одной рукой: тёмный экран, тихий звук, крупные кнопки. С 22:00 до 6:00 сайт включает ночник сам.</p>
-      </div>
-      <div class="night-tiles" role="list">
-        <div role="listitem"><button class="night-tile" type="button" data-action="practice" data-practice="envelope"><svg class="icon" aria-hidden="true"><use href="#i-envelope"/></svg><span class="night-tile__title">Отложить мысли до утра</span><span class="night-tile__sub">конверт подождёт</span></button></div>
-        <div role="listitem"><button class="night-tile" type="button" data-action="breathe" data-pattern="36" data-length="60" data-start="true"><svg class="icon" aria-hidden="true"><use href="#i-wave"/></svg><span class="night-tile__title">Подышать минуту</span><span class="night-tile__sub">длинный выдох, без задержек</span></button></div>
-        <div role="listitem"><button class="night-tile" type="button" data-action="very-hard" data-night-hard><svg class="icon" aria-hidden="true"><use href="#i-anchor"/></svg><span class="night-tile__title" data-hard-title>Мне сейчас очень тяжело</span><span class="night-tile__sub" data-hard-sub>пять шагов, чтобы переждать</span></button></div>
-        <div role="listitem"><button class="night-tile night-tile--noise" type="button" data-action="noise-focus"><svg class="icon" aria-hidden="true"><use href="#i-sound"/></svg><span class="night-tile__title" data-noise-tile>Шум для сна</span><span class="night-tile__sub">для малыша или для тебя</span></button></div>
-      </div>
-      <div class="noise" id="noise" data-noise aria-labelledby="noise-title">
-        <div class="noise__orb" aria-hidden="true"><span></span></div>
-        <div class="noise__body">
-          <h3 class="noise__title" id="noise-title">Шум для сна</h3>
-          <div class="seg seg--dark" role="group" aria-label="Звук">
-            <button type="button" data-noise-type="white" aria-pressed="false">Ровный</button>
-            <button type="button" data-noise-type="pink" aria-pressed="true">Мягкий</button>
-            <button type="button" data-noise-type="brown" aria-pressed="false">Глубокий</button>
-            <button type="button" data-noise-type="shh" aria-pressed="false" data-loud-only>Шшш</button>
-          </div>
-          <div class="seg seg--dark" role="group" aria-label="Таймер">
-            <button type="button" data-noise-timer="15" aria-pressed="false">15 мин</button>
-            <button type="button" data-noise-timer="30" aria-pressed="true">30 мин</button>
-            <button type="button" data-noise-timer="60" aria-pressed="false">1 час</button>
-            <button type="button" data-noise-timer="0" aria-pressed="false">Пока не выключу</button>
-          </div>
-          <div class="seg seg--dark" role="group" aria-label="Громкость">
-            <button type="button" data-noise-level="0.35" aria-pressed="true">Тише</button>
-            <button type="button" data-noise-level="0.6" aria-pressed="false">Средне</button>
-            <button type="button" data-noise-level="0.9" aria-pressed="false">Громче</button>
-          </div>
-          <div class="noise__row">
-            <button class="btn btn--light noise__toggle" type="button" data-noise-toggle><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span>Включить</span></button>
-            <p class="noise__status" data-noise-status role="status"></p>
-          </div>
-          <p class="noise__safety">Поставь телефон подальше от кроватки — метра на два — и делай тише, чем кажется нужным. Экран можно заблокировать: шум продолжит играть.</p>
-        </div>
-      </div>
-      <div class="nochnik__foot">
-        <div class="nochnik__moods js-only" data-night-moods>
-          <p class="nochnik__ask">Как ты сейчас?</p>
-          <div class="pebbles" role="group" aria-label="Как ты сейчас">
-            <button type="button" data-action="checkin" data-mood="good">хорошо</button>
-            <button type="button" data-action="checkin" data-mood="ok">нормально</button>
-            <button type="button" data-action="checkin" data-mood="meh">так себе</button>
-            <button type="button" data-action="checkin" data-mood="hard">тяжело</button>
-            <button type="button" data-action="checkin" data-mood="very-hard">очень тяжело</button>
-          </div>
-        </div>
-        <p class="nochnik__links">
-          <button class="link link--light js-only" type="button" data-action="night-preview" data-night-preview>Посмотреть, как это выглядит ночью</button>
-          <a class="link link--light" href="#vstrecha" data-action="write">Написать Ирине — прочитаю утром</a>
-        </p>
-        <p class="nochnik__sos">Если опасно прямо сейчас — <a href="tel:112">позвонить 112</a>.</p>
-      </div>
-    </div>
-  </section>
 
   <main id="main" tabindex="-1">
 
@@ -870,7 +798,7 @@
         </div>
         <div class="svet__col js-only">
           <h3>Как тебе удобнее</h3>
-          <p data-footer-prefs>Ночник сам по времени · обычный текст · спокойное движение</p>
+          <p data-footer-prefs>Светлая тема · обычный текст · спокойное движение</p>
           <p class="svet__row"><button class="link link--light" type="button" data-action="settings"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg>Настроить</button></p>
         </div>
       </div>
@@ -1036,13 +964,11 @@
         <p class="note">Ответ меняет только тексты на этой странице и никуда не уходит.</p>
       </div>
       <div class="settings-group">
-        <p class="settings-group__label" id="set-theme-label">Ночник</p>
+        <p class="settings-group__label" id="set-theme-label">Тема</p>
         <div class="seg" role="group" aria-labelledby="set-theme-label" data-set-theme>
-          <button type="button" data-action="theme" data-theme-value="auto" aria-pressed="true">Сам по времени</button>
-          <button type="button" data-action="theme" data-theme-value="night" aria-pressed="false">Всегда</button>
-          <button type="button" data-action="theme" data-theme-value="day" aria-pressed="false">Никогда</button>
+          <button type="button" data-action="theme" data-theme-value="day" aria-pressed="true">Светлая</button>
+          <button type="button" data-action="theme" data-theme-value="night" aria-pressed="false">Тёмная</button>
         </div>
-        <p class="note">С 22:00 до 6:00 или когда в системе включена тёмная тема.</p>
       </div>
       <div class="settings-group">
         <button class="toggle-row" type="button" role="switch" aria-checked="false" data-set="textLarge"><svg class="icon" aria-hidden="true"><use href="#i-text"/></svg><span>Крупный текст</span></button>

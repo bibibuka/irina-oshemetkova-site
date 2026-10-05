@@ -25,7 +25,7 @@ fieldset.field legend { padding: 0; margin-bottom: 8px; }
 .is-autosize { overflow: hidden; }
 
 /* Ripple hosts: the soft circle stays inside the control (motion.css draws it). */
-:is(.seg button, .weather__tile, .night-tile, .pebbles button, .bubble-chip, .icon-btn, .step, .door__frame, .book__toc [role='tab']) { position: relative; isolation: isolate; overflow: hidden; }
+:is(.seg button, .weather__tile, .bubble-chip, .icon-btn, .step, .door__frame, .book__toc [role='tab']) { position: relative; isolation: isolate; overflow: hidden; }
 
 /* ---------- Segmented control ---------- */
 .seg { display: inline-flex; flex-wrap: wrap; gap: 6px; }

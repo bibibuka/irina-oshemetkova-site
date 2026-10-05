@@ -41,18 +41,18 @@ export function splitWords(el) {
 
 /* ---------- Reveals ---------- */
 // Headings rise word by word; blocks rise; the items of a group arrive one after another.
-const HEADINGS = 'main h2, .traps__title, .principles__title, .docs__title, .nochnik__copy h2, .svet__head h2';
+const HEADINGS = 'main h2, .traps__title, .principles__title, .docs__title, .svet__head h2';
 const BLOCKS = [
   '.section .lead', '.pogoda__sub', '.traps__sub', '.docs__sub', '.notebook', '.trap-game', '.book', '.deck__moods', '.deck__stack', '.deck__controls',
   '.letter', '.phone', '.karman__honest', '.karman__actions', '.irina__text > p', '.calm-card', '.facts',
-  '.vstrecha__about > .note', '.breath', '.breath-settings', '.dyhanie__lead', '.dyhanie__side', '.nochnik__margin',
-  '.nochnik__lead', '.noise', '.next-line', '.svet__head > p', '.svet__head > .btn',
+  '.vstrecha__about > .note', '.breath', '.breath-settings', '.dyhanie__lead', '.dyhanie__side',
+  '.next-line', '.svet__head > p', '.svet__head > .btn',
 ].join(', ');
 const PHOTOS = '.irina__arch, .opory__arch, .voprosy__arch';
 // [container, items, grid] — in a grid the wave runs diagonally, row by row.
 const GROUPS = [
   ['.weather', '.weather__tile'], ['.doors__row', '.door'], ['.shelf__track', '.shelf-item'],
-  ['.traps__fan', '.trap', true], ['.principles', ':scope > *', true], ['.docs', ':scope > li'], ['.night-tiles', ':scope > *', true],
+  ['.traps__fan', '.trap', true], ['.principles', ':scope > *', true], ['.docs', ':scope > li'],
   ['.first-steps', ':scope > li'], ['.faq', ':scope > details'], ['.svet__cols', ':scope > *'], ['.karman__features', ':scope > li', true],
 ];
 
@@ -164,7 +164,7 @@ export function initHeader() {
   window.addEventListener('resize', update);
   update();
   // Over a dark band the glass turns dark too, so the bar never looks like a pale patch.
-  const dark = $$('.band, .nochnik, .svet');
+  const dark = $$('.band, .svet');
   if (!dark.length || !('IntersectionObserver' in window)) return;
   const under = new Set();
   const io = new IntersectionObserver((entries) => {
@@ -227,7 +227,7 @@ export function initNavPill() {
 
 /* ---------- Soft ripples ---------- */
 const RIPPLE = [
-  '.btn', '.chip', '.seg button', '.weather__tile', '.stage-option', '.night-tile', '.pebbles button',
+  '.btn', '.chip', '.seg button', '.weather__tile', '.stage-option',
   '.bubble-chip', '.icon-btn', '.theme-toggle', '.step', '.door__frame', '.book__toc [role="tab"]',
 ].join(', ');
 

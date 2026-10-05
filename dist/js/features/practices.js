@@ -220,8 +220,7 @@ function afterEnvelope(sealed) {
     h('p', { class: 'room__lead-big', tabindex: '-1' }, ENVELOPE.after),
     sealed ? h('p', { class: 'room__hint' }, ENVELOPE.sealed) : null,
     h('div', { class: 'room__actions' },
-      h('button', { type: 'button', class: 'btn btn--soft', dataset: { action: 'breathe', pattern: '36', length: '3c', start: 'true' } }, icon('wave'), 'Подышать 3 круга'),
-      h('button', { type: 'button', class: 'btn btn--ghost', dataset: { action: 'noise-focus' } }, icon('sound'), 'Включить шум')),
+      h('button', { type: 'button', class: 'btn btn--soft', dataset: { action: 'breathe', pattern: '36', length: '3c', start: 'true' } }, icon('wave'), 'Подышать 3 круга')),
   );
   const art = $('.envelope-art__svg', el.body);
   if (art) art.innerHTML = '<rect x="6" y="14" width="128" height="80" rx="6"/><path class="flap" d="m8 18 62 44 62-44"/><circle class="seal" cx="70" cy="62" r="11"/>';

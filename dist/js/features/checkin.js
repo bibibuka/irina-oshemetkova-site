@@ -131,18 +131,6 @@ function select(mood) {
   document.dispatchEvent(new CustomEvent('mood:change', { detail: { mood } }));
 }
 
-function nightAnswer(el, mood) {
-  const host = el.closest('[data-night-moods]');
-  $$('[data-action="checkin"]', host).forEach((pebble) => pebble.setAttribute('aria-pressed', String(pebble === el)));
-  let box = $('.nochnik__answer', host);
-  if (!box) { box = h('div', { class: 'nochnik__answer' }); host.append(box); }
-  state.mood = mood;
-  store.temp.set('mood', mood);
-  setQuietness(mood);
-  renderAnswer(box, mood, { compact: true });
-  document.dispatchEvent(new CustomEvent('mood:change', { detail: { mood } }));
-}
-
 function initWeather() {
   const group = $('[data-weather]');
   if (!group) return;
@@ -174,8 +162,6 @@ function initWeather() {
 export function init() {
   initWeather();
   registerAction('checkin', (el, { mood }) => {
-    if (!MOODS[mood]) return;
-    if (el?.closest('[data-night-moods]')) nightAnswer(el, mood);
-    else select(mood);
+    if (MOODS[mood]) select(mood);
   });
 }

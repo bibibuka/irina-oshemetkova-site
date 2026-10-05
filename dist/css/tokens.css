@@ -1,5 +1,5 @@
 /* Design tokens. Every component reads colours, type and motion from here.
-   Day = milk paper, sage and terracotta. Night ("ночник") is a separately tuned
+   Day = milk paper, sage and terracotta — the default. Night (the dark theme the moon turns on) is a separately tuned
    warm-dark palette, not an inversion. */
 @font-face { font-family: 'Cormorant'; src: url('../assets/fonts/cormorant-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: 'Cormorant'; src: url('../assets/fonts/cormorant-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
@@ -102,7 +102,7 @@ html[data-part='morning'] { --sky: #fff1cf; --sky-strength: .62; }
 html[data-part='day']     { --sky: #ffffff; --sky-strength: .5; }
 html[data-part='evening'] { --sky: #ffd9a8; --sky-strength: .6; --paper: #f6f2ea; --paper-2: #efeadf; }
 
-/* Night — «ночник» */
+/* Night — the dark theme, only when the visitor turns it on */
 html[data-theme='night'] {
   color-scheme: dark;
   --paper: #171d19;
