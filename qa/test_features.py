@@ -12,7 +12,7 @@ import re
 
 from playwright.sync_api import expect
 
-from _harness import BASE, new_context, open_page, session, storage
+from _harness import BASE, new_context, open_page, session, show_panel, storage
 
 EMPTY = {"local": {}, "session": {}, "cookies": ""}
 
@@ -50,13 +50,17 @@ with session("features") as (run, browser):
         page.locator("[data-threshold='read']").click()
         expect(page.locator("#sheet-threshold")).to_be_hidden()
         assert page.eval_on_selector("[data-flow] > [data-flow-item]", "e => e.dataset.flowItem") == "breath"
+        show_panel(page, "polka")
         expect(page.locator("[data-shelf-item='flashback']")).to_be_visible()
+        show_panel(page, "slova")
         expect(page.locator("#w-tab-loss")).to_be_visible()
         page.locator("#okno [data-stage='loss']").click()
         page.locator("[data-threshold='support']").click()
         expect(page.locator("#sheet-help")).to_be_visible()
         page.keyboard.press("Escape")
         page.locator("#okno [data-stage='none']").click()
+        show_panel(page, "polka")
+        expect(page.locator("#polka")).to_be_visible()
         expect(page.locator("[data-shelf-item='flashback']")).to_be_hidden()
 
     run.check("Loss: threshold sheet, quiet mode, calm title, loss-only blocks", threshold, page)
@@ -74,9 +78,64 @@ with session("features") as (run, browser):
 
     run.check("Stage in «Как мне удобнее» changes the page; the sheet stays open", stage_in_settings, page)
 
+    print("Selling frame and the practices block")
+
+    def offer():
+        cta = page.locator(".okno__actions .btn--primary")
+        expect(cta).to_have_attribute("href", "#vstrecha")
+        expect(cta).to_have_attribute("data-action", "write")
+        expect(page.locator(".okno__terms")).to_contain_text("4 000 ₽")
+        expect(page.locator("#uznaesh .thought-card")).to_have_count(8)
+        expect(page.locator("#stoimost .plan")).to_have_count(2)
+        expect(page.locator("#stoimost .plan--main")).to_contain_text("4 000 ₽")
+        expect(page.locator("#stoimost .howto__step")).to_have_count(4)
+        order = page.eval_on_selector_all("main > section", "els => els.map(e => e.id)")
+        assert order == ["okno", "uznaesh", "dveri", "irina", "stoimost", "praktiki", "voprosy", "vstrecha"], order
+        page.locator("#stoimost .plan:not(.plan--main) [data-action='write']").click()
+        expect(page.locator("#letter-name")).to_be_focused(timeout=4000)
+        expect(page.locator("[data-letter-preview]")).to_contain_text("встреча вдвоём")
+
+    run.check("Offer in the first screen, «узнаёшь себя», pricing; page order; the pair plan fills the letter", offer, page)
+
+    def practice_tabs():
+        tabs = page.locator("#praktiki .ptab")
+        expect(tabs).to_have_count(6)
+        panels = ["pogoda", "dyhanie", "polka", "razbor", "slova", "opory"]
+        for pid in panels:
+            page.locator(f"#praktiki .ptab[aria-controls='{pid}']").click()
+            visible = page.eval_on_selector_all("[data-tab-panel]", "els => els.filter(e => !e.hidden).map(e => e.id)")
+            assert visible == [pid], (pid, visible)
+            expect(page.locator(f"[aria-controls='{pid}']")).to_have_attribute("aria-selected", "true")
+        # A «Что дальше» link in one panel opens another panel.
+        page.locator("#praktiki .ptab[aria-controls='polka']").click()
+        page.locator("#polka .next-line a[href='#razbor']").click()
+        expect(page.locator("#razbor")).to_be_visible(timeout=4000)
+        expect(page.locator("#polka")).to_be_hidden()
+        # Arrow keys move along the tabs.
+        page.locator("#praktiki .ptab[aria-selected='true']").focus()
+        page.keyboard.press("Home")
+        expect(page.locator("#praktiki .ptab").first).to_be_focused()
+        expect(page.locator("#praktiki .ptab").first).to_have_attribute("aria-selected", "true")
+        page.keyboard.press("ArrowRight")
+        expect(page.locator("#praktiki .ptab").nth(1)).to_have_attribute("aria-selected", "true")
+        page.evaluate("document.querySelector('#praktiki .ptab[aria-controls=pogoda]').click()")
+        expect(page.locator("#bot")).to_contain_text("ИИ-ассистент")
+        expect(page.locator(".praktiki__bridge [data-action='write']")).to_be_visible()
+
+    run.check("Practices block: six tabs, one panel at a time, links and keys open the right tab", practice_tabs, page)
+
+    def stage_tabs():
+        page.locator("#okno [data-stage='postpartum']").click()
+        order = page.eval_on_selector_all("#praktiki .ptab", "els => els.map(e => e.getAttribute('aria-controls'))")
+        assert order == ["pogoda", "polka", "slova", "dyhanie", "razbor", "opory"], order
+        page.locator("#okno [data-stage='none']").click()
+
+    run.check("The chosen stage re-orders the practice tabs; check-in first, deck last", stage_tabs, page)
+
     print("Check-in")
 
     def checkin():
+        show_panel(page, "pogoda")
         page.locator(".weather__tile[data-mood='meh']").click()
         expect(page.locator(".weather__tile[data-mood='meh']")).to_have_attribute("aria-checked", "true")
         expect(page.locator("[data-louder]")).to_be_visible()
@@ -101,6 +160,7 @@ with session("features") as (run, browser):
     print("Breathing")
 
     def breathing():
+        show_panel(page, "dyhanie")
         page.locator("[data-breath-patterns] [data-pattern='478']").click()
         expect(page.locator("[data-breath-count]")).to_have_text("Вдох 4 — пауза 7 — выдох 8")
         page.locator("[data-breath-start]").click()
@@ -147,6 +207,7 @@ with session("features") as (run, browser):
     run.check("Help sheet: focus on open, tel links, copy number, Esc returns focus", help_sheet, page)
 
     def stop():
+        show_panel(page, "polka")
         page.locator("[data-shelf-item='stop'] [data-action='stop']").click()
         expect(page.locator("#sheet-stop")).to_be_visible()
         expect(page.locator("[data-stop-progress]")).to_have_text("Шаг 1 из 5")
@@ -170,6 +231,7 @@ with session("features") as (run, browser):
     print("Practices")
 
     def grounding():
+        show_panel(page, "polka")
         page.locator("[data-shelf-item='grounding'] .shelf-item__open").click()
         expect(page.locator("#sheet-room")).to_be_visible()
         expect(page.locator("[data-room-progress]")).to_have_text("Шаг 1 из 5")
@@ -187,6 +249,7 @@ with session("features") as (run, browser):
     run.check("Room 5-4-3-2-1: steps, dots, arrows, finish", grounding, page)
 
     def feelings():
+        show_panel(page, "polka")
         page.locator("[data-shelf-item='feelings'] .shelf-item__open").click()
         page.locator("[data-zone-chip='chest']").click()
         page.locator(".room__nav .btn--primary").click()
@@ -200,6 +263,7 @@ with session("features") as (run, browser):
     run.check("Room «Контакт с чувствами»: body zone, pair, voice, final card", feelings, page)
 
     def envelope():
+        show_panel(page, "polka")
         page.locator("[data-shelf-item='envelope'] .shelf-item__open").click()
         page.locator(".envelope__field").fill("не успеваю ничего")
         page.locator(".room__actions .btn--ghost").click()
@@ -212,6 +276,7 @@ with session("features") as (run, browser):
     run.check("Room «Отложить мысли до утра»: no envelope without memory, let go", envelope, page)
 
     def choose():
+        show_panel(page, "polka")
         page.locator("[data-shelf-item='choose'] .shelf-item__open").click()
         page.wait_for_function("document.getElementById('sheet-room').open || document.querySelector('[data-breath-stop]:not([hidden])')", timeout=5000)
         page.evaluate("document.querySelectorAll('dialog[open]').forEach(d => d.close())")
@@ -223,6 +288,7 @@ with session("features") as (run, browser):
     print("Thought record and traps")
 
     def thought():
+        show_panel(page, "razbor")
         page.locator("#situation-text").fill("после разговора с мамой")
         page.locator(".notebook__nav .btn--primary").click()
         page.locator("#thought-text").fill("Все думают обо мне, что я должна справляться сама")
@@ -254,6 +320,7 @@ with session("features") as (run, browser):
     run.check("Thought record: trap underline, safety branch, reframe, words not numbers", thought, page)
 
     def traps():
+        show_panel(page, "razbor")
         expect(page.locator(".trap")).to_have_count(12)
         page.locator(".trap").first.click()
         expect(page.locator(".trap").first).to_have_attribute("aria-pressed", "true")
@@ -265,6 +332,7 @@ with session("features") as (run, browser):
     print("Words")
 
     def words():
+        show_panel(page, "slova")
         page.locator("#w-tab-partner").click()
         expect(page.locator("#w-partner")).to_be_visible()
         expect(page.locator("#w-family")).to_be_hidden()
@@ -286,6 +354,7 @@ with session("features") as (run, browser):
     print("Deck")
 
     def deck():
+        show_panel(page, "opory")
         page.locator(".deck__draw").click()
         expect(page.locator(".deck-card__text")).not_to_be_empty()
         first = page.locator(".deck-card__text").text_content()

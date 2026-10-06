@@ -12,13 +12,14 @@ import {
   SALUTES, GREETING_LINES, NIGHT_POSTPARTUM, LOSS_LINES, BADGE, PART_ICON, HERO, STAGE_REPLIES, WELCOME_BACK, COMEBACK,
 } from '../content/greetings.js';
 
+// The practice tabs in the order that suits the stage. «Как ты сейчас?» stays first, the deck last.
 const FLOW = {
-  default: ['doors', 'breath', 'shelf', 'thought', 'words'],
-  planning: ['thought', 'words', 'doors', 'breath', 'shelf'],
-  pregnancy: ['breath', 'doors', 'shelf', 'thought', 'words'],
-  postpartum: ['shelf', 'words', 'breath', 'doors', 'thought'],
-  loss: ['breath', 'shelf', 'words', 'doors', 'thought'],
-  close: ['words', 'doors', 'breath', 'shelf', 'thought'],
+  default: ['breath', 'shelf', 'thought', 'words'],
+  planning: ['thought', 'words', 'breath', 'shelf'],
+  pregnancy: ['breath', 'shelf', 'thought', 'words'],
+  postpartum: ['shelf', 'words', 'breath', 'thought'],
+  loss: ['breath', 'shelf', 'words', 'thought'],
+  close: ['words', 'breath', 'shelf', 'thought'],
 };
 
 let greetingKey = '';
@@ -116,7 +117,17 @@ function arrangeFlow() {
   const items = new Map($$('[data-flow-item]', flow).map((el) => [el.dataset.flowItem, el]));
   const current = $$('[data-flow-item]', flow).map((el) => el.dataset.flowItem).join();
   if (current === order.join()) return;
-  order.forEach((key) => { const el = items.get(key); if (el) flow.append(el); });
+  const tail = $('[data-flow-tail]', flow);
+  const tabs = $('[data-tabs]');
+  const tabOf = (panel) => panel && tabs && $(`[aria-controls="${panel.id}"]`, tabs);
+  const tailTab = tabOf(tail);
+  order.forEach((key) => {
+    const panel = items.get(key);
+    if (!panel) return;
+    flow.insertBefore(panel, tail || null);
+    const tab = tabOf(panel);
+    if (tab) tabs.insertBefore(tab, tailTab || null);
+  });
 }
 
 function replyStep(step) {

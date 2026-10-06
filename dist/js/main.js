@@ -3,6 +3,7 @@
 import { initPrefs } from './core/prefs.js';
 import { initSheets } from './core/sheets.js';
 import { initActions } from './core/actions.js';
+import { initPanels } from './core/panels.js';
 import {
   initReveals, initHeader, initSectionSpy, initNavPill, initRipples, initJumps, initKeyboardAwareDock,
 } from './core/motion.js';
@@ -34,6 +35,7 @@ function boot() {
   safely('prefs', initPrefs);
   safely('sheets', initSheets);
   safely('actions', initActions);
+  safely('panels', initPanels);
   safely('header', initHeader);
   safely('reveals', initReveals);
   safely('spy', initSectionSpy);

@@ -1,0 +1,174 @@
+/* The selling frame around the existing features: the offer in the first screen,
+   «Может быть, ты узнаешь себя», formats, pricing with the first-meeting steps,
+   and the one practices block whose tabs hold the former practice sections. */
+
+.btn--large { min-height: 58px; padding: 15px 28px 15px 30px; font-size: max(17px, var(--control)); }
+
+/* ---------- First screen: the offer ---------- */
+.okno__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+.okno__terms { display: flex; flex-wrap: wrap; gap: 4px 0; font-size: var(--text-small); color: var(--muted); }
+.okno__terms span:not(:last-child)::after { content: '·'; margin-inline: 10px; color: var(--terracotta); }
+.okno__proof {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 40rem;
+  padding-top: 18px; border-top: 1px solid var(--line);
+}
+.okno__proof li { display: grid; gap: 2px; padding-right: 14px; }
+.okno__proof li + li { padding-left: 16px; border-left: 1px solid var(--line); }
+.okno__proof b { font-family: var(--serif); font-size: clamp(18px, .7vw + 13px, 22px); font-weight: 500; line-height: 1.2; color: var(--ink); }
+.okno__proof span { font-size: var(--text-micro); color: var(--muted); }
+html.intro .okno__actions, html.intro .okno__terms, html.intro .okno__proof { animation: rise-in .9s var(--ease-settle) .9s backwards; }
+@media (max-width: 560px) {
+  .okno__actions .btn { width: 100%; }
+  .okno__proof li { padding-right: 8px; }
+  .okno__proof li + li { padding-left: 10px; }
+  .okno__proof b { font-size: 17px; }
+}
+
+/* ---------- «Может быть, ты узнаешь себя» ---------- */
+.thoughts { display: grid; gap: 12px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .thoughts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .thoughts { grid-template-columns: minmax(0, 1fr); } }
+.thought-card {
+  display: flex; flex-direction: column; justify-content: space-between; gap: 20px;
+  min-height: 190px; padding: 24px 22px 20px; border-radius: var(--radius-lg) var(--radius-lg) var(--radius) var(--radius);
+  background: var(--surface); border: 1px solid var(--line);
+  transition: transform var(--t-mid) var(--ease-settle), box-shadow var(--t-mid) var(--ease-settle), border-color var(--t-fast);
+}
+.thought-card:nth-child(4n + 2), .thought-card:nth-child(4n + 3) { background: var(--peach); border-color: transparent; }
+.thought-card:hover { transform: translateY(calc(var(--lift) * 1.5)); box-shadow: var(--shadow-md); }
+.thought-card p { font-family: var(--serif); font-style: italic; font-size: clamp(21px, .6vw + 16px, 25px); line-height: 1.25; color: var(--ink); }
+.thought-card span { font-size: var(--text-micro); color: var(--muted); }
+.thought-card span::before { content: ''; display: inline-block; width: 18px; height: 1px; margin-right: 10px; vertical-align: middle; background: currentColor; opacity: .6; }
+@media (max-width: 560px) { .thought-card { min-height: 0; } }
+
+.uznaesh__answer {
+  display: grid; gap: 22px; margin-top: clamp(24px, 3vw, 40px); padding: clamp(26px, 3.4vw, 44px);
+  border-radius: var(--radius-lg); background: var(--sage-100);
+}
+@media (min-width: 960px) { .uznaesh__answer { grid-template-columns: minmax(0, 1.4fr) auto; align-items: center; gap: 48px; } }
+.uznaesh__text { font-family: var(--serif); font-size: clamp(24px, 1.2vw + 16px, 32px); line-height: 1.22; letter-spacing: -.01em; color: var(--ink); }
+.uznaesh__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; }
+
+/* ---------- Services: formats under the doors ---------- */
+.formats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: clamp(22px, 2.6vw, 34px); }
+.formats li { display: inline-flex; align-items: center; gap: 10px; padding: 9px 18px; border-radius: 999px; border: 1px solid var(--line-strong); font-size: var(--text-small); color: var(--ink-soft); }
+.formats .icon { width: 18px; height: 18px; color: var(--sage-500); }
+.formats__more { margin-top: 14px; max-width: 46em; font-size: var(--text-small); color: var(--muted); }
+.irina__cta { margin-top: 8px; }
+
+/* ---------- Pricing ---------- */
+.plans { display: grid; gap: 14px; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+@media (max-width: 860px) { .plans { grid-template-columns: minmax(0, 1fr); } }
+.plan {
+  position: relative; overflow: hidden; display: grid; gap: 20px; align-content: start;
+  padding: clamp(26px, 3.4vw, 44px); border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line);
+}
+.plan--main { background: var(--band); color: var(--on-band); border-color: transparent; box-shadow: var(--shadow-lg); }
+.plan--main::after {
+  content: ''; position: absolute; right: -90px; top: -90px; width: 280px; height: 280px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(231, 167, 127, .3), transparent 68%);
+}
+html[data-theme='night'] .plan--main { border-color: var(--line); }
+.plan__name { font-size: clamp(26px, 1vw + 19px, 32px); line-height: 1.12; }
+.plan--main .plan__name { color: var(--on-band); }
+.plan__price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 16px; }
+.plan__sum { font-family: var(--serif); font-size: clamp(54px, 4vw + 24px, 78px); line-height: 1; letter-spacing: -.03em; }
+.plan__sum--text { font-size: clamp(28px, 1.2vw + 19px, 36px); color: var(--ink-soft); }
+.plan__per { color: var(--muted); }
+.plan--main .plan__per { color: var(--on-band-muted); }
+.plan__list { display: grid; gap: 10px; }
+.plan__list li { display: flex; gap: 12px; line-height: 1.5; }
+.plan__list .icon { width: 20px; height: 20px; margin-top: 3px; color: var(--sage-500); }
+.plan--main .plan__list .icon { color: #e2b296; }
+.plan__cta { justify-self: start; margin-top: 6px; }
+.stoimost__note { margin-top: 16px; }
+
+.howto__title { font-size: var(--h3); margin-block: clamp(48px, 6vw, 80px) 24px; }
+.howto { display: grid; gap: 12px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .howto { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .howto { grid-template-columns: minmax(0, 1fr); } }
+.howto__step { display: grid; align-content: start; gap: 8px; padding: 24px 22px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
+.howto__num { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 8px; border-radius: 50%; border: 1px solid var(--terracotta); color: var(--terracotta-ink); font-family: var(--serif); font-size: 22px; }
+.howto__step b { font-family: var(--serif); font-weight: 500; font-size: 24px; line-height: 1.15; }
+.howto__step p { font-size: var(--text-small); line-height: 1.6; color: var(--muted); }
+
+/* ---------- Practices: one block with tabs ---------- */
+.praktiki { position: relative; padding-top: var(--section); scroll-margin-top: var(--header-h); }
+.praktiki__head { display: grid; gap: 20px 48px; align-items: end; margin-bottom: clamp(24px, 3vw, 40px); }
+@media (min-width: 961px) { .praktiki__head { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
+.praktiki__title { display: grid; gap: 16px; justify-items: start; }
+.praktiki__badge {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px;
+  background: var(--sage-100); color: var(--ink-soft); font-size: var(--text-micro);
+}
+.praktiki__badge .icon { width: 16px; height: 16px; color: var(--green); }
+
+.praktiki__nav { position: sticky; top: calc(var(--header-h) + 8px); z-index: 20; margin-bottom: clamp(18px, 2vw, 28px); }
+.ptabs {
+  display: flex; gap: 4px; width: fit-content; max-width: 100%; padding: 5px; overflow-x: auto; scrollbar-width: none;
+  border-radius: 999px; background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2);
+  border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+}
+.ptabs::-webkit-scrollbar { display: none; }
+.ptab {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 8px 18px 8px 14px;
+  border-radius: 999px; font-size: var(--text-small); color: var(--ink-soft); white-space: nowrap;
+  transition: background-color var(--t-fast), color var(--t-fast), transform var(--t-fast) var(--ease-settle);
+}
+.ptab .icon { width: 20px; height: 20px; color: var(--sage-500); transition: color var(--t-fast); }
+.ptab:hover { background: var(--sage-50); color: var(--ink); }
+.ptab:active { transform: scale(var(--press)); }
+.ptab[aria-selected='true'] { background: var(--green); color: var(--on-green); }
+.ptab[aria-selected='true'] .icon { color: currentColor; }
+@media (max-width: 767px) {
+  .praktiki__nav { top: calc(var(--header-h) + 4px); width: 100%; margin-inline: 0; padding-inline: 10px; }
+  .ptabs { width: 100%; }
+  .ptab { padding: 8px 14px 8px 12px; }
+}
+
+/* Panels are the former sections: they keep their own look. Before JS settles, only the first shows. */
+html.js .praktiki:not([data-tabs-ready]) .ptab-panel:not(#pogoda) { display: none; }
+.ptab-panel { outline: none; }
+/* Beats layout.css «section[id]»: a jump to a panel lands below the sticky tab bar. */
+.praktiki .ptab-panel[id] { scroll-margin-top: calc(var(--header-h) + 76px); }
+/* Inside the block the practice titles are h3 (one h2 for the block), but keep their section size. */
+.praktiki h3.ptab-heading { font-size: var(--h2); line-height: 1; letter-spacing: -.03em; }
+.praktiki .pogoda__head h3.ptab-heading { font-size: clamp(42px, 4.4vw, 66px); }
+.praktiki .razbor__head h3.ptab-heading { font-size: clamp(40px, 4.2vw, 66px); }
+.praktiki .dyhanie__copy h3.ptab-heading { color: var(--on-band); }
+/* Sticky columns inside the panels start below the sticky tab bar, not under it. */
+.praktiki .pogoda__head, .praktiki .razbor__head, .praktiki .book__toc, .praktiki .opory__arch { top: calc(var(--header-h) + 88px); }
+.ptab-panel.pogoda { border-radius: var(--radius-lg); margin-inline: clamp(0px, 1.2vw, 16px); }
+.ptab-panel.dyhanie { border-radius: var(--radius-lg); margin-inline: clamp(0px, 1.2vw, 16px); }
+.praktiki .ptab-panel.section { padding-block: clamp(28px, 3vw, 48px) var(--section); }
+.praktiki .karman { border-top: 1px solid var(--line); }
+@media (max-width: 767px) {
+  .ptab-panel.pogoda, .ptab-panel.dyhanie { border-radius: 0; margin-inline: 0; }
+}
+
+.praktiki__bridge {
+  display: grid; gap: 14px 40px; align-items: center; padding: clamp(26px, 3.4vw, 44px);
+  border-radius: var(--radius-lg); background: var(--peach); box-shadow: var(--shadow-sm);
+}
+@media (min-width: 961px) { .praktiki__bridge { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto; } }
+.praktiki__bridge-lead { font-family: var(--serif); font-size: clamp(30px, 1.6vw + 18px, 42px); line-height: 1.05; letter-spacing: -.02em; color: var(--ink); }
+.praktiki__bridge-lead em { color: var(--terracotta); }
+.praktiki__bridge-text { color: var(--ink-soft); }
+.praktiki__disclaimer { margin-top: 18px; max-width: 60em; font-size: var(--text-micro); color: var(--muted); }
+
+/* ---------- Booking: direct contacts ---------- */
+.contacts { display: grid; gap: 2px; }
+.contacts a { display: flex; align-items: center; gap: 14px; padding: 8px 0; text-decoration: none; color: var(--ink); }
+.contacts .icon { width: 22px; height: 22px; color: var(--green); flex-shrink: 0; }
+.contacts span { display: grid; line-height: 1.35; font-size: var(--text-small); color: var(--muted); overflow-wrap: anywhere; }
+.contacts b { color: var(--ink); font-weight: 500; font-size: var(--text); }
+.contacts a:hover b { color: var(--terracotta-ink); }
+
+/* ---------- Phone dock: «Запись» is the accent ---------- */
+@media (max-width: 767px) {
+  .dock .dock__book { color: var(--green); font-weight: 600; }
+}
+
+/* «Как ты сейчас?» inside the block: at 768–1180 px the five tiles share a narrower column. */
+@media (min-width: 768px) and (max-width: 1180px) { .weather__tile { padding-inline: 6px; } }

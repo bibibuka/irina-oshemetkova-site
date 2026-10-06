@@ -5,6 +5,7 @@
 // must be able to see it), and a sweep shows anything the observer may have missed.
 import { $, $$ } from './dom.js';
 import { prefs } from './prefs.js';
+import { revealPanel } from './panels.js';
 
 const root = document.documentElement;
 
@@ -47,13 +48,15 @@ const BLOCKS = [
   '.letter', '.phone', '.karman__honest', '.karman__actions', '.irina__text > p', '.calm-card', '.facts',
   '.vstrecha__about > .note', '.breath', '.breath-settings', '.dyhanie__lead', '.dyhanie__side',
   '.next-line', '.svet__head > p', '.svet__head > .btn',
+  '.praktiki__head .lead', '.praktiki__badge', '.formats__more', '.stoimost__note', '.contacts', '.irina__cta',
 ].join(', ');
 const PHOTOS = '.irina__arch, .opory__arch, .voprosy__arch';
 // [container, items, grid] — in a grid the wave runs diagonally, row by row.
 const GROUPS = [
   ['.weather', '.weather__tile'], ['.doors__row', '.door'], ['.shelf__track', '.shelf-item'],
   ['.traps__fan', '.trap', true], ['.principles', ':scope > *', true], ['.docs', ':scope > li'],
-  ['.first-steps', ':scope > li'], ['.faq', ':scope > details'], ['.svet__cols', ':scope > *'], ['.karman__features', ':scope > li', true],
+  ['.faq', ':scope > details'], ['.svet__cols', ':scope > *'], ['.karman__features', ':scope > li', true],
+  ['.thoughts', '.thought-card', true], ['.formats', ':scope > li'], ['.plans', '.plan'], ['.howto', '.howto__step', true], ['.ptabs', '.ptab'],
 ];
 
 function columnsOf(box) {
@@ -289,6 +292,7 @@ export function focusTarget(target) {
 export function jumpTo(target, { offset, onDone } = {}) {
   const el = typeof target === 'string' ? $(target) : target;
   if (!el) return;
+  revealPanel(el); // a practice inside a closed tab: open the tab before measuring
   const margin = offset ?? scrollMargin(el);
   const top = Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - margin));
   const done = () => onDone?.(el);

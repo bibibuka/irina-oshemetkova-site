@@ -301,6 +301,8 @@ function bind() {
     if (s.dim || el.section.contains(document.activeElement) || (el.dimmer && !el.dimmer.hidden)) { hideOverlay(); finish(false); }
   });
   document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+  // Another practice tab opened: the circle waits on pause (and lets the screen sleep) until she comes back.
+  document.addEventListener('panel:show', (event) => { if (event.detail?.id !== 'dyhanie') pause(); });
   document.addEventListener('store:change', (event) => { if (['sound', 'vibration', '*'].includes(event.detail?.key)) syncSwitches(); });
   document.addEventListener('prefs:apply', renderTexts);
   document.addEventListener('stage:change', renderTexts);

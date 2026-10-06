@@ -91,6 +91,15 @@ def open_page(context, run: Run, path: str = "/"):
     return page
 
 
+def show_panel(page, panel_id: str):
+    """Practices live in one block with tabs: open the tab that holds `panel_id` (no-op if open)."""
+    page.evaluate("""id => {
+        const panel = document.getElementById(id);
+        const tab = document.querySelector(`[role="tab"][aria-controls="${id}"]`);
+        if (panel && panel.hidden && tab) tab.click();
+    }""", panel_id)
+
+
 def storage(page):
     return page.evaluate("({ local: {...localStorage}, session: {...sessionStorage}, cookies: document.cookie })")
 

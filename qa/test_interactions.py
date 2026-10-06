@@ -9,7 +9,7 @@ import re
 
 from playwright.sync_api import expect
 
-from _harness import BASE, new_context, open_page, session
+from _harness import BASE, new_context, open_page, session, show_panel
 
 WIDTHS = [320, 360, 390, 768, 1024, 1180, 1440]
 
@@ -84,6 +84,7 @@ with session("interactions") as (run, browser):
         expect(page.locator("#door-close")).to_be_visible()
         page.keyboard.press("Home")
         expect(page.locator("#door-tab-planning")).to_have_attribute("aria-selected", "true")
+        show_panel(page, "slova")
         page.locator("#w-tab-partner").click()
         page.keyboard.press("ArrowRight")
         expect(page.locator("#w-tab-family")).to_be_focused()
@@ -132,6 +133,7 @@ with session("interactions") as (run, browser):
     run.check("Skip links: «К содержанию», then «Нужна помощь сейчас» opens help", skip_link, page)
 
     def static_timer():
+        show_panel(page, "dyhanie")
         page.locator("[data-breath-start]").click()
         expect(page.locator("[data-breath-phase]")).to_have_text(re.compile("…$"))
         assert page.evaluate("document.querySelector('[data-breath]').classList.contains('is-static')")
@@ -153,13 +155,14 @@ with session("interactions") as (run, browser):
         box = mobile.locator("#sheet-help").bounding_box()
         assert box and box["y"] > 0 and abs(box["y"] + box["height"] - 844) < 2, box
         mobile.keyboard.press("Escape")
-        mobile.locator(".dock a[href='#polka']").click()
+        mobile.locator(".dock a[href='#praktiki']").click()
         mobile.wait_for_timeout(400)
-        assert mobile.evaluate("document.getElementById('polka').getBoundingClientRect().top") < 200
+        assert mobile.evaluate("document.getElementById('praktiki').getBoundingClientRect().top") < 200
 
     run.check("Phone: five-cell dock, help as a bottom sheet, dock links scroll", dock, mobile)
 
     def full_rooms():
+        show_panel(mobile, "polka")
         mobile.locator("[data-shelf-item='grounding'] .shelf-item__open").click()
         box = mobile.locator("#sheet-room").bounding_box()
         assert box and box["width"] == 390 and box["height"] >= 840, box
@@ -172,24 +175,28 @@ with session("interactions") as (run, browser):
     lively = open_page(moving, run, "/?tod=day")
 
     def headings_reveal():
-        # Every heading and block that waits to rise must arrive once it has been scrolled to.
-        lively.evaluate("""async () => {
-            for (let y = 0; y < document.documentElement.scrollHeight; y += 400) {
-                window.scrollTo({ top: y, behavior: 'instant' });
-                await new Promise((resolve) => setTimeout(resolve, 70));
-            }
-        }""")
-        lively.wait_for_timeout(2500)
-        stuck = lively.evaluate("""() => [...document.querySelectorAll('[data-reveal]')]
-            .filter((el) => el.getClientRects().length && !el.classList.contains('is-in'))
-            .map((el) => el.id || el.className)""")
-        assert not stuck, stuck
-        hidden = lively.evaluate("""() => [...document.querySelectorAll('main h2, footer h2')]
-            .filter((el) => el.getClientRects().length)
-            .filter((el) => { const word = el.querySelector('.w__i') || el; const style = getComputedStyle(word);
-                return Number(style.opacity) < 0.99 || style.transform !== 'none'; })
-            .map((el) => el.id || el.textContent.slice(0, 30))""")
-        assert not hidden, hidden
+        # Every heading and block that waits to rise must arrive once it has been scrolled to —
+        # in every tab of the practices block, not only the one open at first.
+        stuck, hidden = [], []
+        for pid in ["pogoda", "dyhanie", "polka", "razbor", "slova", "opory"]:
+            show_panel(lively, pid)
+            lively.evaluate("""async () => {
+                for (let y = 0; y < document.documentElement.scrollHeight; y += 400) {
+                    window.scrollTo({ top: y, behavior: 'instant' });
+                    await new Promise((resolve) => setTimeout(resolve, 70));
+                }
+            }""")
+            lively.wait_for_timeout(1600)
+            stuck += lively.evaluate("""() => [...document.querySelectorAll('[data-reveal]')]
+                .filter((el) => el.getClientRects().length && !el.classList.contains('is-in'))
+                .map((el) => el.id || el.className)""")
+            hidden += lively.evaluate("""() => [...document.querySelectorAll('main h2, footer h2')]
+                .filter((el) => el.getClientRects().length)
+                .filter((el) => { const word = el.querySelector('.w__i') || el; const style = getComputedStyle(word);
+                    return Number(style.opacity) < 0.99 || style.transform !== 'none'; })
+                .map((el) => el.id || el.textContent.slice(0, 30))""")
+        assert not stuck, sorted(set(stuck))
+        assert not hidden, sorted(set(hidden))
 
     run.check("Motion on: every heading and block arrives after scrolling, none stays hidden", headings_reveal, lively)
 
@@ -224,6 +231,10 @@ with session("interactions") as (run, browser):
         expect(plain.locator(".door-panel")).to_have_count(5)
         for panel in plain.locator(".door-panel").all():
             expect(panel).to_be_visible()
+        # Without JS the practices block shows every practice one after another, no tabs.
+        for pid in ["pogoda", "dyhanie", "polka", "razbor", "slova", "opory"]:
+            expect(plain.locator(f"#{pid}")).to_be_visible()
+        expect(plain.locator(".ptabs")).to_be_hidden()
         expect(plain.locator(".js-only").first).to_be_hidden()
         expect(plain.locator(".dock")).to_be_hidden()
 
