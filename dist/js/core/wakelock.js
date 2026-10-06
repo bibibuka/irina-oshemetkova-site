@@ -1,4 +1,4 @@
-// Keep the screen on only while something needs it (a practice, the night noise).
+// Keep the screen on only while something needs it (a practice, the breathing circle).
 // Each user passes its own reason, so one finishing never switches off another.
 let sentinel = null;
 const reasons = new Set();

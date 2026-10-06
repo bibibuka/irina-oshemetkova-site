@@ -1,12 +1,11 @@
-// Site-wide state that features read: theme («ночник»), part of day, motion,
+// Site-wide state that features read: theme (light by default, dark on request), part of day, motion,
 // text size, the visitor's stage and quiet mode. Everything is reflected on <html>.
 import { store } from './store.js';
-import { partOfDay, isNightLightHours, watchTime, now } from './time.js';
+import { partOfDay, watchTime, now } from './time.js';
 
 const root = document.documentElement;
 const params = new URLSearchParams(location.search);
 const systemReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
 
 export const STAGES = {
   planning: { label: 'Планирую', long: 'Планирую беременность' },
@@ -19,13 +18,13 @@ export const STAGES = {
 
 // Dev preview only: ?stage=loss&tod=night&theme=night
 if (params.get('stage') && STAGES[params.get('stage')]) store.set('stage', params.get('stage'));
-if (['auto', 'day', 'night'].includes(params.get('theme'))) store.set('theme', params.get('theme'));
+if (['day', 'night'].includes(params.get('theme'))) store.set('theme', params.get('theme'));
 
 export const prefs = {
   get stage() { return store.get('stage', null); },
   setStage(stage) { store.set('stage', STAGES[stage] ? stage : null); apply(); },
-  get theme() { return store.get('theme', 'auto'); },
-  setTheme(theme) { store.set('theme', theme); apply(); },
+  get theme() { return store.get('theme') === 'night' ? 'night' : 'day'; },
+  setTheme(theme) { store.set('theme', theme === 'night' ? 'night' : 'day'); apply(); },
   get isNight() { return root.dataset.theme === 'night'; },
   get part() { return root.dataset.part || partOfDay(); },
   get motion() { return store.get('motion', 'auto'); },
@@ -53,8 +52,7 @@ function themeColor() {
 }
 
 export function apply(date = now()) {
-  const theme = prefs.theme;
-  const night = theme === 'night' || (theme === 'auto' && (isNightLightHours(date) || systemDark.matches));
+  const night = prefs.theme === 'night';
   const previousTheme = root.dataset.theme;
   root.dataset.theme = night ? 'night' : 'day';
   root.dataset.part = partOfDay(date);
@@ -73,6 +71,5 @@ export function apply(date = now()) {
 export function initPrefs() {
   watchTime(apply);
   systemReduced.addEventListener?.('change', () => apply());
-  systemDark.addEventListener?.('change', () => apply());
   store.subscribe((key) => { if (key === '*') apply(); });
 }

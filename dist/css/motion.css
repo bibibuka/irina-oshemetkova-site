@@ -1,0 +1,141 @@
+/* Motion. One metronome — breathing. Everything here is decoration: content is
+   visible without it, hidden states exist only after JS adds html.reveals-on,
+   and an observed element is never clipped itself (IntersectionObserver must see it).
+   «Меньше движения» keeps only soft fades: nothing travels, spins or zooms. */
+
+/* ---------- Reveals: blocks rise into place, siblings one after another ---------- */
+html.reveals-on [data-reveal]:not([data-reveal='words']):not(.is-in) { opacity: 0; }
+html.reveals-on [data-reveal].is-in:not([data-reveal='words']) {
+  animation: reveal-rise 1s var(--ease-settle) backwards;
+  animation-delay: calc(var(--stagger, 0) * 85ms);
+}
+html.reveals-on [data-reveal='fade'].is-in { animation-name: reveal-fade; animation-duration: 1.2s; }
+html.reveals-on [data-reveal='photo'].is-in { animation-name: reveal-photo; animation-duration: 1.4s; }
+/* Already on screen at the first paint: no entrance, nothing blinks. */
+html.reveals-on [data-reveal].is-shown { animation: none !important; }
+html.reveals-on [data-reveal].is-shown .w__i { transition: none !important; }
+@keyframes reveal-rise { from { opacity: 0; transform: translateY(34px); } to { opacity: 1; transform: none; } }
+@keyframes reveal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes reveal-photo { from { opacity: 0; clip-path: inset(18% 0 0 0 round 999px 999px 12px 12px); transform: translateY(24px); } to { opacity: 1; clip-path: inset(0 round 999px 999px 12px 12px); transform: none; } }
+
+/* «Words»: each word rises from behind its own line. The padding lets descenders,
+   accents and the italic overhang show; the negative margin keeps the layout. */
+[data-reveal='words'] .w { display: inline-block; vertical-align: top; overflow: clip; padding: .16em .1em .2em; margin: -.16em -.1em -.2em; }
+[data-reveal='words'] .w__i { display: inline-block; }
+html.reveals-on [data-reveal='words'] .w__i {
+  transform: translateY(132%);
+  transition: transform 1.05s var(--ease-settle);
+  transition-delay: calc(var(--i, 0) * 48ms);
+}
+html.reveals-on [data-reveal='words'].is-in .w__i { transform: none; }
+
+/* ---------- First screen: the window opens, the words arrive ---------- */
+.okno__title .line { display: block; overflow: clip; padding: .08em .12em .18em 0; margin: -.08em -.12em -.18em 0; }
+.okno__title .line__i { display: block; }
+html.intro .okno__greeting { animation: reveal-rise 1s var(--ease-settle) .1s backwards; }
+html.intro .okno__title .line__i { animation: line-rise 1.2s var(--ease-settle) .18s backwards; }
+html.intro .okno__title em .line__i { animation-delay: .34s; }
+html.intro .okno__lead { animation: reveal-rise 1.1s var(--ease-settle) .55s backwards; }
+html.intro .okno__night-note, html.intro .okno__welcome { animation: reveal-rise 1.1s var(--ease-settle) .65s backwards; }
+html.intro .stage-pick { animation: reveal-rise 1.1s var(--ease-settle) .72s backwards; }
+html.intro .okno > .next-line { animation: reveal-fade 1.2s var(--ease-out) 1.1s backwards; }
+html.intro .arch-window { animation: arch-open 1.5s var(--ease-settle) .12s backwards; }
+html.intro .arch-window__img { animation: photo-settle 2.2s var(--ease-settle) .12s backwards; }
+html.intro .okno__window::before { animation: reveal-fade 1.6s var(--ease-out) .7s backwards; }
+html.intro .orbit-badge { animation: badge-in 1.3s var(--ease-settle) .95s backwards; }
+html.intro .okno__caption { animation: reveal-fade 1.2s var(--ease-out) 1.1s backwards; }
+html.intro .marquee { animation: reveal-fade 1.4s var(--ease-out) 1.2s backwards; }
+.okno__title.is-relit .line__i { animation: line-rise 1s var(--ease-settle) backwards; }
+.okno__title.is-relit em .line__i { animation-delay: .12s; }
+@keyframes line-rise { from { transform: translateY(112%); } to { transform: none; } }
+@keyframes arch-open { from { clip-path: inset(100% 0 0 0 round 999px 999px 10px 10px); } to { clip-path: inset(0 round 999px 999px 10px 10px); } }
+@keyframes photo-settle { from { transform: scale(1.16); } to { transform: none; } }
+@keyframes badge-in { from { opacity: 0; transform: scale(.55) rotate(-50deg); } to { opacity: 1; transform: none; } }
+
+/* ---------- Rotating badge on the window ---------- */
+.orbit-badge__ring { animation: orbit 46s linear infinite; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+html.is-quiet .orbit-badge__ring { animation-play-state: paused; }
+
+/* ---------- The window light breathes slowly ---------- */
+.daylight__window i { animation: light-breathe 10s var(--ease-breath) infinite alternate; }
+.daylight__window i:nth-child(2) { animation-delay: -2.5s; }
+.daylight__window i:nth-child(3) { animation-delay: -5s; }
+.daylight__window i:nth-child(4) { animation-delay: -7.5s; }
+@keyframes light-breathe {
+  from { opacity: .86; transform: translate(0, 0); }
+  to { opacity: 1; transform: translate(-6px, 4px); }
+}
+html.is-quiet .daylight__window i { animation: none; }
+
+/* Scroll-linked drift where supported (the JS fallback sets --scroll on .daylight). */
+@supports (animation-timeline: scroll()) {
+  html:not(.motion-reduced) .daylight__window {
+    animation: light-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 1600px;
+  }
+  @keyframes light-drift {
+    from { transform: translateY(0) skewX(-16deg) rotate(6deg); }
+    to { transform: translateY(-190px) skewX(-16deg) rotate(6deg); }
+  }
+}
+
+/* ---------- Soft ripples: circles on water under the finger ---------- */
+.ripple {
+  position: absolute; z-index: -1; border-radius: 50%; pointer-events: none;
+  background: currentColor; opacity: .18; transform: translate(-50%, -50%) scale(0);
+  animation: ripple .75s var(--ease-out) forwards;
+}
+@keyframes ripple { to { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+
+/* ---------- Long jumps: the page dissolves into the next place instead of flying ---------- */
+.site-header__inner { view-transition-name: site-header; }
+.dock { view-transition-name: dock; }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+html.vt-jump::view-transition-old(root) { animation: vt-out .32s var(--ease-out) both; }
+html.vt-jump::view-transition-new(root) { animation: vt-in .62s var(--ease-settle) .06s both; }
+@keyframes vt-out { to { opacity: 0; transform: scale(.985); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(22px); } }
+
+/* ---------- Theme switch: a soft circle of light from the tap point ---------- */
+html.vt-reveal::view-transition-new(root) { animation: vt-circle 700ms var(--ease-breath) both; }
+html.vt-reveal::view-transition-new(site-header) { animation: vt-circle-bar 700ms var(--ease-breath) both; }
+html.vt-reveal::view-transition-old(site-header) { animation: none; }
+@keyframes vt-circle { from { clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0%)); } to { clip-path: circle(150% at var(--vt-x, 50%) var(--vt-y, 0%)); } }
+@keyframes vt-circle-bar { from { clip-path: circle(0 at var(--vt-hx, 50%) var(--vt-hy, 50%)); } to { clip-path: circle(150vmax at var(--vt-hx, 50%) var(--vt-hy, 50%)); } }
+
+/* ---------- Small shared pulses ---------- */
+@keyframes soft-pulse { 0%, 100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.06); opacity: 1; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes pop { 0% { transform: scale(.94); } 55% { transform: scale(1.04); } 100% { transform: none; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.appear { animation: rise-in .6s var(--ease-settle) both; }
+.appear-kids > * { animation: rise-in .7s var(--ease-settle) backwards; }
+.appear-kids > :nth-child(2) { animation-delay: .07s; }
+.appear-kids > :nth-child(3) { animation-delay: .14s; }
+.appear-kids > :nth-child(4) { animation-delay: .21s; }
+.appear-kids > :nth-child(5) { animation-delay: .28s; }
+.appear-kids > :nth-child(n + 6) { animation-delay: .35s; }
+html.is-quiet .appear, html.is-quiet .appear-kids > * { animation-name: fade-in; }
+
+/* ---------- Less motion: soft fades only ----------
+   base.css turns every animation and transition off; these carve-outs bring back
+   the dissolves, which are safe for vestibular comfort and keep the page alive. */
+html.motion-reduced.reveals-on [data-reveal].is-in:not([data-reveal='words']),
+html.motion-reduced .appear, html.motion-reduced .appear-kids > * {
+  animation: reveal-fade .7s var(--ease-out) backwards !important;
+}
+html.motion-reduced.reveals-on [data-reveal='words'] .w__i { transform: none !important; opacity: 0; transition: opacity .8s var(--ease-out) !important; transition-delay: calc(var(--i, 0) * 30ms) !important; }
+html.motion-reduced.reveals-on [data-reveal='words'].is-in .w__i { opacity: 1; }
+html.motion-reduced .ripple { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  html:not(.motion-allowed).reveals-on [data-reveal].is-in:not([data-reveal='words']),
+  html:not(.motion-allowed) .appear, html:not(.motion-allowed) .appear-kids > * {
+    animation: reveal-fade .7s var(--ease-out) backwards !important;
+  }
+  html:not(.motion-allowed).reveals-on [data-reveal='words'] .w__i { transform: none !important; opacity: 0; transition: opacity .8s var(--ease-out) !important; transition-delay: calc(var(--i, 0) * 30ms) !important; }
+  html:not(.motion-allowed).reveals-on [data-reveal='words'].is-in .w__i { opacity: 1; }
+  html:not(.motion-allowed) .ripple { display: none; }
+}

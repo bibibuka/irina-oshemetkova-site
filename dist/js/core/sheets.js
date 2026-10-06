@@ -58,7 +58,6 @@ export function closeSheet(target, { switching = false, fromHistory = false } = 
 
 function handleClosed(sheet) {
   syncLock();
-  if (sheet.open) { delete sheet.dataset.closing; return; } // reopened before the queued close event
   const switching = sheet.dataset.closing === 'switch';
   delete sheet.dataset.closing;
   document.dispatchEvent(new CustomEvent('sheet:close', { detail: { id: sheet.id, sheet } }));

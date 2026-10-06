@@ -1,0 +1,92 @@
+/* «Как ты сейчас?» — inner weather. All five tiles are the same colour: no traffic lights. */
+.pogoda { position: relative; background: var(--paper-3); padding-block: clamp(52px, 5.6vw, 88px); }
+.pogoda__inner { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 24px clamp(32px, 5vw, 80px); align-items: start; }
+.pogoda__head { display: grid; gap: 14px; position: sticky; top: calc(var(--header-h) + 24px); }
+.pogoda__head h2 { font-size: clamp(42px, 4.4vw, 66px); }
+.pogoda__sub { color: var(--muted); font-size: var(--text-small); }
+.pogoda .weather, .pogoda .louder, .pogoda .checkin-answer, .pogoda noscript { grid-column: 2; }
+
+.weather { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.weather__tile {
+  display: grid; justify-items: center; align-content: center; gap: 12px; min-height: 176px; padding: 20px 10px;
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius) var(--radius); border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 65%, transparent); color: var(--ink);
+  font-size: var(--control); text-align: center;
+  transition: border-color var(--t-fast), background-color var(--t-fast), transform var(--t-fast) var(--ease-settle), box-shadow var(--t-fast);
+}
+.weather__tile:hover { border-color: var(--sage-300); transform: translateY(calc(var(--lift) * 2)); box-shadow: var(--shadow-sm); }
+.weather__tile:active { transform: scale(var(--press)); transition-duration: .1s; }
+.weather__tile:hover .g-rays { animation: rays 1.1s var(--ease-settle); }
+.weather__tile:hover .g-cloud { animation: cloud-shift 1.4s var(--ease-settle); }
+.weather__tile:hover .g-drops path { animation: drop 1s var(--ease-out) both; }
+.weather__tile:hover .g-drops path:nth-child(2) { animation-delay: .15s; }
+.weather__tile:hover .g-drops path:nth-child(3) { animation-delay: .3s; }
+.weather__tile[aria-checked='true'] { border: 1.5px solid var(--green); background: var(--surface-raised); box-shadow: var(--shadow-sm); }
+.weather__glyph { width: 56px; height: 56px; fill: none; stroke: var(--sage-500); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.weather__tile[aria-checked='true'] .weather__glyph { stroke: var(--green); }
+.weather__glyph g, .weather__glyph path { transform-box: fill-box; transform-origin: center; }
+.weather__tile.is-picked .g-rays { animation: rays 1.1s var(--ease-settle); }
+.weather__tile.is-picked .weather__glyph--ok .g-cloud { animation: cloud-shift 1.2s var(--ease-settle); }
+.weather__tile.is-picked .weather__glyph--meh .g-cloud { animation: cloud-shift 1.4s var(--ease-settle); }
+.weather__tile.is-picked .g-drops path { animation: drop 1s var(--ease-out) both; }
+.weather__tile.is-picked .g-drops path:nth-child(2) { animation-delay: .15s; }
+.weather__tile.is-picked .g-drops path:nth-child(3) { animation-delay: .3s; }
+@keyframes rays { 0% { transform: scale(.82) rotate(-12deg); } 60% { transform: scale(1.08) rotate(4deg); } 100% { transform: none; } }
+@keyframes cloud-shift { 0% { transform: translateX(0); } 45% { transform: translateX(6px); } 100% { transform: translateX(0); } }
+@keyframes drop { 0% { transform: translateY(-6px); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(0); opacity: 1; } }
+
+.louder { display: grid; gap: 12px; margin-top: 26px; }
+.louder__q { font-family: var(--serif); font-style: italic; font-size: clamp(20px, .6vw + 16px, 24px); color: var(--ink-soft); }
+.louder__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.checkin-answer { position: relative; margin-top: 32px; }
+.answer { position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 20px 40px; padding: clamp(24px, 3vw, 40px); border-radius: var(--radius-lg); background: var(--surface-raised); box-shadow: var(--shadow-sm); }
+.answer__phrase { font-family: var(--serif); font-style: italic; font-size: clamp(26px, 1.6vw + 16px, 36px); line-height: 1.18; color: var(--ink); outline: none; }
+.answer__next { grid-column: 2; grid-row: 1 / span 3; display: grid; gap: 8px; align-content: start; }
+.answer__cap { font-size: var(--text-small); color: var(--muted); }
+.answer--very-hard { grid-template-columns: minmax(0, 1fr); }
+.answer--very-hard .answer__next { grid-column: 1; grid-row: auto; }
+html.lamp-on .answer--hard, html.lamp-on .answer--very-hard { box-shadow: 0 0 0 1px var(--line), 0 30px 120px -20px color-mix(in srgb, var(--lamp) 45%, transparent); }
+
+.steps { display: grid; }
+.answer.appear .answer__phrase { animation: rise-in .8s var(--ease-settle) .05s backwards; }
+.answer.appear .steps li { animation: rise-in .7s var(--ease-settle) backwards; }
+.answer.appear .steps li:nth-child(1) { animation-delay: .18s; }
+.answer.appear .steps li:nth-child(2) { animation-delay: .26s; }
+.answer.appear .steps li:nth-child(3) { animation-delay: .34s; }
+html.is-quiet .answer.appear .answer__phrase, html.is-quiet .answer.appear .steps li { animation-name: fade-in; }
+.step {
+  display: grid; grid-template-columns: 44px 1fr 20px; align-items: center; gap: 14px; width: 100%;
+  min-height: 64px; padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; text-decoration: none; color: var(--ink);
+  border-radius: 0; transition: background-color var(--t-fast);
+}
+.steps li:first-child .step { border-top: 1px solid var(--line); }
+.step:hover { background: var(--sage-50); }
+.step__icon { transition: transform .5s var(--ease-settle), background-color .3s var(--ease-out); }
+.step:hover .step__icon { transform: scale(1.08); background: var(--sage-200); }
+.step__icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: var(--sage-100); color: var(--green); }
+.step__icon .icon { width: 20px; height: 20px; }
+.step__text { display: grid; gap: 2px; }
+.step__label { font-size: clamp(17px, .3vw + 16px, 19px); font-weight: 500; line-height: 1.3; }
+.step__sub { font-size: var(--text-micro); color: var(--muted); }
+.step__arrow { width: 18px; height: 18px; color: var(--muted); transition: transform var(--t-fast) var(--ease-settle); }
+.step:hover .step__arrow { transform: translateX(3px); color: var(--terracotta-ink); }
+
+.checkin-help { display: grid; gap: 10px; padding: 20px; border-radius: var(--radius); background: var(--peach); font-size: var(--text-small); }
+.checkin-help a:not(.btn) { font-weight: 600; }
+.checkin-help__row { display: flex; flex-wrap: wrap; gap: 8px; }
+.checkin-help .link { min-height: 0; display: inline; }
+.mini-breath--inline { margin-top: 4px; }
+
+@media (max-width: 1023px) {
+  .pogoda__inner { grid-template-columns: minmax(0, 1fr); }
+  .pogoda__head { position: static; }
+  .pogoda .weather, .pogoda .louder, .pogoda .checkin-answer, .pogoda noscript { grid-column: 1; }
+}
+@media (max-width: 767px) {
+  .weather { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .weather__tile { grid-template-columns: 44px 1fr; justify-items: start; text-align: left; min-height: 64px; padding: 8px 18px; gap: 16px; border-radius: var(--radius); font-size: 18px; }
+  .weather__glyph { width: 40px; height: 40px; }
+  .answer { grid-template-columns: minmax(0, 1fr); padding: 22px 18px; }
+  .answer__next { grid-column: 1; grid-row: auto; }
+}

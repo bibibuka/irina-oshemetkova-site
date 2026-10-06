@@ -80,10 +80,11 @@ const FLOWER = new Path2D('M30 28C9 18 18 2 27 10c3 3 3 12 3 18Zm2 0C32 5 51 9 4
 
 /**
  * Render a calm phrase card as a PNG Blob.
- * renderCard({ text, caption, footer, theme: 'day' | 'night' | 'peach', size: 'story' | 'square' })
+ * renderCard({ text, caption, footer, theme: 'day' | 'night' | 'peach', size: 'story' | 'square' | 'phone' })
+ * 'phone' is a lock-screen picture: tall, with the phrase below the middle so the clock does not cover it.
  */
 export async function renderCard({ text, caption = '', footer = '', theme = 'day', size = 'story' } = {}) {
-  const [width, height] = size === 'square' ? [1080, 1080] : [1080, 1350];
+  const [width, height] = size === 'square' ? [1080, 1080] : size === 'phone' ? [1170, 2532] : [1080, 1350];
   const palettes = {
     day: { bg: '#f8f7f2', ink: '#2f3b31', accent: '#b47a60', soft: '#e5ebdb', line: '#6f8560' },
     night: { bg: '#171d19', ink: '#ece8dd', accent: '#dba486', soft: '#232c26', line: '#a9bea6' },
@@ -106,7 +107,7 @@ export async function renderCard({ text, caption = '', footer = '', theme = 'day
   ctx.beginPath(); ctx.moveTo(ax, ay + r); ctx.arc(ax + r, ay + r, r, Math.PI, 0); ctx.lineTo(ax + aw, ay + ah); ctx.lineTo(ax, ay + ah); ctx.closePath(); ctx.stroke();
   ctx.globalAlpha = 1;
   // flower
-  ctx.save(); ctx.translate(width / 2 - 45, ay + 150); ctx.scale(1.5, 1.5);
+  ctx.save(); ctx.translate(width / 2 - 45, size === 'phone' ? height * 0.4 : ay + 150); ctx.scale(1.5, 1.5);
   ctx.strokeStyle = p.line; ctx.lineWidth = 1.4; ctx.stroke(FLOWER); ctx.restore();
   // phrase
   ctx.fillStyle = p.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
@@ -116,10 +117,12 @@ export async function renderCard({ text, caption = '', footer = '', theme = 'day
     ctx.font = `italic 400 ${fontSize}px Cormorant, Georgia, serif`;
     lines = wrapLines(ctx, text, aw - 120);
     fontSize -= 4;
-  } while (lines.length * fontSize * 1.18 > ah - 420 && fontSize > 40);
+  } while (lines.length * fontSize * 1.18 > (size === 'phone' ? 900 : ah - 420) && fontSize > 40);
   fontSize += 4;
   const lineHeight = fontSize * 1.18;
-  const blockTop = ay + 300 + Math.max(0, (ah - 420 - lines.length * lineHeight) / 2);
+  const blockTop = size === 'phone'
+    ? height * 0.56 - (lines.length * lineHeight) / 2
+    : ay + 300 + Math.max(0, (ah - 420 - lines.length * lineHeight) / 2);
   lines.forEach((line, index) => ctx.fillText(line, width / 2, blockTop + (index + 1) * lineHeight));
   if (caption) {
     ctx.fillStyle = p.accent; ctx.font = '400 30px Inter, Arial, sans-serif';

@@ -20,26 +20,10 @@ export function partOfDay(date = now()) {
   return 'night';
 }
 
-/** The automatic «ночник» window is a little wider than the bot's night. */
+/** Late night, 22:00–6:00: a few texts (the hero note, the envelope) speak to it. */
 export function isNightLightHours(date = now()) {
   const hour = date.getHours();
   return hour >= 22 || hour < 6;
-}
-
-const ORDINAL_GENITIVE = ['двенадцатого', 'первого', 'второго', 'третьего', 'четвёртого', 'пятого', 'шестого', 'седьмого', 'восьмого', 'девятого', 'десятого', 'одиннадцатого'];
-const CARDINAL = ['двенадцать', 'час', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять', 'десять', 'одиннадцать'];
-const CARDINAL_GENITIVE = ['двенадцати', 'часа', 'двух', 'трёх', 'четырёх', 'пяти', 'шести', 'семи', 'восьми', 'девяти', 'десяти', 'одиннадцати'];
-
-/** «Около трёх», «Начало четвёртого», «Половина четвёртого», «Скоро четыре», «Почти четыре». */
-export function humanTime(date = now()) {
-  const m = date.getMinutes();
-  const hour = date.getHours() % 12;
-  const next = (hour + 1) % 12;
-  if (m < 5) return `Около ${CARDINAL_GENITIVE[hour]}`;
-  if (m < 25) return `Начало ${ORDINAL_GENITIVE[next]}`;
-  if (m < 35) return `Половина ${ORDINAL_GENITIVE[next]}`;
-  if (m < 53) return `Скоро ${CARDINAL[next]}`;
-  return `Почти ${CARDINAL[next]}`;
 }
 
 /** Calls fn now and whenever the part of day may have changed (checked each minute). */
