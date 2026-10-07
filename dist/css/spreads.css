@@ -197,7 +197,8 @@ html.motion-reduced .spread__light { translate: 0 0 !important; }
 main { counter-reset: folio 1; }
 .spread__book > .spread__page { counter-increment: folio; }
 .spread__book > .spread__page::after {
-  content: counter(folio); position: absolute; bottom: calc(var(--section) * -.62); pointer-events: none;
+  content: counter(folio); content: counter(folio) / ''; /* decoration: not read aloud */
+  position: absolute; bottom: calc(var(--section) * -.62); pointer-events: none;
   font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1; color: var(--tone-run); opacity: .8;
 }
 .spread__book > .spread__page--l::after { left: 0; }
@@ -207,3 +208,12 @@ main { counter-reset: folio 1; }
 /* ---------- Bookmarks: quiet full-width bands between spreads ---------- */
 .bookmark { position: relative; border-block: 1px solid var(--line); background: color-mix(in srgb, var(--peach) 80%, var(--paper)); }
 .bookmark__inner { width: min(1440px, 100% - 2 * var(--gutter)); margin-inline: auto; padding-block: clamp(26px, 3vw, 44px); }
+
+/* ---------- The foot of a spread: one line across both pages, under the book ---------- */
+.spread__book:has(+ .spread__foot) { padding-bottom: calc(var(--section) * .72); }
+.spread > .spread__foot {
+  position: relative; width: min(1440px, 100% - 2 * var(--gutter)); margin-inline: auto; padding: clamp(22px, 2.4vw, 32px) 0 var(--section);
+  border-top: 1px solid var(--tone-rule);
+}
+.spread__book:has(+ .spread__foot) > .spread__page::after { bottom: calc(var(--section) * -.44); }
+@media (max-width: 860px) { .spread__book:has(+ .spread__foot) { padding-bottom: 36px; } }

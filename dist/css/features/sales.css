@@ -52,6 +52,14 @@ html.intro .okno__actions, html.intro .okno__terms, html.intro .okno__proof { an
   .thought-card:nth-child(even), .thought-card:nth-child(even):hover { padding-left: 22px; }
 }
 
+.thoughts__note { margin-top: 16px; font-size: var(--text-micro); color: var(--muted); max-width: 40em; }
+/* Under the spread: three thoughts that put things back in proportion. */
+.calm-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px clamp(24px, 3vw, 56px); }
+.calm-row li { display: grid; gap: 6px; align-content: start; padding-left: 18px; border-left: 2px solid var(--terracotta-soft); }
+.calm-row b { font-family: var(--serif); font-weight: 500; font-size: clamp(22px, .6vw + 17px, 27px); line-height: 1.15; color: var(--ink); }
+.calm-row span { color: var(--ink-soft); line-height: 1.55; }
+@media (max-width: 860px) { .calm-row { grid-template-columns: minmax(0, 1fr); } }
+
 /* ---------- Services: formats under the doors ---------- */
 .formats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: clamp(22px, 2.6vw, 34px); }
 .formats li { display: inline-flex; align-items: center; gap: 10px; padding: 9px 18px; border-radius: 999px; border: 1px solid var(--line-strong); font-size: var(--text-small); color: var(--ink-soft); }

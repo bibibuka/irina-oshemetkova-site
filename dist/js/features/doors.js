@@ -22,6 +22,9 @@ export function init() {
         if (on) { panel.classList.remove('appear'); void panel.offsetWidth; panel.classList.add('appear'); }
       }
     });
+    // The spread takes the light of the open chapter (doors.css): the accent changes inside the block too.
+    const spread = root.closest('.spread');
+    if (spread) spread.dataset.chapter = tab.dataset.door;
     if (focus) tab.focus();
   };
 

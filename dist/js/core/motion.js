@@ -49,7 +49,7 @@ const BLOCKS = [
   '.vstrecha__about > .note', '.breath', '.breath-settings', '.dyhanie__lead', '.dyhanie__side',
   '.next-line', '.svet__head > p', '.svet__head > .btn',
   '.praktiki__badge', '.formats__more', '.stoimost__note', '.contacts', '.irina__cta',
-  '.podhod__never', '.podhod__hint', '.prep', '.stoimost__unsure', '.irina__caption', '.docs__sub', '.page-turn',
+  '.podhod__never', '.podhod__hint', '.thoughts__note', '.prep', '.stoimost__unsure', '.irina__caption', '.docs__sub', '.page-turn',
 ].join(', ');
 const PHOTOS = '.irina__arch, .opory__arch, .voprosy__arch';
 // [container, items, grid] — in a grid the wave runs diagonally, row by row.
@@ -57,7 +57,7 @@ const GROUPS = [
   ['.weather', '.weather__tile'], ['.doors__row', '.door'], ['.shelf__track', '.shelf-item'],
   ['.traps__fan', '.trap', true], ['.principles', ':scope > *', true], ['.docs', ':scope > li'],
   ['.faq', ':scope > details'], ['.svet__cols', ':scope > *'], ['.karman__features', ':scope > li', true],
-  ['.thoughts', '.thought-card'], ['.pmap', '.pmap__group'], ['.irina__facts', ':scope > div'], ['.prep__list', ':scope > li'], ['.formats', ':scope > li'], ['.plans', '.plan'], ['.howto', '.howto__step', true], ['.ptabs', '.ptab'],
+  ['.thoughts', '.thought-card'], ['.calm-row', ':scope > li'], ['.podhod__foot', ':scope > div'], ['.pmap', '.pmap__group'], ['.irina__facts', ':scope > div'], ['.prep__list', ':scope > li'], ['.formats', ':scope > li'], ['.plans', '.plan'], ['.howto', '.howto__step', true], ['.ptabs', '.ptab'],
 ];
 
 function columnsOf(box) {

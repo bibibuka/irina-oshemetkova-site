@@ -54,6 +54,8 @@ html.js .door-panel + .door-panel { margin-top: 0; }
 .door-panel__feel li::before { content: ''; position: absolute; left: 4px; top: .62em; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--terracotta); }
 .door-panel__work li::before { content: ''; position: absolute; left: 2px; top: .78em; width: 12px; height: 1px; background: var(--sage-500); }
 .door-panel .btn { justify-self: start; }
+.door-panel__named { max-width: 40em; padding: 4px 0 4px 18px; border-left: 2px solid var(--terracotta-soft); font-family: var(--serif); font-style: italic; font-size: clamp(19px, .4vw + 16px, 22px); line-height: 1.4; color: var(--ink-soft); }
+.door-panel.appear > .door-panel__named { animation: rise-in .7s var(--ease-settle) .3s backwards; }
 @media (min-width: 1240px) {
   .door-panel__cols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
 }
@@ -75,3 +77,15 @@ html.is-quiet .door-panel.appear * { animation-name: fade-in; }
   .door__frame { width: 40px; height: 50px; }
   .page-turn { text-align: left; }
 }
+
+/* Each chapter brings its own light to the spread: sage for waiting, peach for pregnancy, honey for
+   the first months, a quiet mist for loss, milk for partners and family. */
+.dveri.spread[data-chapter='pregnancy'] { --tone-bg: #f4e9df; --tone-light: #ffe0bf; --tone-shade: rgba(122, 76, 50, .07); --tone-rule: #e6d6c6; }
+.dveri.spread[data-chapter='postpartum'] { --tone-bg: #f2ead8; --tone-light: #fff0c8; --tone-shade: rgba(110, 86, 40, .07); --tone-rule: #e2d7bf; }
+.dveri.spread[data-chapter='loss'] { --tone-bg: #e7e8e2; --tone-light: #f7f4ec; --tone-shade: rgba(50, 60, 55, .07); --tone-rule: #d4d7cd; --tone-light-strength: .55; }
+.dveri.spread[data-chapter='close'] { --tone-bg: #f8f7f2; --tone-light: #fff5dc; --tone-shade: color-mix(in srgb, var(--ink) 5%, transparent); --tone-rule: var(--line); }
+html[data-theme='night'] .dveri.spread[data-chapter='pregnancy'] { --tone-bg: #221e1b; --tone-rule: #3a322c; }
+html[data-theme='night'] .dveri.spread[data-chapter='postpartum'] { --tone-bg: #221f18; --tone-rule: #3a3428; }
+html[data-theme='night'] .dveri.spread[data-chapter='loss'] { --tone-bg: #1b1d1b; --tone-rule: #303330; }
+html[data-theme='night'] .dveri.spread[data-chapter='close'] { --tone-bg: #171d19; --tone-rule: var(--line); }
+.dveri .spread__light i { transition: background 1.2s var(--ease-out); }
