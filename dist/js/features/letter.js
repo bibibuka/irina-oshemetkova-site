@@ -54,7 +54,7 @@ function compose() {
   const zone = timeZone();
   if (zone) parts.push(`Мой часовой пояс — ${zone}.`);
   const tried = store.temp.get('tried');
-  if (state.tried && tried?.size) parts.push(`На сайте я уже попробовала: ${[...tried].join(', ')}.`);
+  if (state.tried && tried?.size) parts.push(`Практики с сайта, которые я уже пробую: ${[...tried].join(', ')}.`);
   parts.push(CLOSING);
   return parts.join(' ');
 }

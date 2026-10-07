@@ -48,6 +48,8 @@ html.lamp-on .daylight__lamp { opacity: 1; }
   box-shadow: 0 18px 44px -22px rgba(35, 50, 38, .32);
 }
 html[data-theme='night'] .site-header.is-scrolled .site-header__inner { box-shadow: 0 18px 44px -18px rgba(0, 0, 0, .6); }
+/* Without JS the bar never learns it is scrolled: give it the glass from the start, so it never lies over text bare. */
+html.no-js .site-header__inner { padding: 0 8px 0 18px; background: color-mix(in srgb, var(--surface) 88%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border-color: var(--line); }
 /* Day page, dark band under the bar: the same glass, but smoked. */
 html[data-theme='day'] .site-header.is-on-dark {
   --ink: #ece8dd; --ink-soft: #d9d6cb; --muted: #b5b8ad; --line: #333e36; --line-strong: #4a574d;

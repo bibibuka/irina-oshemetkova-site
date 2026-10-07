@@ -9,6 +9,12 @@
 .okno__title em { display: block; padding-left: .5em; }
 .okno__lead { max-width: 30em; }
 .okno__actions .btn--large { padding-inline: 24px 22px; }
+.okno__actions { align-items: center; column-gap: 14px; }
+/* Between phones and wide screens the page is too narrow for two pills: the second becomes a quiet link. */
+@media (min-width: 561px) and (max-width: 1365px) {
+  .okno__actions .btn--ghost { --btn-bd: transparent; min-height: 48px; padding-inline: 4px; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: .32em; }
+  .okno__actions .btn--ghost:hover { --btn-bg: transparent; text-decoration-color: currentColor; color: var(--terracotta-ink); }
+}
 .okno__book { --page-pad: clamp(24px, 3vw, 52px); }
 .okno__night-note, .okno__welcome { display: flex; gap: 10px; align-items: flex-start; max-width: 32em; font-family: var(--serif); font-style: italic; font-size: clamp(19px, .6vw + 15px, 22px); line-height: 1.4; color: var(--ink-soft); }
 .okno__night-note .icon { width: 20px; height: 20px; margin-top: 4px; color: var(--terracotta-ink); }

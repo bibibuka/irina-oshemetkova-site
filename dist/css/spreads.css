@@ -19,7 +19,6 @@
   transition: background-color 1s var(--ease-out);
 }
 .spread--milk  { --tone-bg: #f8f7f2; --tone-light: #fff5dc; }
-.spread--paper { --tone-bg: #fbfaf5; --tone-light: #ffffff; --tone-light-strength: 1; }
 .spread--peach { --tone-bg: #f4e9df; --tone-light: #ffe0bf; --tone-shade: rgba(122, 76, 50, .07); --tone-rule: #e6d6c6; }
 .spread--sage  { --tone-bg: #e9eee1; --tone-light: #fbffef; --tone-shade: rgba(53, 75, 60, .07); --tone-rule: #d5ddc8; }
 .spread--linen { --tone-bg: #efebe2; --tone-light: #fff4dd; --tone-shade: rgba(90, 74, 50, .07); --tone-rule: #ddd6c8; }
@@ -31,11 +30,9 @@
   color: var(--on-band);
 }
 html[data-part='evening'] .spread--milk { --tone-light: #ffe2b8; }
-html[data-part='evening'] .spread--paper { --tone-light: #fff0d8; }
 
 html[data-theme='night'] .spread { --tone-shade: rgba(0, 0, 0, .22); --spine: rgba(236, 232, 221, .12); --tone-light-strength: .22; }
 html[data-theme='night'] .spread--milk  { --tone-bg: #171d19; --tone-light: #e7a77f; }
-html[data-theme='night'] .spread--paper { --tone-bg: #1a201c; --tone-light: #f0c9a4; }
 html[data-theme='night'] .spread--peach { --tone-bg: #221e1b; --tone-light: #e7a77f; --tone-rule: #3a322c; }
 html[data-theme='night'] .spread--sage  { --tone-bg: #1a221d; --tone-light: #c9d8b8; --tone-rule: #303b33; }
 html[data-theme='night'] .spread--linen { --tone-bg: #1d211d; --tone-light: #e7c39f; --tone-rule: #353a33; }
@@ -62,7 +59,7 @@ html[data-theme='night'] .spread--lamp h2 em, html[data-theme='night'] .spread--
   mask-image: radial-gradient(ellipse 74% 64% at 62% 34%, #000 30%, transparent 78%);
   transition: opacity 1.6s var(--ease-out), translate 2.4s var(--ease-settle);
 }
-.spread__light i { display: block; background: linear-gradient(200deg, var(--tone-light) 0%, color-mix(in srgb, var(--tone-light) 70%, transparent) 46%, transparent 90%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-light) 40%, transparent); }
+.spread__light i { display: block; background: linear-gradient(200deg, var(--tone-light) 0%, color-mix(in srgb, var(--tone-light) 70%, transparent) 46%, transparent 90%); filter: blur(1.5px); }
 .spread[data-light='right'] .spread__light { right: -8%; transform: skewX(-15deg) rotate(5deg); transform-origin: top right; translate: 6% 0; }
 .spread[data-light='left'] .spread__light { left: -8%; transform: skewX(15deg) rotate(-5deg) scaleX(-1); transform-origin: top left; translate: -6% 0; }
 .spread.is-lit .spread__light { opacity: var(--tone-light-strength); translate: 0 0; }
@@ -145,12 +142,6 @@ html.is-quiet .spread__light i { animation: none !important; }
 .spread h2 { font-size: var(--h2); }
 .spread .lead { max-width: 30em; }
 
-/* A display quote that fills a page on its own: the typographic «picture» of a spread. */
-.page-quote { position: relative; font-family: var(--serif); font-style: italic; font-size: clamp(30px, 2.4vw + 14px, 52px); line-height: 1.12; letter-spacing: -.015em; color: var(--ink); text-wrap: balance; }
-.page-quote::before { content: '«'; position: absolute; left: -.55em; top: -.08em; color: var(--terracotta); }
-.page-quote::after { content: '»'; color: var(--terracotta); }
-.page-quote__by { display: block; margin-top: 18px; font-family: var(--sans); font-style: normal; font-size: var(--text-small); letter-spacing: 0; color: var(--muted); }
-
 /* ---------- Opening: as a spread arrives, its pages settle open from the spine ---------- */
 /* Transforms only — content stays readable if the class never comes, and sweepSpreads() in
    motion.js opens everything already on screen or scrolled past. */
@@ -189,7 +180,6 @@ html.motion-reduced .spread__light { translate: 0 0 !important; }
   .spread__light { width: 120%; height: 70%; top: -10%; }
   .spread[data-light='right'] .spread__light { right: -40%; }
   .spread[data-light='left'] .spread__light { left: -40%; }
-  .page-quote::before { position: static; }
   html.spreads-on .spread:not(.is-open) .spread__page--l, html.spreads-on .spread:not(.is-open) .spread__page--r { transform: translateY(18px); }
 }
 
