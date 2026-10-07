@@ -82,9 +82,13 @@ html.motion-reduced .okno__window, html.motion-reduced .orbit-badge { translate:
   .okno__title { order: 2; }
   .okno__window { order: 3; width: min(100% - 28px, 440px); margin-block: 20px 12px; }
   .okno__lead { order: 4; }
-  .okno__night-note { order: 5; }
-  .okno__welcome { order: 6; }
-  .stage-pick { order: 7; }
+  /* The offer from sales.css follows the lead, as on wide screens; without an order it jumped above the title. */
+  .okno__actions { order: 5; }
+  .okno__terms { order: 6; }
+  .okno__proof { order: 7; }
+  .okno__night-note { order: 8; }
+  .okno__welcome { order: 9; }
+  .stage-pick { order: 10; }
   .arch-window { aspect-ratio: 4 / 5; }
   .orbit-badge { right: -10px; top: 6%; width: 104px; height: 104px; }
   .orbit-badge__flower { width: 34px; height: 34px; }

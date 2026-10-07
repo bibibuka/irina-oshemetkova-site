@@ -3,9 +3,30 @@
 // first, so any link, action or «Что дальше» that points into a closed panel opens it.
 // Without JS every panel stays visible, one after another.
 import { $$ } from './dom.js';
+import { prefs } from './prefs.js';
 
 function panelOf(tab) { return document.getElementById(tab.getAttribute('aria-controls')); }
 function tabOf(panel) { return document.querySelector(`[role="tab"][aria-controls="${CSS.escape(panel.id)}"]`); }
+
+/** On phones the tab strip scrolls sideways: keep the chosen tab in sight there. Never moves the page. */
+function keepTabInStrip(list, tab) {
+  if (list.scrollWidth <= list.clientWidth + 1) return;
+  const strip = list.getBoundingClientRect();
+  const box = tab.getBoundingClientRect();
+  const pad = 12;
+  let delta = 0;
+  if (box.left < strip.left + pad) delta = box.left - strip.left - pad;
+  else if (box.right > strip.right - pad) delta = box.right - strip.right + pad;
+  if (delta) list.scrollBy({ left: delta, behavior: prefs.reducedMotion ? 'auto' : 'smooth' });
+}
+
+/** A tab chosen deep inside a long panel: the new, shorter panel may start above the screen. Bring its top under the tab bar. */
+function bringPanelIntoView(tab) {
+  const panel = panelOf(tab);
+  const list = tab.closest('[role="tablist"]');
+  if (!panel || !list) return;
+  if (panel.getBoundingClientRect().top < list.getBoundingClientRect().bottom - 1) panel.scrollIntoView({ block: 'start' });
+}
 
 /** Open the tab that owns `panel`. Returns true when something changed. */
 export function selectTab(tab, { focus = false } = {}) {
@@ -20,6 +41,7 @@ export function selectTab(tab, { focus = false } = {}) {
     if (panel) panel.hidden = !on;
   });
   if (focus) tab.focus();
+  keepTabInStrip(list, tab);
   if (!already) {
     const panel = panelOf(tab);
     // Features that measured themselves while hidden get a chance to measure again.
@@ -42,7 +64,7 @@ export function initPanels() {
     const tabs = $$('[role="tab"]', list);
     if (!tabs.length) return;
     tabs.forEach((tab) => {
-      tab.addEventListener('click', () => selectTab(tab));
+      tab.addEventListener('click', () => { selectTab(tab); bringPanelIntoView(tab); });
       tab.addEventListener('keydown', (event) => {
         const index = tabs.indexOf(tab);
         const next = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: tabs.length - 1 }[event.key];
@@ -50,7 +72,7 @@ export function initPanels() {
         event.preventDefault();
         const target = tabs[(next + tabs.length) % tabs.length];
         selectTab(target, { focus: true });
-        target.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        bringPanelIntoView(target);
       });
     });
     const initial = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') || tabs[0];

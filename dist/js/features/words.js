@@ -56,11 +56,22 @@ function selectTab(key, { focus = false } = {}) {
   if (focus) tab.focus();
 }
 
+/** Switched from deep inside a long page to a short one (the contents stick on wide screens):
+ *  bring the start of the new page back under the practices tab bar. */
+function bringPageIntoView() {
+  const tab = tabs.find((item) => item.getAttribute('aria-selected') === 'true');
+  const page = tab && document.getElementById(tab.getAttribute('aria-controls'));
+  if (!page) return;
+  const bar = ($('.praktiki__nav') || $('.site-header'))?.getBoundingClientRect().bottom || 0;
+  const top = page.getBoundingClientRect().top;
+  if (top < bar) window.scrollTo({ top: top + window.scrollY - bar - 16, behavior: prefs.reducedMotion ? 'auto' : 'smooth' });
+}
+
 function initTabs() {
   const list = $('[data-words-tabs]');
   if (!list) return;
   tabs = $$('[role="tab"]', list);
-  tabs.forEach((tab) => tab.addEventListener('click', () => { touched = true; selectTab(tab.dataset.wordsTab); }));
+  tabs.forEach((tab) => tab.addEventListener('click', () => { touched = true; selectTab(tab.dataset.wordsTab); bringPageIntoView(); }));
   list.addEventListener('keydown', (event) => {
     const shown = visibleTabs();
     const index = shown.indexOf(document.activeElement);
@@ -74,6 +85,7 @@ function initTabs() {
     event.preventDefault();
     touched = true;
     selectTab(shown[next].dataset.wordsTab, { focus: true });
+    bringPageIntoView();
   });
   document.addEventListener('click', (event) => {
     const link = event.target.closest?.('[data-words-open]');

@@ -50,6 +50,8 @@ with session("features") as (run, browser):
         page.locator("[data-threshold='read']").click()
         expect(page.locator("#sheet-threshold")).to_be_hidden()
         assert page.eval_on_selector("[data-flow] > [data-flow-item]", "e => e.dataset.flowItem") == "breath"
+        # «Я готова читать» opens the first practice a moment later: let it land before switching tabs.
+        expect(page.locator(".ptab[aria-controls='dyhanie']")).to_have_attribute("aria-selected", "true")
         show_panel(page, "polka")
         expect(page.locator("[data-shelf-item='flashback']")).to_be_visible()
         show_panel(page, "slova")

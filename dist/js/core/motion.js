@@ -257,6 +257,16 @@ export function initRipples() {
 /* ---------- Calm long jumps ---------- */
 const FAR = 1.6; // viewport heights: further than this, the page dissolves instead of flying
 
+let lastScrollAt = 0;
+window.addEventListener('scroll', () => { lastScrollAt = performance.now(); }, { passive: true });
+
+/** Runs fn once the page stands still (no scroll for 100 ms), at most a second later. */
+function whenStill(fn, started = performance.now()) {
+  const now = performance.now();
+  if (now - lastScrollAt >= 100 || now - started > 1000) fn();
+  else setTimeout(() => whenStill(fn, started), 50);
+}
+
 function scrollMargin(el) {
   const margin = parseFloat(getComputedStyle(el).scrollMarginTop);
   return Number.isFinite(margin) && margin > 0 ? margin : (parseFloat(getComputedStyle(root).scrollPaddingTop) || 0);
@@ -292,6 +302,13 @@ export function focusTarget(target) {
 export function jumpTo(target, { offset, onDone } = {}) {
   const el = typeof target === 'string' ? $(target) : target;
   if (!el) return;
+  // A smooth scroll still under way (a nav link, the wheel) keeps adding its distance after
+  // an instant jump and carries the target off its place: let the page settle first.
+  if (performance.now() - lastScrollAt < 100) { whenStill(() => jumpNow(el, { offset, onDone })); return; }
+  jumpNow(el, { offset, onDone });
+}
+
+function jumpNow(el, { offset, onDone }) {
   revealPanel(el); // a practice inside a closed tab: open the tab before measuring
   const margin = offset ?? scrollMargin(el);
   const top = Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - margin));
