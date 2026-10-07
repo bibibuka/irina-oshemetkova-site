@@ -6,8 +6,9 @@
 
 /* ---------- First screen: the offer ---------- */
 .okno__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
-.okno__terms { display: flex; flex-wrap: wrap; gap: 4px 0; font-size: var(--text-small); color: var(--muted); }
-.okno__terms span:not(:last-child)::after { content: '·'; margin-inline: 10px; color: var(--terracotta); }
+.okno__terms { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: var(--text-small); color: var(--muted); }
+.okno__terms span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.okno__terms span::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--terracotta); }
 .okno__proof {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 40rem;
   padding-top: 18px; border-top: 1px solid var(--line);
@@ -114,7 +115,8 @@ html[data-theme='night'] .plan--main { border-color: var(--line); }
 .stoimost__unsure .link { min-height: 0; font-family: var(--sans); font-style: normal; font-size: .85em; }
 
 /* ---------- Practices: one block with tabs ---------- */
-.praktiki { position: relative; scroll-margin-top: 0; }
+/* The dark chapter opening lands right under the glass bar, with no strip of the spread before it. */
+section.praktiki { position: relative; scroll-margin-top: calc(-1 * var(--header-h)); }
 .praktiki__badge {
   display: inline-flex; align-items: center; gap: 8px; justify-self: start; padding: 7px 14px; border-radius: 999px;
   background: rgba(238, 240, 230, .1); color: var(--on-band-muted); font-size: var(--text-micro);
@@ -128,10 +130,12 @@ html[data-theme='night'] .plan--main { border-color: var(--line); }
 html[data-theme='night'] .pmap__name { color: var(--terracotta-ink); }
 .pmap__what { color: var(--on-band-muted); line-height: 1.5; }
 .pmap__links { display: flex; flex-wrap: wrap; gap: 6px 20px; }
-.pmap__links a { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; color: var(--on-band); font-weight: 500; text-decoration: underline; text-decoration-color: rgba(238, 240, 230, .35); text-underline-offset: .3em; transition: color .25s var(--ease-out), text-decoration-color .25s var(--ease-out); }
-.pmap__links a::after { content: '→'; font-weight: 400; transition: transform .35s var(--ease-settle); }
-.pmap__links a:hover { color: #fff; text-decoration-color: currentColor; }
-.pmap__links a:hover::after { transform: translateX(3px); }
+.pmap__links a, .pmap__links button { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; color: var(--on-band); font-weight: 500; text-decoration: underline; text-decoration-color: rgba(238, 240, 230, .35); text-underline-offset: .3em; transition: color .25s var(--ease-out), text-decoration-color .25s var(--ease-out); }
+.pmap__links a::after, .pmap__links button::after { content: '→'; content: '→' / ''; font-weight: 400; transition: transform .35s var(--ease-settle); }
+.pmap__links a:hover, .pmap__links button:hover { color: #fff; text-decoration-color: currentColor; }
+.pmap__links a:hover::after, .pmap__links button:hover::after { transform: translateX(3px); }
+.pmap__start { margin-top: 18px; color: var(--on-band-muted); }
+.pmap__start a { color: var(--on-band); font-weight: 500; text-underline-offset: .3em; text-decoration-color: rgba(238, 240, 230, .35); }
 @media (max-width: 560px) { .pmap__group { grid-template-columns: minmax(0, 1fr); } .pmap__name { grid-row: auto; } }
 .praktiki__body { position: relative; background: var(--paper); padding-top: clamp(28px, 3vw, 44px); }
 
@@ -163,7 +167,7 @@ html[data-theme='night'] .pmap__name { color: var(--terracotta-ink); }
 html.js .praktiki:not([data-tabs-ready]) .ptab-panel:not(#pogoda) { display: none; }
 .ptab-panel { outline: none; }
 /* Beats layout.css «section[id]»: a jump to a panel lands below the sticky tab bar. */
-.praktiki .ptab-panel[id] { scroll-margin-top: calc(var(--header-h) + 76px); }
+.praktiki .ptab-panel[id] { scroll-margin-top: 76px; } /* added to the page's scroll padding: below the sticky tabs */
 /* Inside the block the practice titles are h3 (one h2 for the block), but keep their section size. */
 .praktiki h3.ptab-heading { font-size: var(--h2); line-height: 1; letter-spacing: -.03em; }
 .praktiki .pogoda__head h3.ptab-heading { font-size: clamp(42px, 4.4vw, 66px); }
@@ -201,3 +205,10 @@ html.js .praktiki:not([data-tabs-ready]) .ptab-panel:not(#pogoda) { display: non
 
 /* «Как ты сейчас?» inside the block: at 768–1180 px the five tiles share a narrower column. */
 @media (min-width: 768px) and (max-width: 1180px) { .weather__tile { padding-inline: 6px; } }
+
+/* At 768–1180 px the six tabs do not fit: tighter tabs and a fade at the edge that says «there is more». */
+@media (max-width: 1180px) {
+  .ptab { padding: 8px 14px 8px 12px; gap: 6px; }
+  .ptabs { -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
+}
+.praktiki .pogoda__head h3.ptab-heading em { display: block; }

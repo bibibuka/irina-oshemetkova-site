@@ -21,7 +21,7 @@
 
 /* The arch window on the right page */
 .okno__window { display: grid; justify-items: center; align-content: center; margin: 0; }
-.okno__frame { position: relative; width: min(100%, 460px); translate: 0 calc(var(--sy, 0) * -.06px); }
+.okno__frame { position: relative; width: min(100%, 440px, calc((100svh - var(--header-h) - 230px) / 1.32)); translate: 0 calc(var(--sy, 0) * -.06px); }
 .okno__frame::before {
   content: ''; position: absolute; inset: -14px; border-radius: 999px 999px 18px 18px;
   border: 1px solid color-mix(in srgb, var(--green) 45%, transparent); pointer-events: none;
@@ -38,8 +38,8 @@
 .arch-window__mullion {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
-    linear-gradient(90deg, transparent calc(50% - .5px), rgba(255, 255, 255, .42) calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)),
-    linear-gradient(180deg, transparent calc(44% - .5px), rgba(255, 255, 255, .42) calc(44% - .5px) calc(44% + .5px), transparent calc(44% + .5px));
+    linear-gradient(90deg, transparent calc(16% - .5px), rgba(255, 255, 255, .42) calc(16% - .5px) calc(16% + .5px), transparent calc(16% + .5px)),
+    linear-gradient(180deg, transparent calc(22% - .5px), rgba(255, 255, 255, .42) calc(22% - .5px) calc(22% + .5px), transparent calc(22% + .5px));
   mix-blend-mode: soft-light;
 }
 html[data-part='evening'] .arch-window::after, html[data-theme='night'] .arch-window::after {
@@ -96,7 +96,7 @@ html[data-theme='night'] .stage-pick { background: color-mix(in srgb, var(--pape
   .okno__copy { display: contents; }
   .okno__title { order: 2; margin-bottom: 8px; }
   .okno__window { order: 3; margin-block: 24px 22px; }
-  .okno__frame { width: min(100% - 28px, 420px); }
+  .okno__frame { width: min(100% - 28px, 420px, 40svh); }
   .okno__lead { order: 4; }
   .okno__actions { order: 5; margin-top: 18px; }
   .okno__terms { order: 6; margin-top: 14px; }

@@ -78,14 +78,14 @@ html.is-quiet .door-panel.appear * { animation-name: fade-in; }
   .page-turn { text-align: left; }
 }
 
-/* Each chapter brings its own light to the spread: sage for waiting, peach for pregnancy, honey for
-   the first months, a quiet mist for loss, milk for partners and family. */
-.dveri.spread[data-chapter='pregnancy'] { --tone-bg: #f4e9df; --tone-light: #ffe0bf; --tone-shade: rgba(122, 76, 50, .07); --tone-rule: #e6d6c6; }
-.dveri.spread[data-chapter='postpartum'] { --tone-bg: #f2ead8; --tone-light: #fff0c8; --tone-shade: rgba(110, 86, 40, .07); --tone-rule: #e2d7bf; }
-.dveri.spread[data-chapter='loss'] { --tone-bg: #e7e8e2; --tone-light: #f7f4ec; --tone-shade: rgba(50, 60, 55, .07); --tone-rule: #d4d7cd; --tone-light-strength: .55; }
-.dveri.spread[data-chapter='close'] { --tone-bg: #f8f7f2; --tone-light: #fff5dc; --tone-shade: color-mix(in srgb, var(--ink) 5%, transparent); --tone-rule: var(--line); }
-html[data-theme='night'] .dveri.spread[data-chapter='pregnancy'] { --tone-bg: #221e1b; --tone-rule: #3a322c; }
-html[data-theme='night'] .dveri.spread[data-chapter='postpartum'] { --tone-bg: #221f18; --tone-rule: #3a3428; }
-html[data-theme='night'] .dveri.spread[data-chapter='loss'] { --tone-bg: #1b1d1b; --tone-rule: #303330; }
-html[data-theme='night'] .dveri.spread[data-chapter='close'] { --tone-bg: #171d19; --tone-rule: var(--line); }
-.dveri .spread__light i { transition: background 1.2s var(--ease-out); }
+/* Each chapter brings its own light to the spread: sage for waiting, rose-apricot for pregnancy, honey
+   for the first months, a quiet mist for loss, milk for partners and family. None of them repeats
+   the spread above (#uznaesh, peach) or below (#irina, linen). The light colour fades (@property). */
+html[data-theme='day'] .dveri.spread[data-chapter='pregnancy'] { --tone-bg: #f6e3dc; --tone-light: #ffd6c2; --tone-shade: rgba(122, 66, 50, .07); --tone-rule: #e8d0c6; }
+html[data-theme='day'] .dveri.spread[data-chapter='postpartum'] { --tone-bg: #f5e8cc; --tone-light: #ffe6a8; --tone-shade: rgba(110, 86, 40, .07); --tone-rule: #e6d6b0; }
+html[data-theme='day'] .dveri.spread[data-chapter='loss'] { --tone-bg: #e7e8e2; --tone-light: #f7f4ec; --tone-shade: rgba(50, 60, 55, .07); --tone-rule: #d4d7cd; --tone-light-strength: .55; }
+html[data-theme='day'] .dveri.spread[data-chapter='close'] { --tone-bg: #f8f7f2; --tone-light: #fff5dc; --tone-shade: rgba(47, 59, 49, .05); --tone-rule: var(--line); }
+html[data-theme='night'] .dveri.spread[data-chapter='pregnancy'] { --tone-bg: #241d1c; --tone-light: #e7a77f; --tone-rule: #3d3030; }
+html[data-theme='night'] .dveri.spread[data-chapter='postpartum'] { --tone-bg: #23201a; --tone-light: #e7c39f; --tone-rule: #3c3628; }
+html[data-theme='night'] .dveri.spread[data-chapter='loss'] { --tone-bg: #1a1c1a; --tone-light: #c9c9bf; --tone-rule: #303330; --tone-light-strength: .18; }
+html[data-theme='night'] .dveri.spread[data-chapter='close'] { --tone-bg: #151a17; --tone-light: #e7a77f; --tone-rule: var(--line); }

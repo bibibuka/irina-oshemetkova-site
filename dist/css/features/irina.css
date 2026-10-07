@@ -1,8 +1,8 @@
 /* «Я — Ирина» — a spread: the portrait in an arch on the left page (held in view), on the right
    who I am, where I worked, what I studied and the documents. «Как я говорю» is its own spread. */
 .irina__photo { margin: 0; }
-.irina__photo-in { display: grid; justify-items: center; gap: 22px; }
-.irina__arch { position: relative; width: min(100%, 470px); aspect-ratio: 4 / 5.3; border-radius: var(--arch); overflow: hidden; background: var(--paper-3); box-shadow: var(--shadow-md); }
+.irina__photo-in { display: grid; justify-items: center; gap: 22px; margin: 0; }
+.irina__arch { position: relative; width: min(100%, 470px, calc((100svh - var(--header-h) - 150px) * 4 / 5.3)); aspect-ratio: 4 / 5.3; border-radius: var(--arch); overflow: hidden; background: var(--paper-3); box-shadow: var(--shadow-md); }
 .irina__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 32%; filter: var(--photo-filter); transition: opacity 1.2s var(--ease-out); }
 .irina__img--night { opacity: 0; }
 .irina__arch.is-night .irina__img--night.is-ready { opacity: 1; }
@@ -30,6 +30,7 @@
 .podhod__foot ul { display: grid; gap: 10px; margin-top: 12px; }
 .podhod__may li { position: relative; padding-left: 28px; font-family: var(--serif); font-size: clamp(22px, .6vw + 17px, 27px); line-height: 1.2; color: var(--ink); }
 .podhod__may li::before { content: ''; position: absolute; left: 2px; top: .5em; width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--sage-500); background: color-mix(in srgb, var(--sage-300) 40%, transparent); }
+.podhod__turn { grid-column: 1 / -1; margin-top: 8px; }
 .podhod__small { margin-top: 16px; font-size: var(--text-small); color: var(--muted); max-width: 32em; }
 .podhod__limits li { position: relative; padding-left: 28px; line-height: 1.55; color: var(--ink-soft); }
 .podhod__limits li::before { content: ''; position: absolute; left: 2px; top: .78em; width: 12px; height: 1px; background: var(--terracotta); }
@@ -39,7 +40,7 @@
 
 .docs__title { font-size: clamp(28px, 1.4vw + 16px, 38px); margin-top: clamp(20px, 2.4vw, 36px); }
 .principles > [role='listitem'] { display: grid; }
-.principles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.principles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 14px; }
 .principle { position: relative; display: grid; width: 100%; min-height: 144px; perspective: 1400px; text-align: left; color: var(--ink); border-radius: var(--radius); transition: transform .5s var(--ease-settle); }
 .principle__face {
   grid-area: 1 / 1; display: grid; align-content: space-between; gap: 18px; padding: 26px 26px 22px;
@@ -57,7 +58,7 @@
 .principle:hover .principle__face { box-shadow: var(--shadow-md); border-color: var(--sage-300); }
 .principle:hover .principle__front::before { transform: translate(-18%, 18%); }
 .principle:active { transform: scale(var(--press)); transition-duration: .1s; }
-.principle__name { font-family: var(--serif); font-size: clamp(28px, 1.2vw + 18px, 36px); line-height: 1.05; }
+.principle__name { text-wrap: balance; font-family: var(--serif); font-size: clamp(28px, 1.2vw + 18px, 36px); line-height: 1.05; }
 .principle__hint { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-micro); color: var(--muted); }
 .principle__hint::after { content: '↻'; display: inline-block; font-size: 15px; color: var(--terracotta-ink); transition: transform .6s var(--ease-settle); }
 .principle:hover .principle__hint::after { transform: rotate(180deg); }
@@ -78,7 +79,8 @@ html.motion-reduced .principle[aria-pressed='true'] .principle__back { opacity: 
 }
 
 .docs__sub { color: var(--muted); font-size: var(--text-small); margin-top: -10px; }
-.docs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 4px 0 0; }
+ul.docs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 4px 0 0; }
+@media (min-width: 861px) and (max-width: 1180px) { ul.docs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .docs li { min-width: 0; }
 .doc {
   position: relative; display: grid; gap: 10px; width: 100%; height: 100%; align-content: start; padding: 10px 10px 14px; text-align: left;
@@ -88,7 +90,7 @@ html.motion-reduced .principle[aria-pressed='true'] .principle__back { opacity: 
 .doc:hover, .doc:focus-visible { transform: translateY(calc(var(--lift) * 3.5)); z-index: 2; box-shadow: var(--shadow-lg); }
 .doc:active { transform: translateY(calc(var(--lift) * 2)) scale(.98); transition-duration: .12s; }
 .doc__img { display: block; overflow: hidden; border-radius: 5px; background: var(--paper-3); }
-.doc img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; border-radius: 5px; background: var(--paper-3); transition: transform .9s var(--ease-settle); }
+.doc img { filter: var(--photo-filter); width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; border-radius: 5px; background: var(--paper-3); transition: transform .9s var(--ease-settle); }
 .doc:hover img { transform: scale(1.05); }
 .doc__name { font-size: var(--text-small); font-weight: 500; line-height: 1.3; }
 .doc__where { font-size: var(--text-micro); color: var(--muted); margin-top: -6px; }
@@ -98,13 +100,13 @@ html.motion-reduced .principle[aria-pressed='true'] .principle__back { opacity: 
 }
 @media (max-width: 860px) {
   .irina__arch { width: min(100%, 420px); aspect-ratio: 4 / 5; }
-  .docs { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin-inline: calc(-1 * var(--gutter)); padding: 12px var(--gutter) 18px; scrollbar-width: none; }
+  .principles { grid-auto-rows: auto; }
+  ul.docs { display: flex; overflow-x: auto; scroll-padding-inline: var(--gutter); scroll-snap-type: x mandatory; gap: 14px; margin-inline: calc(-1 * var(--gutter)); padding: 12px var(--gutter) 18px; scrollbar-width: none; }
   .docs::-webkit-scrollbar { display: none; }
   .docs li { flex: 0 0 min(46vw, 210px); scroll-snap-align: start; }
 }
 @media (max-width: 560px) {
-  .principles { grid-template-columns: minmax(0, 1fr); }
-  .principle { min-height: 0; }
+  .principles { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 1fr; }
 }
 
 /* Lightbox */

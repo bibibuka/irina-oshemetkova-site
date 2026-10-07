@@ -53,9 +53,9 @@
   --shadow-lg: 0 30px 80px rgba(23, 42, 37, .18);
   --photo-filter: saturate(.86) contrast(1.02);
 
-  /* Light from the window — tinted by part of day */
-  --sky: #fff6dc;
-  --sky-strength: .55;
+  /* Light from the window — tinted by part of day; the spreads mix it into their panes and glow */
+  --sky: #fff1d6;
+  --glow: rgba(255, 252, 240, .5);
 
   /* Typography */
   --serif: 'Cormorant', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -73,7 +73,7 @@
 
   /* Space & shape */
   --gutter: clamp(16px, 4.4vw, 64px);
-  --max: 1280px;
+  --max: 1440px;
   --section: clamp(60px, 6.6vw, 104px);
   --radius-xs: 6px;
   --radius-sm: 10px;
@@ -98,9 +98,9 @@
 html.text-large { --text: 19px; --text-lead: clamp(21px, 1.1vw + 15px, 24px); --text-small: 17px; --text-micro: 15px; --control: 18px; }
 
 /* Evening: the page warms a little, the light gets longer and amber. */
-html[data-part='morning'] { --sky: #fff1cf; --sky-strength: .62; }
-html[data-part='day']     { --sky: #ffffff; --sky-strength: .5; }
-html[data-part='evening'] { --sky: #ffd9a8; --sky-strength: .6; --paper: #f6f2ea; --paper-2: #efeadf; }
+html[data-part='morning'] { --sky: #ffe7b0; --glow: rgba(255, 246, 222, .56); }
+html[data-part='day']     { --sky: #fff4dc; --glow: rgba(255, 252, 240, .5); }
+html[data-part='evening'] { --sky: #ffcf99; --glow: rgba(255, 232, 200, .56); --paper: #f6f2ea; --paper-2: #efeadf; }
 
 /* Night — the dark theme, only when the visitor turns it on */
 html[data-theme='night'] {
@@ -141,8 +141,7 @@ html[data-theme='night'] {
   --shadow-lg: 0 30px 80px rgba(0, 0, 0, .55);
   --photo-filter: brightness(.84) saturate(.85) contrast(1.02);
   --sky: #e7a77f;
-  --sky-strength: .22;
 }
 
 /* Quiet mode (loss stage, help sheet, «тяжело»): no celebrations, softer colour. */
-html.is-quiet { --terracotta: #a98a7a; --sky-strength: .3; }
+html.is-quiet { --terracotta: #a98a7a; }

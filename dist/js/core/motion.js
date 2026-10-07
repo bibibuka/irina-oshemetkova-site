@@ -148,8 +148,25 @@ export function initReveals() {
 // A spread opens once (its pages settle from the spine) and is «lit» while it crosses the middle
 // of the screen: its window light turns fully on, the previous one dims. Spreads already on
 // screen at the first paint are open without a transition; a sweep opens anything scrolled past.
+let allSpreads = [];
+let spreadOpener = null;
+
+/** A jump lands on a spread: open it (and every spread above it) at once, so the page under the
+ *  focus does not swing. Used by jumpTo() before it scrolls. */
+export function openSpreadsUpTo(target) {
+  allSpreads.forEach((spread) => {
+    if (spread.classList.contains('is-open')) return;
+    const before = spread.contains(target) || (spread.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if (!before) return;
+    spread.classList.add('is-open', 'is-instant');
+    spreadOpener?.unobserve(spread);
+    requestAnimationFrame(() => requestAnimationFrame(() => spread.classList.remove('is-instant')));
+  });
+}
+
 export function initSpreads() {
   const spreads = $$('.spread');
+  allSpreads = spreads;
   if (!spreads.length) return;
   const light = (spread) => spreads.forEach((other) => other.classList.toggle('is-lit', other === spread));
   if (!('IntersectionObserver' in window)) {
@@ -158,7 +175,7 @@ export function initSpreads() {
     return;
   }
   const open = (spread) => { spread.classList.add('is-open'); opener.unobserve(spread); };
-  const opener = new IntersectionObserver((entries) => {
+  const opener = spreadOpener = new IntersectionObserver((entries) => {
     entries.forEach((entry) => { if (entry.isIntersecting) open(entry.target); });
   }, { rootMargin: '0px 0px -12% 0px' });
   spreads.forEach((spread) => {
@@ -188,7 +205,6 @@ export function initSpreads() {
 export function initHeader() {
   const header = $('.site-header');
   if (!header) return;
-  const light = $('.daylight');
   const progress = $('.site-progress');
   const hero = $('.okno__window');
   let ticking = false;
@@ -197,7 +213,6 @@ export function initHeader() {
     const y = window.scrollY;
     header.classList.toggle('is-scrolled', y > 24);
     // Variables live on the elements that use them: a change on <html> would restyle the whole page.
-    light?.style.setProperty('--scroll', String(Math.min(1, y / 1600)));
     if (progress) {
       const max = root.scrollHeight - window.innerHeight;
       progress.style.setProperty('--progress', String(max > 0 ? Math.min(1, y / max) : 0));
@@ -308,9 +323,12 @@ function whenStill(fn, started = performance.now()) {
   else setTimeout(() => whenStill(fn, started), 50);
 }
 
+/** Where a jump puts the target: the page's scroll padding (the header) plus the element's own
+ *  scroll-margin — the same sum the browser uses for a #link, so both land in one place. */
 function scrollMargin(el) {
-  const margin = parseFloat(getComputedStyle(el).scrollMarginTop);
-  return Number.isFinite(margin) && margin > 0 ? margin : (parseFloat(getComputedStyle(root).scrollPaddingTop) || 0);
+  const margin = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+  const padding = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+  return padding + margin;
 }
 
 function instantScroll(top) {
@@ -351,6 +369,7 @@ export function jumpTo(target, { offset, onDone } = {}) {
 
 function jumpNow(el, { offset, onDone }) {
   revealPanel(el); // a practice inside a closed tab: open the tab before measuring
+  openSpreadsUpTo(el); // and the spread it lives in, so the landing page stands still
   const margin = offset ?? scrollMargin(el);
   const top = Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - margin));
   const done = () => onDone?.(el);

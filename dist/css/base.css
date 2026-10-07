@@ -4,7 +4,7 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-top: var(--header-h); /* the only offset for jumps and #links; elements add their own scroll-margin */
   interpolate-size: allow-keywords;
 }
 body {
@@ -94,6 +94,8 @@ p { text-wrap: pretty; }
 .btn--soft:hover { --btn-bg: var(--sage-200); }
 .btn--light { --btn-bg: var(--paper); --btn-fg: var(--ink); --btn-glow: rgba(0, 0, 0, .35); }
 .btn--light:hover { --btn-bg: #fff; }
+html[data-theme='night'] .btn--light { --btn-bg: #e6e4da; --btn-fg: #17201a; }
+html[data-theme='night'] .btn--light:hover { --btn-bg: #f3f1e8; }
 .btn--small { min-height: 44px; padding: 9px 18px; font-size: var(--text-small); gap: 8px; }
 .btn--small .icon { width: 18px; height: 18px; }
 .btn--block { width: 100%; }

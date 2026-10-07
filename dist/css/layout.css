@@ -116,7 +116,7 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
   .site-nav { display: none; }
   .site-header__tools, .site-nav + .site-header__tools { margin-left: auto; }
 }
-@media (max-width: 860px) {
+@media (max-width: 767px) {
   .header-cta { display: none; }
 }
 @media (max-width: 767px) {
@@ -176,8 +176,6 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
 html.is-quiet .marquee { display: none; }
 
 /* ---------- Sections ---------- */
-.section { scroll-margin-top: var(--header-h); }
-section[id] { scroll-margin-top: calc(var(--header-h) + 8px); }
 .section-head { display: grid; gap: 20px; margin-bottom: clamp(28px, 3.6vw, 52px); max-width: 52rem; }
 .band { background: var(--band); color: var(--on-band); position: relative; }
 .band h2 em, .band h3 em { color: var(--terracotta-ink); }
