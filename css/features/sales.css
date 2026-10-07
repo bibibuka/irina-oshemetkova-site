@@ -1,0 +1,216 @@
+/* The selling frame around the existing features: the offer in the first screen,
+   «Может быть, ты узнаешь себя», formats, pricing with the first-meeting steps,
+   and the one practices block whose tabs hold the former practice sections. */
+
+.btn--large { min-height: 58px; padding: 15px 28px 15px 30px; font-size: max(17px, var(--control)); }
+
+/* ---------- First screen: the offer ---------- */
+.okno__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+.okno__terms { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: var(--text-small); color: var(--muted); }
+.okno__terms span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.okno__terms span::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--terracotta); }
+.okno__proof {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 40rem;
+  padding-top: 18px; border-top: 1px solid var(--line);
+}
+.okno__proof li { display: grid; gap: 2px; padding-right: 14px; }
+.okno__proof li + li { padding-left: 16px; border-left: 1px solid var(--line); }
+.okno__proof b { font-family: var(--serif); font-size: clamp(18px, .7vw + 13px, 22px); font-weight: 500; line-height: 1.2; color: var(--ink); }
+.okno__proof span { font-size: var(--text-micro); color: var(--muted); }
+html.intro .okno__actions, html.intro .okno__terms, html.intro .okno__proof { animation: rise-in .9s var(--ease-settle) .9s backwards; }
+@media (max-width: 560px) {
+  .okno__actions .btn { width: 100%; }
+  .okno__proof li { padding-right: 8px; }
+  .okno__proof li + li { padding-left: 10px; }
+  .okno__proof b { font-size: 17px; }
+}
+
+/* ---------- «Может быть, ты узнаешь себя» — a spread ----------
+   Left page: the heading and the answer, held in view. Right page: the thoughts as a column
+   of handwritten-feeling quotes on hairlines, not a grid of cards. */
+.uznaesh__aside { gap: clamp(20px, 2.2vw, 30px); }
+.uznaesh__answer { display: grid; gap: 22px; padding-top: clamp(22px, 2.4vw, 32px); border-top: 1px solid var(--tone-rule); }
+.uznaesh__text { font-family: var(--serif); font-size: clamp(24px, 1vw + 17px, 31px); line-height: 1.24; letter-spacing: -.01em; color: var(--ink); max-width: 22em; }
+.uznaesh__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; }
+
+.thoughts { display: grid; counter-reset: thought; }
+.thought-card {
+  position: relative; display: grid; gap: 10px; padding: clamp(20px, 2vw, 28px) 0 clamp(20px, 2vw, 26px);
+  border-bottom: 1px solid var(--tone-rule);
+  transition: padding-left .6s var(--ease-settle);
+}
+.thought-card:first-child { padding-top: 4px; }
+.thought-card:nth-child(even) { padding-left: clamp(24px, 4vw, 72px); }
+.thought-card p { font-family: var(--serif); font-style: italic; font-size: clamp(23px, .9vw + 16px, 31px); line-height: 1.22; letter-spacing: -.005em; color: var(--ink); text-wrap: balance; }
+.thought-card p::before { content: '«'; color: var(--terracotta); }
+.thought-card p::after { content: '»'; color: var(--terracotta); }
+.thought-card span { font-size: var(--text-micro); color: var(--muted); }
+.thought-card span::before { content: ''; display: inline-block; width: 18px; height: 1px; margin-right: 10px; vertical-align: middle; background: currentColor; opacity: .6; }
+.thought-card:hover { padding-left: clamp(12px, 1.4vw, 20px); }
+.thought-card:nth-child(even):hover { padding-left: clamp(36px, 5vw, 92px); }
+@media (max-width: 860px) {
+  .thought-card:hover { padding-left: 0; }
+  .thought-card:nth-child(even), .thought-card:nth-child(even):hover { padding-left: 22px; }
+}
+
+.thoughts__note { margin-top: 16px; font-size: var(--text-micro); color: var(--muted); max-width: 40em; }
+/* Under the spread: three thoughts that put things back in proportion. */
+.calm-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px clamp(24px, 3vw, 56px); }
+.calm-row li { display: grid; gap: 6px; align-content: start; padding-left: 18px; border-left: 2px solid var(--terracotta-soft); }
+.calm-row b { font-family: var(--serif); font-weight: 500; font-size: clamp(22px, .6vw + 17px, 27px); line-height: 1.15; color: var(--ink); }
+.calm-row span { color: var(--ink-soft); line-height: 1.55; }
+@media (max-width: 860px) { .calm-row { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- Services: formats under the doors ---------- */
+.formats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: clamp(22px, 2.6vw, 34px); }
+.formats li { display: inline-flex; align-items: center; gap: 10px; padding: 9px 18px; border-radius: 999px; border: 1px solid var(--line-strong); font-size: var(--text-small); color: var(--ink-soft); }
+.formats .icon { width: 18px; height: 18px; color: var(--sage-500); }
+.formats__more { margin-top: 14px; max-width: 46em; font-size: var(--text-small); color: var(--muted); }
+.irina__cta { margin-top: 8px; }
+
+/* ---------- Pricing — a spread: the price on the left page, the first meeting on the right ---------- */
+.stoimost__head { display: grid; gap: 16px; margin-bottom: clamp(24px, 3vw, 36px); }
+.plans { display: grid; gap: 14px; }
+.plan {
+  position: relative; overflow: hidden; display: grid; gap: 18px; align-content: start;
+  padding: clamp(24px, 3vw, 40px); border-radius: var(--radius-lg); background: color-mix(in srgb, var(--surface) 70%, transparent); border: 1px solid var(--tone-rule);
+}
+.plan--main { background: var(--band); color: var(--on-band); border-color: transparent; box-shadow: var(--shadow-lg); }
+.plan--main::after {
+  content: ''; position: absolute; right: -90px; top: -90px; width: 300px; height: 300px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(231, 167, 127, .32), transparent 68%);
+}
+html[data-theme='night'] .plan--main { border-color: var(--line); }
+.plan__name { font-size: clamp(25px, .8vw + 19px, 31px); line-height: 1.12; }
+.plan--main .plan__name { color: var(--on-band); }
+.plan__price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 16px; }
+.plan__sum { font-family: var(--serif); font-size: clamp(60px, 4.4vw + 24px, 92px); line-height: .95; letter-spacing: -.035em; }
+.plan__sum--text { font-size: clamp(24px, .8vw + 18px, 30px); color: var(--ink-soft); }
+.plan__per { color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 22px; }
+.plan--main .plan__per { color: var(--on-band-muted); }
+.plan__list { display: grid; gap: 10px; }
+.plan__list li { display: flex; gap: 12px; line-height: 1.5; }
+.plan__list .icon { width: 20px; height: 20px; margin-top: 3px; color: var(--sage-500); }
+.plan--main .plan__list .icon { color: #e2b296; }
+.plan__cta { justify-self: start; margin-top: 4px; }
+.plan:not(.plan--main) { gap: 12px; }
+.stoimost__note { margin-top: 16px; }
+
+.howto__title { font-size: clamp(32px, 1.6vw + 20px, 48px); line-height: 1.05; margin-bottom: clamp(18px, 2vw, 28px); }
+.howto { display: grid; position: relative; }
+.howto__step { position: relative; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 18px; padding: 16px 0 22px; }
+.howto__step:not(:last-child)::after { content: ''; position: absolute; left: 25px; top: 66px; bottom: -2px; width: 1px; background: var(--tone-rule); }
+.howto__num { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--terracotta); background: var(--tone-bg); color: var(--terracotta-ink); font-family: var(--serif); font-size: 24px; }
+.howto__step b { display: block; margin: 8px 0 4px; font-family: var(--serif); font-weight: 500; font-size: clamp(23px, .5vw + 19px, 27px); line-height: 1.15; }
+.howto__step p { font-size: var(--text-small); line-height: 1.6; color: var(--ink-soft); }
+
+.prep { margin-top: clamp(18px, 2vw, 26px); padding: 22px 24px; border-radius: var(--radius); background: color-mix(in srgb, var(--surface) 64%, transparent); border: 1px solid var(--tone-rule); }
+.prep__cap { font-family: var(--serif); font-style: italic; font-size: 24px; color: var(--terracotta-ink); margin-bottom: 10px; }
+.prep__list { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 20px; }
+.prep__list li { display: flex; gap: 10px; align-items: flex-start; font-size: var(--text-small); line-height: 1.5; color: var(--ink-soft); }
+.prep__list .icon { width: 20px; height: 20px; color: var(--sage-500); margin-top: 1px; }
+@media (max-width: 560px) { .prep__list { grid-template-columns: minmax(0, 1fr); } }
+.stoimost__unsure { display: flex; gap: 12px; align-items: flex-start; margin-top: 22px; font-family: var(--serif); font-style: italic; font-size: clamp(20px, .5vw + 16px, 23px); line-height: 1.4; color: var(--ink); }
+.stoimost__unsure .icon { width: 22px; height: 22px; margin-top: 4px; color: var(--terracotta-ink); }
+.stoimost__unsure .link { min-height: 0; font-family: var(--sans); font-style: normal; font-size: .85em; }
+
+/* ---------- Practices: one block with tabs ---------- */
+/* The dark chapter opening lands right under the glass bar, with no strip of the spread before it. */
+section.praktiki { position: relative; scroll-margin-top: calc(-1 * var(--header-h)); }
+.praktiki__badge {
+  display: inline-flex; align-items: center; gap: 8px; justify-self: start; padding: 7px 14px; border-radius: 999px;
+  background: rgba(238, 240, 230, .1); color: var(--on-band-muted); font-size: var(--text-micro);
+}
+.praktiki__badge .icon { width: 16px; height: 16px; color: #e2b296; }
+.praktiki__open h2 { color: var(--on-band); }
+/* The map of practices on the right page: three ways in — body, thoughts, bonds. */
+.pmap { display: grid; border-top: 1px solid var(--tone-rule); }
+.pmap__group { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 6px 28px; padding: clamp(18px, 2vw, 26px) 0; border-bottom: 1px solid var(--tone-rule); }
+.pmap__name { grid-row: 1 / span 2; font-family: var(--serif); font-style: italic; font-size: clamp(38px, 2.4vw + 16px, 60px); line-height: 1; color: #e2b296; }
+html[data-theme='night'] .pmap__name { color: var(--terracotta-ink); }
+.pmap__what { color: var(--on-band-muted); line-height: 1.5; }
+.pmap__links { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+.pmap__links a, .pmap__links button { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; color: var(--on-band); font-weight: 500; text-decoration: underline; text-decoration-color: rgba(238, 240, 230, .35); text-underline-offset: .3em; transition: color .25s var(--ease-out), text-decoration-color .25s var(--ease-out); }
+.pmap__links a::after, .pmap__links button::after { content: '→'; content: '→' / ''; font-weight: 400; transition: transform .35s var(--ease-settle); }
+.pmap__links a:hover, .pmap__links button:hover { color: #fff; text-decoration-color: currentColor; }
+.pmap__links a:hover::after, .pmap__links button:hover::after { transform: translateX(3px); }
+.pmap__start { margin-top: 18px; color: var(--on-band-muted); }
+.pmap__start a { color: var(--on-band); font-weight: 500; text-underline-offset: .3em; text-decoration-color: rgba(238, 240, 230, .35); }
+@media (max-width: 560px) { .pmap__group { grid-template-columns: minmax(0, 1fr); } .pmap__name { grid-row: auto; } }
+.praktiki__body { position: relative; background: var(--paper); padding-top: clamp(28px, 3vw, 44px); }
+
+.praktiki__nav { position: sticky; top: calc(var(--header-h) + 8px); z-index: 20; margin-bottom: clamp(18px, 2vw, 28px); }
+.ptabs {
+  display: flex; gap: 4px; width: fit-content; max-width: 100%; padding: 5px; overflow-x: auto; scrollbar-width: none;
+  border-radius: 999px; background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2);
+  border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+}
+.ptabs::-webkit-scrollbar { display: none; }
+.ptab {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 8px 18px 8px 14px;
+  border-radius: 999px; font-size: var(--text-small); color: var(--ink-soft); white-space: nowrap;
+  transition: background-color var(--t-fast), color var(--t-fast), transform var(--t-fast) var(--ease-settle);
+}
+.ptab .icon { width: 20px; height: 20px; color: var(--sage-500); transition: color var(--t-fast); }
+.ptab:hover { background: var(--sage-50); color: var(--ink); }
+.ptab:active { transform: scale(var(--press)); }
+.ptab[aria-selected='true'] { background: var(--green); color: var(--on-green); }
+.ptab[aria-selected='true'] .icon { color: currentColor; }
+@media (max-width: 767px) {
+  .praktiki__nav { top: calc(var(--header-h) + 4px); width: 100%; margin-inline: 0; padding-inline: 10px; }
+  .ptabs { width: 100%; }
+  .ptab { padding: 8px 14px 8px 12px; }
+}
+
+/* Panels are the former sections: they keep their own look. Before JS settles, only the first shows. */
+html.js .praktiki:not([data-tabs-ready]) .ptab-panel:not(#pogoda) { display: none; }
+.ptab-panel { outline: none; }
+/* A jump to a panel lands below the sticky tab bar: this margin is added to the page's scroll padding. */
+.praktiki .ptab-panel[id] { scroll-margin-top: 76px; } /* added to the page's scroll padding: below the sticky tabs */
+/* Inside the block the practice titles are h3 (one h2 for the block), but keep their section size. */
+.praktiki h3.ptab-heading { font-size: var(--h2); line-height: 1; letter-spacing: -.03em; }
+.praktiki .pogoda__head h3.ptab-heading { font-size: clamp(42px, 4.4vw, 66px); }
+.praktiki .razbor__head h3.ptab-heading { font-size: clamp(40px, 4.2vw, 66px); }
+.praktiki .dyhanie__copy h3.ptab-heading { color: var(--on-band); }
+/* Sticky columns inside the panels start below the sticky tab bar, not under it. */
+.praktiki .pogoda__head, .praktiki .razbor__head, .praktiki .book__toc, .praktiki .opory__arch { top: calc(var(--header-h) + 88px); }
+/* The two tinted panels are cards as wide as the book above them. */
+.ptab-panel.pogoda, .ptab-panel.dyhanie { border-radius: var(--radius-lg); width: min(1440px, 100% - 2 * var(--gutter) + 32px); margin-inline: auto; }
+.praktiki .ptab-panel.section { padding-block: clamp(28px, 3vw, 48px) var(--section); }
+@media (max-width: 767px) {
+  .ptab-panel.pogoda, .ptab-panel.dyhanie { border-radius: 0; width: auto; margin-inline: 0; }
+}
+
+/* The bookmark after the practices: practice helps in the moment, the meetings help to understand. */
+.praktiki__bridge { display: grid; gap: 14px 40px; align-items: center; }
+@media (min-width: 961px) { .praktiki__bridge { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto; } .praktiki__disclaimer { grid-column: 1 / -1; } }
+.praktiki__bridge-lead { font-family: var(--serif); font-size: clamp(30px, 1.6vw + 18px, 44px); line-height: 1.04; letter-spacing: -.02em; color: var(--ink); }
+.praktiki__bridge-lead em { color: var(--terracotta); }
+.praktiki__bridge-text { color: var(--ink-soft); }
+.praktiki__disclaimer { max-width: 60em; font-size: var(--text-micro); color: var(--muted); }
+
+/* ---------- Booking: direct contacts ---------- */
+.contacts { display: grid; gap: 2px; }
+.contacts a { display: flex; align-items: center; gap: 14px; padding: 8px 0; text-decoration: none; color: var(--ink); }
+.contacts .icon { width: 22px; height: 22px; color: var(--green); flex-shrink: 0; }
+.contacts span { display: grid; line-height: 1.35; font-size: var(--text-small); color: var(--muted); overflow-wrap: anywhere; }
+.contacts b { color: var(--ink); font-weight: 500; font-size: var(--text); }
+.contacts a:hover b { color: var(--terracotta-ink); }
+
+/* ---------- Phone dock: «Запись» is the accent ---------- */
+@media (max-width: 767px) {
+  .dock .dock__book { color: var(--green); font-weight: 600; }
+}
+
+/* «Как ты сейчас?» inside the block: at 768–1180 px the five tiles share a narrower column. */
+@media (min-width: 768px) and (max-width: 1180px) { .weather__tile { padding-inline: 6px; } }
+
+/* At 768–1180 px the six tabs do not fit: tighter tabs and a fade at the edge that says «there is more». */
+@media (max-width: 1180px) {
+  .ptab { padding: 8px 14px 8px 12px; gap: 6px; }
+}
+.ptabs[data-overflow='end'] { -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
+.ptabs[data-overflow='start'] { -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%); mask-image: linear-gradient(90deg, transparent, #000 12%); }
+.ptabs[data-overflow='both'] { -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.praktiki .pogoda__head h3.ptab-heading em { display: block; }

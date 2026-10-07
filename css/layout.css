@@ -1,0 +1,249 @@
+/* Page frame: header, phone dock, sections, bands, footer and the window light.
+   Mobile first is not the rule here; the phone layout is set below 768px. */
+
+/* ---------- Visibility switches ---------- */
+html.no-js .js-only { display: none !important; }
+html.js .no-js-only { display: none !important; }
+/* Child photos: only for «Жду малыша», «Малыш родился», «Близкий»; never at night or in quiet mode. */
+html:not([data-stage='pregnancy']):not([data-stage='postpartum']):not([data-stage='close']) [data-child-photo],
+html[data-theme='night'] [data-child-photo],
+html.is-quiet [data-child-photo] { display: none !important; }
+html:not([data-stage='loss']) [data-loss-only] { display: none !important; }
+html.is-quiet [data-loud-only] { display: none !important; }
+
+body { padding-bottom: var(--dock-h); }
+main { display: block; outline: none; }
+.noscript-note { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 70; padding: 14px 18px; border-radius: var(--radius-sm); background: var(--surface-raised); box-shadow: var(--shadow-md); font-size: var(--text-small); }
+
+/* ---------- Window light (decorative) ---------- */
+/* Spreads paint their own backgrounds, so the lamp lies over them and only warms what is under it. */
+.daylight { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; mix-blend-mode: multiply; }
+html[data-theme='night'] .daylight { mix-blend-mode: screen; }
+.daylight__lamp {
+  position: absolute; left: -12vw; bottom: -20vh; width: 70vw; height: 70vw; max-width: 900px; max-height: 900px;
+  border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--lamp) 34%, transparent) 0%, transparent 65%);
+  opacity: 0; transition: opacity 1.4s var(--ease-out);
+}
+html.lamp-on .daylight__lamp { opacity: 1; }
+
+/* ---------- Header: brand, four links, the moon, help and the letter ---------- */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  height: var(--header-h); display: flex; align-items: center;
+  pointer-events: none; /* the strip around the floating bar lets clicks through */
+}
+.site-header__inner {
+  pointer-events: auto;
+  width: min(1440px, 100% - 2 * var(--gutter)); height: 64px; margin-inline: auto;
+  display: flex; align-items: center; gap: 18px; padding: 0 0 0 2px;
+  border: 1px solid transparent; border-radius: 999px;
+  transition: width .6s var(--ease-settle), padding .6s var(--ease-settle), background-color .5s var(--ease-out), border-color .5s var(--ease-out), box-shadow .6s var(--ease-out);
+}
+/* Scrolled: the bar gathers into a floating pane of frosted glass. */
+.site-header.is-scrolled .site-header__inner {
+  width: min(1180px, 100% - 2 * var(--gutter)); padding: 0 8px 0 18px;
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25); backdrop-filter: blur(18px) saturate(1.25);
+  border-color: color-mix(in srgb, var(--line) 85%, transparent);
+  box-shadow: 0 18px 44px -22px rgba(35, 50, 38, .32);
+}
+html[data-theme='night'] .site-header.is-scrolled .site-header__inner { box-shadow: 0 18px 44px -18px rgba(0, 0, 0, .6); }
+/* Without JS the bar never learns it is scrolled: give it the glass from the start, so it never lies over text bare. */
+html.no-js .site-header__inner { padding: 0 8px 0 18px; background: color-mix(in srgb, var(--surface) 88%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border-color: var(--line); }
+/* Day page, dark band under the bar: the same glass, but smoked. */
+html[data-theme='day'] .site-header.is-on-dark {
+  --ink: #ece8dd; --ink-soft: #d9d6cb; --muted: #b5b8ad; --line: #333e36; --line-strong: #4a574d;
+  --sage-50: rgba(255, 255, 255, .06); --sage-100: rgba(255, 255, 255, .1); --sage-500: #93aa8e;
+  --green: #cfdcc9; --green-deep: #e4ece0; --on-green: #17201a; --terracotta-ink: #e5ad87; --surface: #1b231e;
+}
+html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow: 0 18px 44px -18px rgba(0, 0, 0, .55); }
+.site-header .brand, .site-header .site-nav a, .site-header .help-link, .site-header .theme-toggle { transition-property: color, background-color, border-color, transform; transition-duration: .35s; }
+.site-progress {
+  position: absolute; left: 0; top: 0; width: 100%; height: 2px; pointer-events: none;
+  background: linear-gradient(90deg, var(--terracotta), var(--lamp));
+  transform-origin: 0 50%; transform: scaleX(var(--progress, 0)); opacity: .85;
+}
+.brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); min-height: 44px; flex-shrink: 0; }
+.brand__flower { width: 38px; height: 38px; color: var(--green); stroke-width: 1.1; transition: transform 1.2s var(--ease-settle); }
+.brand:hover .brand__flower { transform: rotate(72deg); }
+.brand__text { display: grid; line-height: 1.1; }
+.brand__name { font-family: var(--serif); font-size: 23px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
+.brand__role { font-size: var(--text-micro); color: var(--muted); letter-spacing: .01em; }
+
+.site-nav { position: relative; display: flex; gap: 2px; margin-inline: auto; padding: 4px; }
+.site-nav__pill {
+  position: absolute; left: 0; top: 4px; bottom: 4px; width: var(--pill-w, 0); border-radius: 999px; pointer-events: none;
+  background: var(--sage-100); transform: translateX(var(--pill-x, 0)); opacity: 0; transition: opacity .3s var(--ease-out);
+}
+.site-nav.pill-ready .site-nav__pill { transition: transform .55s var(--ease-settle), width .55s var(--ease-settle), opacity .3s var(--ease-out); }
+.site-nav.has-pill .site-nav__pill { opacity: 1; }
+.site-nav a { position: relative; z-index: 1; padding: 9px 16px; border-radius: 999px; font-size: 15px; color: var(--ink-soft); text-decoration: none; transition: color .25s var(--ease-out); }
+.site-nav a:hover, .site-nav a[aria-current] { color: var(--ink); }
+.site-nav:not(.has-pill) a:hover { background: var(--sage-50); }
+
+.site-header__tools { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.site-nav + .site-header__tools { margin-left: 0; }
+
+/* The moon: one round button, the icon turns between day and night. */
+.theme-toggle {
+  position: relative; isolation: isolate; overflow: hidden; display: grid; place-items: center; flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-strong); color: var(--ink);
+  transition: background-color .25s var(--ease-out), border-color .25s var(--ease-out), transform .38s var(--ease-settle);
+}
+.theme-toggle:hover { background: var(--sage-50); border-color: var(--sage-500); }
+.theme-toggle:active { transform: scale(var(--press)); }
+.theme-toggle .icon { grid-area: 1 / 1; width: 20px; height: 20px; transition: transform .7s var(--ease-settle), opacity .35s var(--ease-out); }
+.theme-toggle__moon { opacity: 0; transform: rotate(-120deg) scale(.3); }
+.theme-toggle[aria-pressed='true'] .theme-toggle__sun { opacity: 0; transform: rotate(120deg) scale(.3); }
+.theme-toggle[aria-pressed='true'] .theme-toggle__moon { opacity: 1; transform: none; }
+.theme-toggle:hover .theme-toggle__sun { transform: rotate(45deg); }
+.theme-toggle[aria-pressed='true']:hover .theme-toggle__moon { transform: rotate(-18deg); }
+
+.help-link {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 999px;
+  color: var(--terracotta-ink); font-size: 15px; font-weight: 500; text-decoration: none;
+  transition: background-color .25s var(--ease-out), color .25s var(--ease-out);
+}
+.help-link .icon { width: 20px; height: 20px; transition: transform .8s var(--ease-settle); }
+.help-link:hover { background: color-mix(in srgb, var(--terracotta-ink) 10%, transparent); }
+.help-link:hover .icon { transform: rotate(90deg); }
+.header-cta { padding-inline: 20px 18px; }
+
+/* ---------- Phone dock ---------- */
+.dock { display: none; }
+
+@media (max-width: 1180px) {
+  .site-nav { display: none; }
+  .site-header__tools, .site-nav + .site-header__tools { margin-left: auto; }
+}
+@media (max-width: 767px) {
+  .header-cta { display: none; }
+}
+@media (max-width: 767px) {
+  :root { --header-h: 64px; }
+  html.js { --dock-h: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  html.js.keyboard-open, html.js.is-locked { --dock-h: 0px; }
+  .site-header__inner { height: 52px; width: calc(100% - 20px); gap: 8px; padding: 0 4px 0 6px; }
+  .site-header.is-scrolled .site-header__inner { width: calc(100% - 16px); padding: 0 4px 0 12px; }
+  .brand { gap: 8px; }
+  .brand__flower { width: 30px; height: 30px; }
+  .brand__name { font-size: 20px; }
+  .brand__role { display: none; }
+  .theme-toggle { width: 42px; height: 42px; }
+  html.js .help-link { display: none; }
+
+  .dock {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    padding: 4px 6px env(safe-area-inset-bottom, 0px);
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    box-shadow: 0 -1px 0 var(--line);
+    transition: transform var(--t-mid) var(--ease-out);
+  }
+  html.keyboard-open .dock, html.is-locked .dock { transform: translateY(110%); }
+  .dock a { position: relative; display: grid; justify-items: center; align-content: center; gap: 3px; min-height: 58px; padding: 4px 2px; color: var(--muted); font-size: var(--text-micro); line-height: 1.2; text-decoration: none; border-radius: var(--radius-sm); transition: color .25s var(--ease-out); }
+  .dock a .icon { width: 22px; height: 22px; transition: transform .45s var(--ease-settle); }
+  .dock a:active .icon { transform: scale(.88); }
+  .dock a[aria-current] { color: var(--green); }
+  .dock a[aria-current] .icon { transform: translateY(-2px); }
+  .dock a::after { content: ''; position: absolute; left: 50%; bottom: 4px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: currentColor; opacity: 0; transform: scale(0); transition: opacity .3s var(--ease-out), transform .45s var(--ease-settle); }
+  .dock a[aria-current]::after { opacity: 1; transform: none; }
+  .dock .dock__help { color: var(--terracotta-ink); }
+  .dock .dock__help .icon { padding: 2px; border: 1px solid currentColor; border-radius: 50%; width: 26px; height: 26px; }
+}
+@media (max-width: 380px) {
+  .brand__name { font-size: 17px; }
+}
+@media (max-width: 339px) {
+  .brand__text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+
+/* ---------- Marquee: the topics drift by under the first screen ---------- */
+.marquee {
+  position: relative; overflow: hidden; padding-block: clamp(16px, 2.2vw, 28px);
+  border-block: 1px solid var(--line);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.marquee__track { display: flex; width: max-content; animation: marquee 70s linear infinite; }
+.marquee__set { display: flex; align-items: center; gap: clamp(20px, 2.6vw, 40px); padding-right: clamp(20px, 2.6vw, 40px); }
+.marquee span { font-family: var(--serif); font-style: italic; font-size: clamp(26px, 3vw, 46px); line-height: 1.15; color: var(--ink-soft); white-space: nowrap; }
+.marquee span:nth-of-type(3n + 2) { color: var(--terracotta); }
+.marquee .icon { width: 22px; height: 22px; color: var(--sage-500); stroke-width: 1.2; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+html.is-quiet .marquee { display: none; }
+
+/* ---------- Sections ---------- */
+.section-head { display: grid; gap: 20px; margin-bottom: clamp(28px, 3.6vw, 52px); max-width: 52rem; }
+.band { background: var(--band); color: var(--on-band); position: relative; }
+.band h2 em, .band h3 em { color: var(--terracotta-ink); }
+html[data-theme='day'] .band h2 em, html[data-theme='day'] .band h3 em { color: #e2b296; }
+.band .lead, .band .note { color: var(--on-band-muted); }
+.band .link { color: var(--on-band); text-decoration-color: color-mix(in srgb, var(--on-band) 45%, transparent); }
+.band :focus-visible { outline-color: var(--lamp); }
+
+/* The quiet «Что дальше» line that ends each section: no dead ends. */
+.next-line { margin-top: clamp(36px, 4vw, 56px); padding-top: 18px; border-top: 1px solid var(--line); font-family: var(--serif); font-style: italic; font-size: clamp(19px, 1vw + 12px, 22px); color: var(--muted); }
+.next-line a { color: var(--ink); text-decoration-color: var(--line-strong); text-underline-offset: .25em; transition: color .25s var(--ease-out), text-decoration-color .25s var(--ease-out); }
+.next-line a:hover { color: var(--terracotta-ink); text-decoration-color: currentColor; }
+.next-line .icon { display: inline-block; vertical-align: -4px; width: 18px; height: 18px; margin-left: 8px; transition: transform .45s var(--ease-settle); }
+.next-line a:hover .icon { transform: translateY(4px); }
+@keyframes nudge-down { 0%, 60%, 100% { transform: none; } 30% { transform: translateY(5px); } }
+.band .next-line { border-top-color: color-mix(in srgb, var(--on-band) 18%, transparent); color: var(--on-band-muted); }
+.band .next-line a { color: var(--on-band); }
+
+/* Links inside dark blocks */
+.link--light { color: var(--on-band); text-decoration-color: color-mix(in srgb, var(--on-band) 40%, transparent); }
+.link--light:hover { color: #fff; }
+.btn--on-dark { --btn-fg: var(--on-band); --btn-bd: color-mix(in srgb, var(--on-band) 38%, transparent); }
+.btn--on-dark:hover { --btn-bg: color-mix(in srgb, var(--on-band) 12%, transparent); }
+
+/* ---------- Footer «Свет здесь не гаснет» ---------- */
+.svet {
+  --svet-bg: #1d2420;
+  position: relative; overflow: hidden;
+  padding: clamp(64px, 7.4vw, 120px) 0 calc(40px + env(safe-area-inset-bottom, 0px));
+  background: var(--svet-bg); color: #e6e4da;
+  --on-band: #e6e4da; --on-band-muted: #b9bfb2;
+}
+html[data-theme='night'] .svet { --svet-bg: #0f1311; }
+.svet__lamp { position: absolute; left: -160px; bottom: -200px; width: 680px; height: 680px; border-radius: 50%; background: radial-gradient(circle, rgba(231, 167, 127, .22) 0%, rgba(231, 167, 127, .08) 40%, transparent 68%); display: grid; place-items: center; pointer-events: none; }
+.svet__lamp .icon { width: 120px; height: 120px; color: #e7a77f; opacity: .55; stroke-width: .8; translate: 90px -110px; animation: orbit 90s linear infinite; }
+html.is-quiet .svet__lamp .icon { animation-play-state: paused; }
+.svet .wrap { position: relative; }
+.svet__head { display: grid; gap: 22px; justify-items: start; max-width: 46rem; margin-bottom: clamp(44px, 5vw, 72px); }
+.svet__head h2 { font-size: clamp(48px, 7vw, 104px); }
+.svet__head h2 em { color: #dba486; }
+.svet__head p { font-size: var(--text-lead); color: var(--on-band-muted); }
+.svet__cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(28px, 4vw, 56px); padding-top: 40px; border-top: 1px solid rgba(230, 228, 218, .14); }
+.svet__col h3 { font-family: var(--sans); font-size: var(--text-small); font-weight: 600; letter-spacing: .01em; margin-bottom: 14px; color: #e6e4da; }
+.svet__col ul { display: grid; gap: 6px; }
+.svet__col a:not(.btn), .svet__col p { font-size: var(--text-small); color: var(--on-band-muted); line-height: 1.6; }
+.svet__col li > a { display: inline-block; padding-block: 6px; text-decoration-color: rgba(230, 228, 218, .25); }
+.svet__col a:hover { color: #fff; }
+.svet__col b { color: #e6e4da; font-weight: 600; }
+.svet__honest { margin-top: 12px; }
+.svet__row { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.svet__bottom { display: grid; gap: 8px; margin-top: clamp(40px, 4.4vw, 64px); padding-top: 24px; border-top: 1px solid rgba(230, 228, 218, .14); font-size: var(--text-micro); color: #a6ad9f; }
+.svet__bottom .link { min-height: 0; font-size: inherit; }
+.svet :focus-visible { outline-color: #e7a77f; }
+/* Wide: the big line on the left, the invitation and the button on the right — not a lone heading over an empty half. */
+@media (min-width: 861px) {
+  .svet__head { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-rows: auto auto; column-gap: clamp(32px, 5vw, 80px); align-items: end; max-width: none; }
+  .svet__head h2 { grid-row: 1 / span 2; align-self: end; }
+  .svet__head p { grid-column: 2; grid-row: 1; max-width: 26em; }
+  .svet__head .btn { grid-column: 2; grid-row: 2; }
+}
+/* The flower sits in the free space under «Связаться»; once the columns narrow it would land on the links. */
+@media (max-width: 1180px) { .svet__lamp .icon { display: none; } }
+@media (max-width: 1023px) { .svet__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .svet__cols { grid-template-columns: minmax(0, 1fr); } .svet__lamp { width: 460px; height: 460px; } .svet__lamp .icon { opacity: .18; } }
+
+/* ---------- Print: just the words ---------- */
+@media print {
+  .site-header, .dock, .daylight, .grain::after, .skip-link, .marquee { display: none !important; }
+  body { padding: 0; background: #fff; color: #000; }
+  .band, .svet { background: #fff !important; color: #000 !important; }
+}

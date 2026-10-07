@@ -1,0 +1,92 @@
+/* «Начнём с разговора?» — how it works on the left, a paper letter on the right. Plus the FAQ. */
+.vstrecha__about { display: grid; gap: 22px; align-content: start; }
+.vstrecha__fallback { margin-top: -10px; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 24px; font-family: var(--serif); font-size: clamp(22px, 1vw + 16px, 28px); line-height: 1.3; color: var(--ink); }
+.facts span { display: inline-flex; align-items: baseline; gap: 10px; }
+.facts span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--terracotta); align-self: center; }
+.calm-card { display: grid; gap: 10px; justify-items: start; margin-top: 10px; padding: 22px 24px; border-radius: var(--radius); background: var(--peach); max-width: 26rem; box-shadow: var(--shadow-sm); }
+.calm-card__text.is-new { animation: rise-in .6s var(--ease-settle); }
+.calm-card__cap { font-size: var(--text-micro); color: var(--muted); }
+.calm-card__text { font-family: var(--serif); font-style: italic; font-size: clamp(22px, .8vw + 16px, 26px); line-height: 1.3; min-height: 2.6em; }
+
+.letter {
+  position: relative; display: grid; gap: 24px; padding: 80px clamp(22px, 4vw, 52px) clamp(28px, 4vw, 44px);
+  border-radius: var(--radius) var(--radius) var(--radius-lg) var(--radius-lg); background: #fbf9f3; color: #2f3b31; box-shadow: var(--shadow-md);
+  --ink: #2f3b31; --ink-soft: #3f4c41; --muted: #5f675b; --faint: #7d8576; --line: #dcdfd2; --line-strong: #c4cdb8; --surface: #fffefa;
+}
+html[data-theme='night'] .letter { background: #262f29; color: var(--ink); --ink: #ece8dd; --ink-soft: #ddd8cb; --muted: #b5b8ad; --faint: #8e9488; --line: #333e36; --line-strong: #46534a; --surface: #2c3630; }
+/* The envelope: a thin V of the flap and a wax seal where it meets. */
+.letter__flap { position: absolute; left: 0; top: 0; width: 100%; height: 46px; overflow: visible; pointer-events: none; fill: color-mix(in srgb, var(--line) 45%, transparent); stroke: var(--line-strong); stroke-width: 1; }
+.letter__flap path { vector-effect: non-scaling-stroke; }
+.letter__seal {
+  position: absolute; left: 50%; top: 46px; z-index: 1; display: grid; place-items: center; width: 46px; height: 46px; margin: -23px 0 0 -23px;
+  border-radius: 50%; color: #fbf3ea; pointer-events: none;
+  background: radial-gradient(circle at 35% 30%, #c88f73, var(--terracotta) 55%, #9c6450);
+  box-shadow: 0 6px 14px -6px rgba(143, 90, 67, .7), inset 0 0 0 3px rgba(255, 255, 255, .14);
+}
+.letter__seal .icon { width: 24px; height: 24px; stroke-width: 1.2; }
+/* Arriving from «Написать Ирине»: a soft ring spreads from the letter and the seal stamps. */
+.letter::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.letter.is-arriving::after { animation: letter-ring 1.6s var(--ease-out) .1s; }
+.letter.is-arriving .letter__seal { animation: seal-stamp .9s var(--ease-settle) .15s backwards; }
+@keyframes letter-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--terracotta) 45%, transparent); }
+  100% { box-shadow: 0 0 0 28px transparent; }
+}
+@keyframes seal-stamp { 0% { transform: scale(1.6); opacity: 0; } 60% { transform: scale(.92); opacity: 1; } 100% { transform: none; } }
+html.motion-reduced .letter.is-arriving::after { animation: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--terracotta) 40%, transparent); }
+.letter__title { font-size: clamp(32px, 2.4vw + 14px, 44px); }
+.letter__fields { display: grid; gap: 24px; }
+.letter .chip { background: var(--surface); }
+.letter .chip[aria-pressed='true'], .letter .chip[aria-checked='true'] { background: var(--green); color: var(--on-green); }
+.letter .textarea { margin-top: 8px; }
+.letter [data-letter-days], .letter [data-letter-times] { align-items: flex-start; align-content: flex-start; }
+@media (min-width: 1366px), (min-width: 561px) and (max-width: 860px) {
+  .letter .field:has(> [data-letter-days]) { grid-template-columns: auto minmax(0, 1fr); column-gap: 20px; }
+  .letter .field:has(> [data-letter-days]) > :not([data-letter-days]):not([data-letter-times]) { grid-column: 1 / -1; }
+}
+.letter__preview { padding: 20px 22px; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--line) 40%, transparent); transition: background-color .6s var(--ease-out); }
+.letter__preview.is-updated { animation: preview-ink .9s var(--ease-out); }
+@keyframes preview-ink { 0% { background-color: color-mix(in srgb, var(--sage-200) 85%, transparent); } 100% { background-color: color-mix(in srgb, var(--line) 40%, transparent); } }
+.letter__cap { font-size: var(--text-micro); color: var(--muted); margin-bottom: 6px; }
+.letter__text { font-family: var(--serif); font-style: italic; font-size: clamp(20px, .6vw + 16px, 23px); line-height: 1.45; color: var(--ink); white-space: pre-line; }
+.letter__send { display: grid; gap: 12px; }
+.letter__main { justify-self: stretch; min-height: 56px; }
+.letter__alt { display: flex; flex-wrap: wrap; gap: 8px; }
+.letter__status { min-height: 1.5em; font-size: var(--text-small); color: var(--green); }
+html[data-theme='night'] .letter__status { color: var(--sage-500); }
+.letter .privacy-line a { color: var(--ink); }
+
+/* The short column travels beside the long letter instead of leaving a hole under it. letter.js
+   measures it into --about-h: if it fits under the header it sticks there; if it is taller than
+   the window it sticks with its lower part (steps, «Перед встречей») in view. Two columns only. */
+@media (min-width: 961px) {
+  html.js .vstrecha__about { position: sticky; top: min(calc(var(--header-h) + 24px), calc(100vh - var(--about-h, 0px) - 24px)); }
+}
+
+/* ---------- FAQ ---------- */
+.voprosy__aside { gap: 28px; }
+.voprosy__ask { font-family: var(--serif); font-style: italic; font-size: clamp(20px, .5vw + 16px, 23px); color: var(--ink-soft); }
+.voprosy__ask .link { font-family: var(--sans); font-style: normal; font-size: var(--text-small); }
+.voprosy__arch { position: relative; aspect-ratio: 4 / 3; border-radius: var(--arch); overflow: hidden; background: var(--paper-3); max-width: 420px; }
+.voprosy__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: var(--photo-filter); }
+.voprosy__img--child { z-index: 1; object-position: 50% 60%; }
+.voprosy__img--calm { object-position: 50% 55%; }
+.faq { display: grid; border-top: 1px solid var(--tone-rule, var(--line)); }
+.faq details { border-bottom: 1px solid var(--tone-rule, var(--line)); }
+.faq summary {
+  position: relative; display: block; list-style: none; cursor: pointer; padding: 22px 52px 22px 0;
+  font-family: var(--serif); font-size: clamp(22px, 1vw + 16px, 28px); line-height: 1.2; color: var(--ink);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before, .faq summary::after { content: ''; position: absolute; right: 12px; top: 50%; width: 18px; height: 1.5px; background: var(--terracotta-ink); transition: transform var(--t-mid) var(--ease-settle); }
+.faq summary::after { transform: rotate(90deg); }
+.faq details[open] summary::after { transform: rotate(0); }
+.faq details[open] summary::before { transform: rotate(180deg); }
+.faq summary:hover { color: var(--terracotta-ink); }
+.faq details > div { display: grid; gap: 10px; padding: 0 52px 24px 0; color: var(--ink-soft); line-height: 1.65; }
+.faq details::details-content { transition: content-visibility var(--t-mid) allow-discrete, opacity var(--t-mid); opacity: 0; }
+.faq details[open]::details-content { opacity: 1; }
+@media (max-width: 860px) {
+  .voprosy__arch { aspect-ratio: 16 / 10; max-width: none; }
+}
