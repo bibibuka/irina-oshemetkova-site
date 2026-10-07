@@ -56,5 +56,6 @@ export function init() {
     if (tab) select(tab);
   };
   byStage();
+  root.closest('.dveri')?.setAttribute('data-doors-ready', '');
   document.addEventListener('stage:change', () => { if (!touched) byStage(); });
 }

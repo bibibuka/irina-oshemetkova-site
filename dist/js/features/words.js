@@ -4,7 +4,7 @@
 // unless the visitor taps «Отправить».
 import { $, $$, h, icon, announce, uid } from '../core/dom.js';
 import { prefs } from '../core/prefs.js';
-import { copyText, shareText, canShareText, renderCard, fileFromBlob, shareOrDownload } from '../core/share.js';
+import { copyText, shareText, canShareText, renderCard, fileFromBlob, shareOrDownload, plain } from '../core/share.js';
 import { watchField } from '../core/safety.js';
 import { DEFAULT_TAB, BUILDER, buildRequest, GUESTS, MEMO_TITLE } from '../content/words.js';
 
@@ -105,7 +105,7 @@ function enhancePhrase(quote) {
   if (!p || $('.phrase__actions', quote)) return;
   const soft = p.textContent.trim();
   const firm = quote.dataset.firm;
-  const text = () => p.textContent.trim();
+  const text = () => plain(p.textContent.trim());
   const bar = h('div', { class: 'phrase__actions' },
     actionButton('copy', 'Скопировать', (event) => copy(text(), event.currentTarget, p)),
     actionButton('share', 'Отправить', () => send(text())),

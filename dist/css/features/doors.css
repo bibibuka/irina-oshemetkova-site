@@ -48,7 +48,7 @@ html[data-theme='night'] .door[aria-selected='true'] .door__label { color: var(-
 html.js .door-panel + .door-panel { margin-top: 0; }
 .door-panel h3 { font-size: clamp(32px, 1.8vw + 18px, 50px); line-height: 1.04; letter-spacing: -.02em; max-width: 14em; }
 .door-panel__cols { display: grid; gap: 26px; }
-.door-panel__cap { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--terracotta-ink); margin-bottom: 10px; }
+.door-panel__cap { font-family: var(--serif); font-style: italic; font-size: 24px; color: var(--terracotta-ink); margin-bottom: 10px; }
 .door-panel ul { display: grid; gap: 10px; }
 .door-panel li { position: relative; padding-left: 26px; line-height: 1.55; }
 .door-panel__feel li::before { content: ''; position: absolute; left: 4px; top: .62em; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--terracotta); }
@@ -83,9 +83,13 @@ html.is-quiet .door-panel.appear * { animation-name: fade-in; }
    the spread above (#uznaesh, peach) or below (#irina, linen). The light colour fades (@property). */
 html[data-theme='day'] .dveri.spread[data-chapter='pregnancy'] { --tone-bg: #f6e3dc; --tone-light: #ffd6c2; --tone-shade: rgba(122, 66, 50, .07); --tone-rule: #e8d0c6; }
 html[data-theme='day'] .dveri.spread[data-chapter='postpartum'] { --tone-bg: #f5e8cc; --tone-light: #ffe6a8; --tone-shade: rgba(110, 86, 40, .07); --tone-rule: #e6d6b0; }
-html[data-theme='day'] .dveri.spread[data-chapter='loss'] { --tone-bg: #e7e8e2; --tone-light: #f7f4ec; --tone-shade: rgba(50, 60, 55, .07); --tone-rule: #d4d7cd; --tone-light-strength: .55; }
+html[data-theme='day'] .dveri.spread[data-chapter='loss'] { --tone-bg: #e1e5e0; --tone-light: #f7f4ec; --tone-shade: rgba(50, 60, 55, .07); --tone-rule: #d4d7cd; --tone-light-strength: .55; }
 html[data-theme='day'] .dveri.spread[data-chapter='close'] { --tone-bg: #f8f7f2; --tone-light: #fff5dc; --tone-shade: rgba(47, 59, 49, .05); --tone-rule: var(--line); }
-html[data-theme='night'] .dveri.spread[data-chapter='pregnancy'] { --tone-bg: #241d1c; --tone-light: #e7a77f; --tone-rule: #3d3030; }
-html[data-theme='night'] .dveri.spread[data-chapter='postpartum'] { --tone-bg: #23201a; --tone-light: #e7c39f; --tone-rule: #3c3628; }
+html[data-theme='night'] .dveri.spread[data-chapter='pregnancy'] { --tone-bg: #2c1f20; --tone-light: #e7a77f; --tone-rule: #3d3030; }
+html[data-theme='night'] .dveri.spread[data-chapter='postpartum'] { --tone-bg: #2a2416; --tone-light: #e7c39f; --tone-rule: #3c3628; }
 html[data-theme='night'] .dveri.spread[data-chapter='loss'] { --tone-bg: #1a1c1a; --tone-light: #c9c9bf; --tone-rule: #303330; --tone-light-strength: .18; }
 html[data-theme='night'] .dveri.spread[data-chapter='close'] { --tone-bg: #151a17; --tone-light: #e7a77f; --tone-rule: var(--line); }
+/* Before doors.js settles, only the first chapter is shown (the others would fold away under the visitor). */
+html.js .dveri:not([data-doors-ready]) .door-panel:not(#door-planning) { display: none; }
+/* Short laptop screens: the chapter is taller than the window, so it scrolls with the page instead of sticking. */
+@media (max-height: 820px) { .dveri__chapter.page-sticky { position: static; } }

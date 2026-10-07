@@ -155,8 +155,7 @@ let spreadOpener = null;
  *  focus does not swing. Used by jumpTo() before it scrolls. */
 export function openSpreadsUpTo(target) {
   allSpreads.forEach((spread) => {
-    if (spread.classList.contains('is-open')) return;
-    const before = spread.contains(target) || (spread.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const before = spread.contains(target) || target.contains(spread) || (spread.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING);
     if (!before) return;
     spread.classList.add('is-open', 'is-instant');
     spreadOpener?.unobserve(spread);
@@ -358,27 +357,33 @@ export function focusTarget(target) {
  * jumpTo('#vstrecha') — a far jump dissolves into the place (View Transitions), a near one
  * scrolls smoothly, less motion jumps at once. `offset` overrides the scroll margin.
  */
-export function jumpTo(target, { offset, onDone } = {}) {
+export function jumpTo(target, { offset, onDone, instant = false } = {}) {
   const el = typeof target === 'string' ? $(target) : target;
   if (!el) return;
   // A smooth scroll still under way (a nav link, the wheel) keeps adding its distance after
   // an instant jump and carries the target off its place: let the page settle first.
-  if (performance.now() - lastScrollAt < 100) { whenStill(() => jumpNow(el, { offset, onDone })); return; }
-  jumpNow(el, { offset, onDone });
+  if (!instant && performance.now() - lastScrollAt < 100) { whenStill(() => jumpNow(el, { offset, onDone })); return; }
+  jumpNow(el, { offset, onDone, instant });
 }
 
-function jumpNow(el, { offset, onDone }) {
+function jumpNow(el, { offset, onDone, instant = false }) {
   revealPanel(el); // a practice inside a closed tab: open the tab before measuring
   openSpreadsUpTo(el); // and the spread it lives in, so the landing page stands still
   const margin = offset ?? scrollMargin(el);
-  const top = Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - margin));
+  const place = () => Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY - margin));
+  const top = place();
   const done = () => onDone?.(el);
   if (Math.abs(top - window.scrollY) < 2) { done(); return; }
-  if (prefs.reducedMotion) { instantScroll(top); done(); return; }
+  if (instant || prefs.reducedMotion) { instantScroll(top); sweepReveals({ instant: true }); done(); return; }
   const far = Math.abs(top - window.scrollY) > window.innerHeight * FAR;
   if (far && document.startViewTransition && document.visibilityState === 'visible') {
     root.classList.add('vt-jump');
-    const transition = document.startViewTransition(() => { instantScroll(top); sweepReveals({ instant: true }); });
+    // Measure again inside the transition: anything that settled meanwhile is counted, and check once after.
+    const transition = document.startViewTransition(() => {
+      instantScroll(place());
+      sweepReveals({ instant: true });
+      if (Math.abs(el.getBoundingClientRect().top - margin) > 1) instantScroll(place());
+    });
     transition.finished.finally(() => { root.classList.remove('vt-jump'); done(); });
     return;
   }

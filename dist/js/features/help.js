@@ -6,7 +6,7 @@ import { prefs } from '../core/prefs.js';
 import { store } from '../core/store.js';
 import { registerAction, runAction } from '../core/actions.js';
 import { openSheet } from '../core/sheets.js';
-import { copyText, shareText, canShareText } from '../core/share.js';
+import { copyText, shareText, canShareText, plain } from '../core/share.js';
 import { startMiniBreath } from '../core/minibreath.js';
 
 const QUIET_HOURS = 24;
@@ -21,7 +21,7 @@ function say(node, text) {
   const status = statusFor(node);
   if (status) { status.textContent = ''; requestAnimationFrame(() => { status.textContent = text; }); }
 }
-const textOf = (selector) => $(selector)?.textContent.trim() || '';
+const textOf = (selector) => plain($(selector)?.textContent.trim() || '');
 
 function enterQuiet(reason) {
   prefs.enterQuiet(reason);

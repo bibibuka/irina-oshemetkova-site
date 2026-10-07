@@ -59,8 +59,20 @@ export function revealPanel(el) {
   return tab ? selectTab(tab) : false;
 }
 
+/** A strip that scrolls sideways shows a fade only on the side where more tabs are hidden. */
+function watchOverflow(list) {
+  const update = () => {
+    const max = list.scrollWidth - list.clientWidth;
+    list.dataset.overflow = max <= 1 ? 'none' : list.scrollLeft <= 1 ? 'end' : list.scrollLeft >= max - 1 ? 'start' : 'both';
+  };
+  list.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+}
+
 export function initPanels() {
   $$('[data-tabs]').forEach((list) => {
+    if (list.matches('[data-tabs]')) watchOverflow(list);
     const tabs = $$('[role="tab"]', list);
     if (!tabs.length) return;
     tabs.forEach((tab) => {

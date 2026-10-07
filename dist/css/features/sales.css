@@ -105,7 +105,7 @@ html[data-theme='night'] .plan--main { border-color: var(--line); }
 .howto__step p { font-size: var(--text-small); line-height: 1.6; color: var(--ink-soft); }
 
 .prep { margin-top: clamp(18px, 2vw, 26px); padding: 22px 24px; border-radius: var(--radius); background: color-mix(in srgb, var(--surface) 64%, transparent); border: 1px solid var(--tone-rule); }
-.prep__cap { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--terracotta-ink); margin-bottom: 10px; }
+.prep__cap { font-family: var(--serif); font-style: italic; font-size: 24px; color: var(--terracotta-ink); margin-bottom: 10px; }
 .prep__list { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 20px; }
 .prep__list li { display: flex; gap: 10px; align-items: flex-start; font-size: var(--text-small); line-height: 1.5; color: var(--ink-soft); }
 .prep__list .icon { width: 20px; height: 20px; color: var(--sage-500); margin-top: 1px; }
@@ -166,7 +166,7 @@ html[data-theme='night'] .pmap__name { color: var(--terracotta-ink); }
 /* Panels are the former sections: they keep their own look. Before JS settles, only the first shows. */
 html.js .praktiki:not([data-tabs-ready]) .ptab-panel:not(#pogoda) { display: none; }
 .ptab-panel { outline: none; }
-/* Beats layout.css «section[id]»: a jump to a panel lands below the sticky tab bar. */
+/* A jump to a panel lands below the sticky tab bar: this margin is added to the page's scroll padding. */
 .praktiki .ptab-panel[id] { scroll-margin-top: 76px; } /* added to the page's scroll padding: below the sticky tabs */
 /* Inside the block the practice titles are h3 (one h2 for the block), but keep their section size. */
 .praktiki h3.ptab-heading { font-size: var(--h2); line-height: 1; letter-spacing: -.03em; }
@@ -175,11 +175,11 @@ html.js .praktiki:not([data-tabs-ready]) .ptab-panel:not(#pogoda) { display: non
 .praktiki .dyhanie__copy h3.ptab-heading { color: var(--on-band); }
 /* Sticky columns inside the panels start below the sticky tab bar, not under it. */
 .praktiki .pogoda__head, .praktiki .razbor__head, .praktiki .book__toc, .praktiki .opory__arch { top: calc(var(--header-h) + 88px); }
-.ptab-panel.pogoda { border-radius: var(--radius-lg); margin-inline: clamp(0px, 1.2vw, 16px); }
-.ptab-panel.dyhanie { border-radius: var(--radius-lg); margin-inline: clamp(0px, 1.2vw, 16px); }
+/* The two tinted panels are cards as wide as the book above them. */
+.ptab-panel.pogoda, .ptab-panel.dyhanie { border-radius: var(--radius-lg); width: min(1440px, 100% - 2 * var(--gutter) + 32px); margin-inline: auto; }
 .praktiki .ptab-panel.section { padding-block: clamp(28px, 3vw, 48px) var(--section); }
 @media (max-width: 767px) {
-  .ptab-panel.pogoda, .ptab-panel.dyhanie { border-radius: 0; margin-inline: 0; }
+  .ptab-panel.pogoda, .ptab-panel.dyhanie { border-radius: 0; width: auto; margin-inline: 0; }
 }
 
 /* The bookmark after the practices: practice helps in the moment, the meetings help to understand. */
@@ -209,6 +209,8 @@ html.js .praktiki:not([data-tabs-ready]) .ptab-panel:not(#pogoda) { display: non
 /* At 768–1180 px the six tabs do not fit: tighter tabs and a fade at the edge that says «there is more». */
 @media (max-width: 1180px) {
   .ptab { padding: 8px 14px 8px 12px; gap: 6px; }
-  .ptabs { -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
 }
+.ptabs[data-overflow='end'] { -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); }
+.ptabs[data-overflow='start'] { -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%); mask-image: linear-gradient(90deg, transparent, #000 12%); }
+.ptabs[data-overflow='both'] { -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
 .praktiki .pogoda__head h3.ptab-heading em { display: block; }

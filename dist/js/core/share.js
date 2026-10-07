@@ -1,7 +1,11 @@
 // Copy, share and save — always by the visitor's own action, never automatically.
 
+/** Typesetting no-break spaces stay on the page; what the visitor copies or sends gets plain spaces. */
+export const plain = (text) => String(text ?? '').replace(/[\u00a0\u202f]/g, ' ');
+
 /** Copy text. Falls back to selecting `selectNode` so the visitor can copy manually. */
 export async function copyText(text, selectNode = null) {
+  text = plain(text);
   try {
     if (navigator.clipboard?.writeText && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
@@ -32,7 +36,7 @@ export function canShareText() { return typeof navigator.share === 'function'; }
 /** Share plain text through the system sheet. Resolves 'shared' | 'cancelled' | 'unsupported'. */
 export async function shareText({ title, text }) {
   if (!canShareText()) return 'unsupported';
-  try { await navigator.share({ title, text }); return 'shared'; } catch (error) {
+  try { await navigator.share({ title: plain(title), text: plain(text) }); return 'shared'; } catch (error) {
     return error?.name === 'AbortError' ? 'cancelled' : 'unsupported';
   }
 }

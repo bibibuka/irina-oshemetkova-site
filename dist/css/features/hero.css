@@ -21,7 +21,7 @@
 
 /* The arch window on the right page */
 .okno__window { display: grid; justify-items: center; align-content: center; margin: 0; }
-.okno__frame { position: relative; width: min(100%, 440px, calc((100svh - var(--header-h) - 230px) / 1.32)); translate: 0 calc(var(--sy, 0) * -.06px); }
+.okno__frame { position: relative; width: min(100%, 440px, max(280px, calc((100svh - var(--header-h) - 230px) / 1.32))); translate: 0 calc(var(--sy, 0) * -.06px); }
 .okno__frame::before {
   content: ''; position: absolute; inset: -14px; border-radius: 999px 999px 18px 18px;
   border: 1px solid color-mix(in srgb, var(--green) 45%, transparent); pointer-events: none;
@@ -39,7 +39,7 @@
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
     linear-gradient(90deg, transparent calc(16% - .5px), rgba(255, 255, 255, .42) calc(16% - .5px) calc(16% + .5px), transparent calc(16% + .5px)),
-    linear-gradient(180deg, transparent calc(22% - .5px), rgba(255, 255, 255, .42) calc(22% - .5px) calc(22% + .5px), transparent calc(22% + .5px));
+    linear-gradient(180deg, transparent calc(9% - .5px), rgba(255, 255, 255, .42) calc(9% - .5px) calc(9% + .5px), transparent calc(9% + .5px));
   mix-blend-mode: soft-light;
 }
 html[data-part='evening'] .arch-window::after, html[data-theme='night'] .arch-window::after {
@@ -96,7 +96,7 @@ html[data-theme='night'] .stage-pick { background: color-mix(in srgb, var(--pape
   .okno__copy { display: contents; }
   .okno__title { order: 2; margin-bottom: 8px; }
   .okno__window { order: 3; margin-block: 24px 22px; }
-  .okno__frame { width: min(100% - 28px, 420px, 40svh); }
+  .okno__frame { width: min(100% - 28px, 420px, max(240px, 40svh)); }
   .okno__lead { order: 4; }
   .okno__actions { order: 5; margin-top: 18px; }
   .okno__terms { order: 6; margin-top: 14px; }
@@ -138,3 +138,14 @@ html[data-theme='night'] .sheet--threshold { --sheet-bg: var(--paper-2); }
 .stage-option:hover { border-color: var(--sage-500); }
 .stage-option[aria-pressed='true'] { background: var(--green); color: var(--on-green); border-color: var(--green); }
 .stage-option[aria-pressed='true'] .icon { color: currentColor; }
+
+/* Short laptop screens: the caption would fall under the fold — the arch and the badge say enough. */
+@media (min-width: 861px) and (max-height: 820px) { .okno__caption { display: none; } }
+/* Phones: say what and offer the booking before the photo, so the button is on the first screen. */
+@media (max-width: 560px) {
+  .okno__lead { order: 3; }
+  .okno__actions { order: 4; }
+  .okno__terms { order: 5; }
+  .okno__window { order: 6; margin-block: 28px 18px; }
+  .okno__proof { order: 7; }
+}

@@ -35,9 +35,9 @@
 
 html[data-theme='night'] .spread { --tone-shade: rgba(0, 0, 0, .22); --spine: rgba(236, 232, 221, .12); --tone-light-strength: .3; }
 html[data-theme='night'] .spread--milk  { --tone-bg: #151a17; --tone-light: #e7a77f; }
-html[data-theme='night'] .spread--peach { --tone-bg: #221e1b; --tone-light: #e7a77f; --tone-rule: #3a322c; }
+html[data-theme='night'] .spread--peach { --tone-bg: #2a201c; --tone-light: #e7a77f; --tone-rule: #42332c; }
 html[data-theme='night'] .spread--sage  { --tone-bg: #1b2620; --tone-light: #c9d8b8; --tone-rule: #31403a; }
-html[data-theme='night'] .spread--linen { --tone-bg: #22211c; --tone-light: #e7c39f; --tone-rule: #3a3830; }
+html[data-theme='night'] .spread--linen { --tone-bg: #1f231c; --tone-light: #e7c39f; --tone-rule: #383c32; }
 html[data-theme='night'] .spread--dusk  { --tone-bg: #241c19; --tone-light: #e7a77f; --tone-rule: #3d302a; }
 html[data-theme='night'] .spread--lamp  { --tone-bg: #0f1411; --tone-light: #e7a77f; --tone-light-strength: .34; }
 html.is-quiet .spread { --quiet-k: .5; }
@@ -230,3 +230,11 @@ html[data-stage='loss'] .thought-card[data-stage='loss'] { order: -1; }
   .uznaesh__answer { order: 3; margin-top: 36px; }
   .uznaesh h2 { margin-bottom: 18px; }
 }
+
+/* The deeper terracotta also where large accents sit on tinted paper outside a spread. */
+html[data-theme='day'] :is(.bookmark, .praktiki__body) { --terracotta: #a66b51; }
+html[data-theme='day'].is-quiet :is(.bookmark, .praktiki__body) { --terracotta: #94705f; }
+/* On the loss stage the calm row keeps one thought: it sits under the right page, not alone in a corner. */
+html[data-stage='loss'] .uznaesh .calm-row { grid-template-columns: minmax(0, 34rem); justify-content: end; }
+@media (max-width: 860px) { html[data-stage='loss'] .uznaesh .calm-row { justify-content: start; } }
+.nowrap { white-space: nowrap; }

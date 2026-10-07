@@ -308,7 +308,7 @@ function renderTraps() {
   // Front: the name and how the thought sounds; back: how to notice it and the question that helps.
   h('span', { class: 'trap__face trap__front' },
     h('span', { class: 'trap__name' }, trap.name),
-    h('span', { class: 'trap__example' }, `«${trap.example.replace(/\.$/, '')}»`),
+    h('span', { class: 'trap__example' }, `«${((prefs.stage === 'loss' && trap.exampleLoss) || trap.example).replace(/\.$/, '')}»`),
     h('span', { class: 'trap__hint' }, 'перевернуть')),
   h('span', { class: 'trap__face trap__back' },
     h('span', { class: 'trap__row' }, h('b', {}, 'Как узнать: '), trap.how, '.'),
@@ -343,6 +343,7 @@ function renderGame() {
 export function init() {
   el = { root: $('[data-thought]'), page: $('[data-thought-page]'), dots: $('[data-thought-dots]') };
   renderTraps();
+  document.addEventListener('stage:change', renderTraps); // loss-stage examples never mention a baby
   renderGame();
   if (!el.root || !el.page) return;
   stepSituation();

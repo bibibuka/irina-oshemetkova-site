@@ -5,7 +5,7 @@ import { initSheets } from './core/sheets.js';
 import { initActions } from './core/actions.js';
 import { initPanels } from './core/panels.js';
 import {
-  initReveals, initSpreads, initHeader, initSectionSpy, initNavPill, initRipples, initJumps, initKeyboardAwareDock,
+  initReveals, initSpreads, initHeader, initSectionSpy, initNavPill, initRipples, initJumps, initKeyboardAwareDock, jumpTo,
 } from './core/motion.js';
 import { $$ } from './core/dom.js';
 
@@ -27,6 +27,20 @@ function autosizeFallback() {
   document.addEventListener('input', (event) => {
     if (event.target instanceof HTMLTextAreaElement) { event.target.classList.add('is-autosize'); fit(event.target); }
   });
+}
+
+/** The browser scrolls to …/#irina before the features render and fold about two thousand pixels
+ *  of tabs and doors above the target, so the landing drifts far past it: land again, once, now. */
+function landOnHash() {
+  const hash = window.__landHash || location.hash; // the head script held it back from the browser
+  const id = decodeURIComponent(hash.slice(1));
+  const target = id && document.getElementById(id);
+  window.__landHash = null;
+  if (!target || target.closest('dialog')) return;
+  Promise.resolve(document.fonts?.ready).then(() => requestAnimationFrame(() => {
+    jumpTo(target, { instant: true });
+    try { history.replaceState(history.state, '', hash); } catch { /* old browsers */ }
+  }));
 }
 
 function boot() {
@@ -55,6 +69,7 @@ function boot() {
   Promise.allSettled(loading).then(() => {
     document.documentElement.dataset.features = 'ready';
     document.dispatchEvent(new CustomEvent('features:ready'));
+    landOnHash();
   });
 }
 
