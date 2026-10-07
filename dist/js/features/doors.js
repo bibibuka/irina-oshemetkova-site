@@ -25,7 +25,14 @@ export function init() {
     if (focus) tab.focus();
   };
 
-  tabs.forEach((tab) => tab.addEventListener('click', () => { touched = true; select(tab); }));
+  // On a phone the chapter opens below the list: bring its start into view if it is off screen.
+  const follow = (tab) => {
+    const panel = document.getElementById(tab.getAttribute('aria-controls'));
+    if (!panel || !window.matchMedia('(max-width: 860px)').matches) return;
+    const top = panel.getBoundingClientRect().top;
+    if (top > window.innerHeight * 0.7) panel.scrollIntoView({ behavior: prefs.reducedMotion ? 'auto' : 'smooth', block: 'start' });
+  };
+  tabs.forEach((tab) => tab.addEventListener('click', () => { touched = true; select(tab); follow(tab); }));
   root.addEventListener('keydown', (event) => {
     const index = tabs.indexOf(document.activeElement);
     if (index < 0) return;

@@ -60,15 +60,19 @@ function renderTitle() {
   const first = !titleKey;
   titleKey = variant;
   const { title: [plain, accent], lead: text } = HERO[variant];
+  // Display lines carry no end punctuation (it caught the eye); a second sentence still gets
+  // its full stop for screen readers, so the two lines are not read as one.
+  const stop = /[\p{L}]$/u.test(plain) && /^\p{Lu}/u.test(accent) ? '.' : '';
   const update = () => {
     title.replaceChildren(
-      h('span', { class: 'line' }, h('span', { class: 'line__i' }, plain.trim())), ' ',
+      h('span', { class: 'line' }, h('span', { class: 'line__i' }, plain.trim())),
+      ...(stop ? [h('span', { class: 'visually-hidden' }, stop)] : []), ' ',
       h('em', { class: 'line' }, h('span', { class: 'line__i' }, accent)));
     lead.textContent = text;
   };
   if (first) {
     // The page already shows these words and the intro may be animating them: leave them be.
-    if (title.textContent.replace(/\s+/g, ' ').trim() !== `${plain.trim()} ${accent}`) update();
+    if (title.textContent.replace(/\s+/g, ' ').trim() !== `${plain.trim()}${stop} ${accent}`) update();
     else if (lead.textContent !== text) lead.textContent = text;
     return;
   }

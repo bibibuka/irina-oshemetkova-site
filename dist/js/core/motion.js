@@ -42,13 +42,14 @@ export function splitWords(el) {
 
 /* ---------- Reveals ---------- */
 // Headings rise word by word; blocks rise; the items of a group arrive one after another.
-const HEADINGS = 'main h2, .traps__title, .principles__title, .docs__title, .svet__head h2';
+const HEADINGS = 'main h2, .traps__title, .howto__title, .docs__title, .svet__head h2';
 const BLOCKS = [
-  '.section .lead', '.pogoda__sub', '.traps__sub', '.docs__sub', '.notebook', '.trap-game', '.book', '.deck__moods', '.deck__stack', '.deck__controls',
+  '.section .lead', '.spread .lead', '.pogoda__sub', '.traps__sub', '.docs__sub', '.notebook', '.trap-game', '.book', '.deck__moods', '.deck__stack', '.deck__controls',
   '.letter', '.phone', '.karman__honest', '.karman__actions', '.irina__text > p', '.calm-card', '.facts',
   '.vstrecha__about > .note', '.breath', '.breath-settings', '.dyhanie__lead', '.dyhanie__side',
   '.next-line', '.svet__head > p', '.svet__head > .btn',
-  '.praktiki__head .lead', '.praktiki__badge', '.formats__more', '.stoimost__note', '.contacts', '.irina__cta',
+  '.praktiki__badge', '.formats__more', '.stoimost__note', '.contacts', '.irina__cta',
+  '.podhod__never', '.podhod__hint', '.prep', '.stoimost__unsure', '.irina__caption', '.docs__sub', '.page-turn',
 ].join(', ');
 const PHOTOS = '.irina__arch, .opory__arch, .voprosy__arch';
 // [container, items, grid] — in a grid the wave runs diagonally, row by row.
@@ -56,7 +57,7 @@ const GROUPS = [
   ['.weather', '.weather__tile'], ['.doors__row', '.door'], ['.shelf__track', '.shelf-item'],
   ['.traps__fan', '.trap', true], ['.principles', ':scope > *', true], ['.docs', ':scope > li'],
   ['.faq', ':scope > details'], ['.svet__cols', ':scope > *'], ['.karman__features', ':scope > li', true],
-  ['.thoughts', '.thought-card', true], ['.formats', ':scope > li'], ['.plans', '.plan'], ['.howto', '.howto__step', true], ['.ptabs', '.ptab'],
+  ['.thoughts', '.thought-card'], ['.pmap', '.pmap__group'], ['.irina__facts', ':scope > div'], ['.prep__list', ':scope > li'], ['.formats', ':scope > li'], ['.plans', '.plan'], ['.howto', '.howto__step', true], ['.ptabs', '.ptab'],
 ];
 
 function columnsOf(box) {
@@ -143,6 +144,46 @@ export function initReveals() {
   window.addEventListener('beforeprint', () => pending.forEach((el) => show(el, { instant: true })));
 }
 
+/* ---------- Spreads: pages settle open, the light moves on ---------- */
+// A spread opens once (its pages settle from the spine) and is «lit» while it crosses the middle
+// of the screen: its window light turns fully on, the previous one dims. Spreads already on
+// screen at the first paint are open without a transition; a sweep opens anything scrolled past.
+export function initSpreads() {
+  const spreads = $$('.spread');
+  if (!spreads.length) return;
+  const light = (spread) => spreads.forEach((other) => other.classList.toggle('is-lit', other === spread));
+  if (!('IntersectionObserver' in window)) {
+    spreads.forEach((spread) => spread.classList.add('is-open'));
+    light(spreads[0]);
+    return;
+  }
+  const open = (spread) => { spread.classList.add('is-open'); opener.unobserve(spread); };
+  const opener = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => { if (entry.isIntersecting) open(entry.target); });
+  }, { rootMargin: '0px 0px -12% 0px' });
+  spreads.forEach((spread) => {
+    if (inView(spread)) spread.classList.add('is-open');
+    else opener.observe(spread);
+  });
+  // Pages tilt only after the first paint, so nothing on the first screen moves by itself.
+  requestAnimationFrame(() => root.classList.add('spreads-on'));
+  const sweep = () => spreads.forEach((spread) => {
+    if (!spread.classList.contains('is-open') && spread.getBoundingClientRect().top < window.innerHeight * 0.9) open(spread);
+  });
+  let timer = 0;
+  window.addEventListener('scroll', () => { clearTimeout(timer); timer = setTimeout(sweep, 160); }, { passive: true });
+  window.addEventListener('beforeprint', () => spreads.forEach(open));
+
+  const crossing = new Set();
+  const lamp = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => { if (entry.isIntersecting) crossing.add(entry.target); else crossing.delete(entry.target); });
+    const current = spreads.filter((spread) => crossing.has(spread)).pop();
+    if (current) light(current);
+  }, { rootMargin: '-46% 0px -46% 0px' });
+  spreads.forEach((spread) => lamp.observe(spread));
+  light(spreads.find((spread) => inView(spread)) || spreads[0]);
+}
+
 /* ---------- Header: glass on scroll, reading progress, the window light, hero depth ---------- */
 export function initHeader() {
   const header = $('.site-header');
@@ -167,7 +208,7 @@ export function initHeader() {
   window.addEventListener('resize', update);
   update();
   // Over a dark band the glass turns dark too, so the bar never looks like a pale patch.
-  const dark = $$('.band, .svet');
+  const dark = $$('.band, .svet, .spread--lamp');
   if (!dark.length || !('IntersectionObserver' in window)) return;
   const under = new Set();
   const io = new IntersectionObserver((entries) => {

@@ -1,42 +1,27 @@
-/* «Окно» — first screen: greeting, the brand line, the stage question, the arch window. */
-.okno { position: relative; overflow-x: clip; padding-top: calc(var(--header-h) + clamp(28px, 5vw, 72px)); }
-.okno__inner {
-  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 6vw, 96px);
-  align-items: center; padding-bottom: clamp(28px, 3.4vw, 48px);
-}
+/* «Окно» — the title spread: the offer on the left page, the arch window with Irina on the right,
+   the greeting as the left running head. Under the spread — the stage question as a bookmark. */
+.okno { padding-top: var(--header-h); }
+.okno__book { min-height: min(calc(100svh - var(--header-h)), 1000px); padding-bottom: clamp(36px, 4vw, 64px); }
 .okno__copy { display: grid; gap: 22px; align-content: center; }
-.okno__greeting { display: inline-flex; align-items: center; gap: 10px; font-size: var(--text); color: var(--muted); }
-.okno__greeting .icon { width: 20px; height: 20px; color: var(--terracotta-ink); }
-.okno__title { font-size: clamp(52px, 7.8vw, 128px); line-height: .95; letter-spacing: -.035em; margin-top: 4px; }
-.okno__title em { display: block; }
-.okno__title em.line { padding-left: .04em; }
+.okno__greeting { font-family: var(--serif); font-style: italic; color: var(--ink-soft); }
+.okno__greeting .icon { width: 18px; height: 18px; }
+.okno__title { font-size: clamp(52px, 7vw, 116px); line-height: .95; letter-spacing: -.035em; }
+.okno__title em { display: block; padding-left: .5em; }
 .okno__lead { max-width: 30em; }
+.okno__actions .btn--large { padding-inline: 24px 22px; }
+.okno__book { --page-pad: clamp(24px, 3vw, 52px); }
 .okno__night-note, .okno__welcome { display: flex; gap: 10px; align-items: flex-start; max-width: 32em; font-family: var(--serif); font-style: italic; font-size: clamp(19px, .6vw + 15px, 22px); line-height: 1.4; color: var(--ink-soft); }
 .okno__night-note .icon { width: 20px; height: 20px; margin-top: 4px; color: var(--terracotta-ink); }
 
-/* Stage question */
-.stage-pick { display: grid; gap: 14px; margin-top: 10px; padding-top: 22px; border-top: 1px solid var(--line); max-width: 40rem; }
-.stage-pick__q { font-size: clamp(28px, 2vw + 14px, 38px); line-height: 1.1; }
-.stage-pick__chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-width: 34rem; }
-.stage-pick__chips .chip { justify-content: flex-start; min-height: 58px; padding-inline: 20px; }
-.stage-pick__chips .chip .icon { width: 22px; height: 22px; }
-.stage-pick__links { display: flex; flex-wrap: wrap; gap: 0 22px; margin-top: -4px; }
-.stage-pick__links .link { font-weight: 400; color: var(--ink-soft); }
-.stage-pick__links .link[aria-pressed='true'] { color: var(--green); font-weight: 600; text-decoration-color: currentColor; }
-.stage-pick__hint { font-size: var(--text-small); color: var(--muted); }
-.stage-reply { display: grid; gap: 6px; padding: 16px 0 0; }
-.stage-reply__text { font-family: var(--serif); font-style: italic; font-size: clamp(20px, .7vw + 15px, 24px); line-height: 1.4; color: var(--ink); max-width: 30em; }
-.stage-reply__next { display: flex; flex-wrap: wrap; align-items: center; gap: 0 12px; }
-.stage-reply__dot { color: var(--faint); }
-
-/* The arch window */
-.okno__window { position: relative; justify-self: center; width: min(100%, 500px); margin: 0; translate: 0 calc(var(--sy, 0) * -.07px); }
-.okno__window::before {
+/* The arch window on the right page */
+.okno__window { display: grid; justify-items: center; align-content: center; margin: 0; }
+.okno__frame { position: relative; width: min(100%, 460px); translate: 0 calc(var(--sy, 0) * -.06px); }
+.okno__frame::before {
   content: ''; position: absolute; inset: -14px; border-radius: 999px 999px 18px 18px;
   border: 1px solid color-mix(in srgb, var(--green) 45%, transparent); pointer-events: none;
 }
 .arch-window {
-  position: relative; aspect-ratio: 5 / 6.9; border-radius: var(--arch); overflow: hidden;
+  position: relative; aspect-ratio: 5 / 6.6; border-radius: var(--arch); overflow: hidden;
   background: var(--paper-3); box-shadow: var(--shadow-md); isolation: isolate;
 }
 .arch-window__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 38%; filter: var(--photo-filter); transition: opacity 1.2s var(--ease-out), transform 1.6s var(--ease-settle); }
@@ -56,48 +41,72 @@ html[data-part='evening'] .arch-window::after, html[data-theme='night'] .arch-wi
   background: linear-gradient(200deg, rgba(231, 167, 127, .26), transparent 60%);
   mix-blend-mode: soft-light;
 }
-.okno__caption { margin-top: 26px; font-size: var(--text-small); color: var(--muted); text-align: center; max-width: 26em; margin-inline: auto; }
+.okno__caption { margin-top: 28px; font-family: var(--serif); font-style: italic; font-size: clamp(17px, .3vw + 15px, 19px); color: var(--muted); text-align: center; max-width: 24em; }
 
 /* Rotating badge on the right shoulder of the arch */
 .orbit-badge {
-  position: absolute; z-index: 2; top: 9%; right: -54px; width: 136px; height: 136px;
+  position: absolute; z-index: 2; top: 8%; right: -50px; width: 132px; height: 132px;
   display: grid; place-items: center; border-radius: 50%;
   background: color-mix(in srgb, var(--surface) 92%, transparent); box-shadow: var(--shadow-sm);
   border: 1px solid var(--line); translate: 0 calc(var(--sy, 0) * -.1px);
 }
-html.motion-reduced .okno__window, html.motion-reduced .orbit-badge { translate: none; }
-@media (prefers-reduced-motion: reduce) { html:not(.motion-allowed) .okno__window, html:not(.motion-allowed) .orbit-badge { translate: none; } }
+html.motion-reduced .okno__frame, html.motion-reduced .orbit-badge { translate: none; }
+@media (prefers-reduced-motion: reduce) { html:not(.motion-allowed) .okno__frame, html:not(.motion-allowed) .orbit-badge { translate: none; } }
 .orbit-badge__ring { position: absolute; inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); overflow: visible; }
 .orbit-badge__ring text { font-family: var(--sans); font-size: 8.4px; font-weight: 500; letter-spacing: .06em; fill: var(--ink-soft); }
 .orbit-badge__flower { width: 44px; height: 44px; color: var(--terracotta); stroke-width: 1.2; }
 
-@media (max-width: 1300px) { .orbit-badge { right: -34px; } }
+/* The bookmark under the title spread: «Что сейчас про тебя?» in one quiet band. */
+.stage-pick { position: relative; border-block: 1px solid var(--line); background: color-mix(in srgb, var(--sage-50) 70%, transparent); }
+.stage-pick__inner {
+  width: min(1440px, 100% - 2 * var(--gutter)); margin-inline: auto; padding-block: clamp(22px, 2.6vw, 36px);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: calc(2 * var(--page-pad, 64px)); align-items: center; row-gap: 14px;
+}
+.stage-pick__q { font-size: clamp(30px, 2vw + 16px, 46px); line-height: 1.05; }
+.stage-pick__body { display: grid; gap: 12px; }
+.stage-pick__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.stage-pick__chips .chip { min-height: 48px; padding-inline: 16px 18px; }
+.stage-pick__chips .chip--quiet { background: transparent; }
+.stage-pick__hint { display: flex; flex-wrap: wrap; align-items: center; gap: 0 14px; font-size: var(--text-small); color: var(--muted); }
+.stage-pick__hint .link { min-height: 36px; font-weight: 400; color: var(--ink-soft); }
+.stage-pick__hint .link[aria-pressed='true'] { color: var(--green); font-weight: 600; text-decoration-color: currentColor; }
+.stage-pick__reply:empty { display: none; }
+.stage-reply { display: grid; gap: 6px; }
+.stage-reply__text { font-family: var(--serif); font-style: italic; font-size: clamp(20px, .7vw + 15px, 24px); line-height: 1.4; color: var(--ink); max-width: 30em; }
+.stage-reply__next { display: flex; flex-wrap: wrap; align-items: center; gap: 0 12px; }
+.stage-reply__dot { color: var(--faint); }
+html[data-theme='night'] .stage-pick { background: color-mix(in srgb, var(--paper-2) 80%, transparent); }
+
+@media (max-width: 1300px) { .orbit-badge { right: -30px; } }
 @media (max-width: 1100px) {
-  .orbit-badge { right: -26px; width: 118px; height: 118px; }
+  .orbit-badge { right: -22px; width: 116px; height: 116px; }
+  .stage-pick__inner { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 860px) {
-  .okno__inner { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  /* Phone: the greeting, the title, the window, then the offer. */
+  .okno__book { min-height: 0; padding-bottom: 36px; }
+  .okno__book .spread__run--l { display: flex; order: 1; margin-bottom: 18px; border-bottom: 0; padding-bottom: 0; }
+  .okno__book .spread__run--r { display: none; }
   .okno__copy { display: contents; }
-  .okno__greeting { order: 1; }
-  .okno__title { order: 2; }
-  .okno__window { order: 3; width: min(100% - 28px, 440px); margin-block: 20px 12px; }
+  .okno__title { order: 2; margin-bottom: 8px; }
+  .okno__window { order: 3; margin-block: 24px 22px; }
+  .okno__frame { width: min(100% - 28px, 420px); }
   .okno__lead { order: 4; }
-  /* The offer from sales.css follows the lead, as on wide screens; without an order it jumped above the title. */
-  .okno__actions { order: 5; }
-  .okno__terms { order: 6; }
-  .okno__proof { order: 7; }
-  .okno__night-note { order: 8; }
-  .okno__welcome { order: 9; }
-  .stage-pick { order: 10; }
+  .okno__actions { order: 5; margin-top: 18px; }
+  .okno__terms { order: 6; margin-top: 14px; }
+  .okno__proof { order: 7; margin-top: 20px; }
+  .okno__night-note { order: 8; margin-top: 16px; }
+  .okno__welcome { order: 9; margin-top: 16px; }
   .arch-window { aspect-ratio: 4 / 5; }
-  .orbit-badge { right: -10px; top: 6%; width: 104px; height: 104px; }
-  .orbit-badge__flower { width: 34px; height: 34px; }
+  .orbit-badge { right: -10px; top: 6%; width: 100px; height: 100px; }
+  .orbit-badge__flower { width: 32px; height: 32px; }
   .okno__caption { margin-top: 20px; }
 }
 @media (max-width: 560px) {
-  .okno__title { font-size: clamp(44px, 13vw, 72px); }
-  .stage-pick__chips { gap: 8px; }
-  .stage-pick__chips .chip { gap: 8px; padding-inline: 12px; min-height: 64px; text-align: left; line-height: 1.25; }
+  .okno__title { font-size: clamp(46px, 14vw, 72px); }
+  .okno__title em { padding-left: .3em; }
+  .stage-pick__chips .chip { flex: 1 1 calc(50% - 8px); justify-content: flex-start; padding-inline: 12px; min-height: 54px; line-height: 1.25; text-align: left; }
+  .stage-pick__chips .chip--quiet { flex-basis: 100%; }
 }
 
 /* Threshold sheet before the loss pages */

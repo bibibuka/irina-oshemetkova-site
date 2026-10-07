@@ -16,26 +16,15 @@ main { display: block; outline: none; }
 .noscript-note { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 70; padding: 14px 18px; border-radius: var(--radius-sm); background: var(--surface-raised); box-shadow: var(--shadow-md); font-size: var(--text-small); }
 
 /* ---------- Window light (decorative) ---------- */
-.daylight { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-.daylight__window {
-  position: absolute; top: -18vh; right: -6vw; width: min(78vw, 1100px); height: 130vh;
-  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px;
-  transform: translateY(calc(var(--scroll, 0) * -190px)) skewX(-16deg) rotate(6deg);
-  transform-origin: top right;
-  opacity: var(--sky-strength);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 70% 30%, #000 30%, transparent 75%);
-  mask-image: radial-gradient(ellipse 70% 60% at 70% 30%, #000 30%, transparent 75%);
-  transition: opacity 1.2s var(--ease-out);
-}
-.daylight__window i { display: block; background: linear-gradient(200deg, var(--sky) 0%, color-mix(in srgb, var(--sky) 55%, transparent) 45%, transparent 85%); }
-html[data-theme='night'] .daylight__window { mix-blend-mode: screen; }
+/* Spreads paint their own backgrounds, so the lamp lies over them and only warms what is under it. */
+.daylight { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; mix-blend-mode: multiply; }
+html[data-theme='night'] .daylight { mix-blend-mode: screen; }
 .daylight__lamp {
   position: absolute; left: -12vw; bottom: -20vh; width: 70vw; height: 70vw; max-width: 900px; max-height: 900px;
   border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--lamp) 34%, transparent) 0%, transparent 65%);
   opacity: 0; transition: opacity 1.4s var(--ease-out);
 }
 html.lamp-on .daylight__lamp { opacity: 1; }
-html.is-quiet .daylight__window { opacity: calc(var(--sky-strength) * .7); }
 
 /* ---------- Header: brand, four links, the moon, help and the letter ---------- */
 .site-header {
@@ -201,10 +190,7 @@ html[data-theme='day'] .band h2 em, html[data-theme='day'] .band h3 em { color: 
 .next-line a:hover { color: var(--terracotta-ink); text-decoration-color: currentColor; }
 .next-line .icon { display: inline-block; vertical-align: -4px; width: 18px; height: 18px; margin-left: 8px; transition: transform .45s var(--ease-settle); }
 .next-line a:hover .icon { transform: translateY(4px); }
-.okno > .next-line .icon { animation: nudge-down 2.6s var(--ease-breath) 2.4s infinite; }
 @keyframes nudge-down { 0%, 60%, 100% { transform: none; } 30% { transform: translateY(5px); } }
-html.is-quiet .okno > .next-line .icon { animation: none; }
-.okno > .next-line { margin-top: 0; border-top: 0; padding: 0 0 clamp(32px, 4vw, 56px); }
 .band .next-line { border-top-color: color-mix(in srgb, var(--on-band) 18%, transparent); color: var(--on-band-muted); }
 .band .next-line a { color: var(--on-band); }
 

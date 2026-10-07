@@ -27,7 +27,7 @@ with session("features") as (run, browser):
     print("Hero and stages")
 
     def hero():
-        expect(page.locator("#okno-title")).to_contain_text("Быть мамой.")
+        expect(page.locator("#okno-title")).to_contain_text("Быть мамой")
         expect(page.locator("[data-greeting]")).not_to_be_empty()
         expect(page.locator("[data-badge-text]")).not_to_be_empty()
         page.locator("#okno [data-stage='postpartum']").click()
@@ -92,7 +92,7 @@ with session("features") as (run, browser):
         expect(page.locator("#stoimost .plan--main")).to_contain_text("4 000 ₽")
         expect(page.locator("#stoimost .howto__step")).to_have_count(4)
         order = page.eval_on_selector_all("main > section", "els => els.map(e => e.id)")
-        assert order == ["okno", "uznaesh", "dveri", "irina", "stoimost", "praktiki", "voprosy", "vstrecha"], order
+        assert order == ["okno", "uznaesh", "dveri", "irina", "podhod", "stoimost", "praktiki", "voprosy", "vstrecha"], order
         page.locator("#stoimost .plan:not(.plan--main) [data-action='write']").click()
         expect(page.locator("#letter-name")).to_be_focused(timeout=4000)
         expect(page.locator("[data-letter-preview]")).to_contain_text("встреча вдвоём")
@@ -384,6 +384,8 @@ with session("features") as (run, browser):
         page.locator("#letter-topic").fill("не хочу жить")
         expect(page.locator(".letter .crisis-hint")).to_be_visible(timeout=3000)
         page.locator("#letter-topic").fill("")
+        # The hint leaves 450 ms after the text is cleared and the send buttons move up: click after that.
+        expect(page.locator(".letter .crisis-hint")).to_have_count(0)
         with context.expect_page() as popup:
             page.locator("[data-letter-telegram]").click()
         popup.value.close()

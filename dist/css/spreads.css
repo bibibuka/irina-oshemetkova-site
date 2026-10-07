@@ -1,0 +1,209 @@
+/* Spreads. Every block of the page is an open book: a left and a right page around a spine,
+   quiet running heads on top, and its own light — the window falls on one page, the other rests
+   in shade, and the side and the tone change from spread to spread (milk, peach, sage, lamp-lit
+   green). On phones the pages stack and the spine becomes a hairline with a flower.
+   The light is decoration only: content never depends on it, and it holds still with less motion. */
+
+/* ---------- Tones: one per spread, tuned for day and for the dark theme ---------- */
+.spread {
+  --tone-bg: var(--paper);
+  --tone-shade: color-mix(in srgb, var(--ink) 5%, transparent);   /* the gutter toward the spine */
+  --tone-light: #fffaf0;                                           /* colour of the window light */
+  --tone-light-strength: .9;
+  --tone-run: var(--muted);
+  --tone-rule: var(--line);
+  --spine: color-mix(in srgb, var(--ink) 16%, transparent);
+  --page-pad: clamp(28px, 4.4vw, 76px);
+  position: relative; isolation: isolate; overflow: clip;
+  background: var(--tone-bg);
+  transition: background-color 1s var(--ease-out);
+}
+.spread--milk  { --tone-bg: #f8f7f2; --tone-light: #fff5dc; }
+.spread--paper { --tone-bg: #fbfaf5; --tone-light: #ffffff; --tone-light-strength: 1; }
+.spread--peach { --tone-bg: #f4e9df; --tone-light: #ffe0bf; --tone-shade: rgba(122, 76, 50, .07); --tone-rule: #e6d6c6; }
+.spread--sage  { --tone-bg: #e9eee1; --tone-light: #fbffef; --tone-shade: rgba(53, 75, 60, .07); --tone-rule: #d5ddc8; }
+.spread--linen { --tone-bg: #efebe2; --tone-light: #fff4dd; --tone-shade: rgba(90, 74, 50, .07); --tone-rule: #ddd6c8; }
+.spread--dusk  { --tone-bg: #f0e0d4; --tone-light: #ffd6b0; --tone-shade: rgba(122, 66, 40, .08); --tone-rule: #e2cbbb; --tone-light-strength: 1; }
+/* The lamp-lit spread: deep green, warm light from a lamp instead of the window. */
+.spread--lamp {
+  --tone-bg: var(--band); --tone-light: #e9b37f; --tone-light-strength: .5; --tone-shade: rgba(0, 0, 0, .16);
+  --tone-run: var(--on-band-muted); --tone-rule: rgba(238, 240, 230, .14); --spine: rgba(238, 240, 230, .16);
+  color: var(--on-band);
+}
+html[data-part='evening'] .spread--milk { --tone-light: #ffe2b8; }
+html[data-part='evening'] .spread--paper { --tone-light: #fff0d8; }
+
+html[data-theme='night'] .spread { --tone-shade: rgba(0, 0, 0, .22); --spine: rgba(236, 232, 221, .12); --tone-light-strength: .22; }
+html[data-theme='night'] .spread--milk  { --tone-bg: #171d19; --tone-light: #e7a77f; }
+html[data-theme='night'] .spread--paper { --tone-bg: #1a201c; --tone-light: #f0c9a4; }
+html[data-theme='night'] .spread--peach { --tone-bg: #221e1b; --tone-light: #e7a77f; --tone-rule: #3a322c; }
+html[data-theme='night'] .spread--sage  { --tone-bg: #1a221d; --tone-light: #c9d8b8; --tone-rule: #303b33; }
+html[data-theme='night'] .spread--linen { --tone-bg: #1d211d; --tone-light: #e7c39f; --tone-rule: #353a33; }
+html[data-theme='night'] .spread--dusk  { --tone-bg: #241c19; --tone-light: #e7a77f; --tone-rule: #3d302a; }
+html[data-theme='night'] .spread--lamp  { --tone-bg: #0f1411; --tone-light: #e7a77f; --tone-light-strength: .34; }
+html.is-quiet .spread { --tone-light-strength: .45; }
+
+/* Text on the lamp-lit spread */
+.spread--lamp h2 em, .spread--lamp h3 em { color: #e2b296; }
+html[data-theme='night'] .spread--lamp h2 em, html[data-theme='night'] .spread--lamp h3 em { color: var(--terracotta-ink); }
+.spread--lamp .lead, .spread--lamp .note { color: var(--on-band-muted); }
+.spread--lamp .link { color: var(--on-band); text-decoration-color: color-mix(in srgb, var(--on-band) 45%, transparent); }
+.spread--lamp :focus-visible { outline-color: var(--lamp); }
+
+/* ---------- The light that falls on one page ---------- */
+/* A window: four panes of light with the shadow of the frame between them, slanted across the
+   lit page. data-light="left|right" mirrors it; .is-lit (the spread in the middle of the screen)
+   turns it fully on, so the light visibly moves on as you go from spread to spread. */
+.spread__light {
+  position: absolute; z-index: -1; top: -14%; width: min(64%, 980px); height: 128%; pointer-events: none;
+  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: clamp(8px, 1vw, 14px);
+  opacity: calc(var(--tone-light-strength) * .4);
+  -webkit-mask-image: radial-gradient(ellipse 74% 64% at 62% 34%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse 74% 64% at 62% 34%, #000 30%, transparent 78%);
+  transition: opacity 1.6s var(--ease-out), translate 2.4s var(--ease-settle);
+}
+.spread__light i { display: block; background: linear-gradient(200deg, var(--tone-light) 0%, color-mix(in srgb, var(--tone-light) 70%, transparent) 46%, transparent 90%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-light) 40%, transparent); }
+.spread[data-light='right'] .spread__light { right: -8%; transform: skewX(-15deg) rotate(5deg); transform-origin: top right; translate: 6% 0; }
+.spread[data-light='left'] .spread__light { left: -8%; transform: skewX(15deg) rotate(-5deg) scaleX(-1); transform-origin: top left; translate: -6% 0; }
+.spread.is-lit .spread__light { opacity: var(--tone-light-strength); translate: 0 0; }
+html[data-theme='night'] .spread__light { mix-blend-mode: screen; }
+/* The lamp: a round warm pool instead of panes. */
+.spread--lamp .spread__light, html[data-theme='night'] .spread__light {
+  grid-template-columns: 1fr; grid-template-rows: 1fr; width: min(70%, 900px); height: auto; aspect-ratio: 1; top: auto; bottom: -38%;
+  -webkit-mask-image: none; mask-image: none; transform: none; border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--tone-light) 38%, transparent) 0%, color-mix(in srgb, var(--tone-light) 10%, transparent) 42%, transparent 68%);
+}
+.spread--lamp .spread__light i, html[data-theme='night'] .spread__light i { display: none; }
+.spread--lamp[data-light='left'] .spread__light, html[data-theme='night'] .spread[data-light='left'] .spread__light { left: -18%; }
+.spread--lamp[data-light='right'] .spread__light, html[data-theme='night'] .spread[data-light='right'] .spread__light { right: -18%; }
+html[data-theme='night'] .spread--lamp .spread__light { opacity: calc(var(--tone-light-strength) * 1.2); }
+/* The slow breath of the light, only on the spread in view. */
+.spread.is-lit .spread__light i { animation: light-breathe 10s var(--ease-breath) infinite alternate; }
+.spread.is-lit .spread__light i:nth-child(2) { animation-delay: -2.5s; }
+.spread.is-lit .spread__light i:nth-child(3) { animation-delay: -5s; }
+.spread.is-lit .spread__light i:nth-child(4) { animation-delay: -7.5s; }
+html.is-quiet .spread__light i { animation: none !important; }
+@keyframes light-breathe {
+  from { opacity: .86; transform: translate(0, 0); }
+  to { opacity: 1; transform: translate(-6px, 4px); }
+}
+
+/* Light and shade across the whole spread: the lit page a little brighter, the other a little
+   dimmer. Together with the panes this is what makes the light read as coming from one side. */
+.spread::before {
+  content: ''; position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  background: linear-gradient(var(--shade-dir, 270deg), rgba(255, 252, 240, .5) 0%, rgba(255, 252, 240, .12) 38%, transparent 55%, color-mix(in srgb, var(--tone-shade) 90%, transparent) 100%);
+  opacity: .55; transition: opacity 1.6s var(--ease-out);
+}
+.spread[data-light='left'] { --shade-dir: 90deg; }
+.spread.is-lit::before { opacity: 1; }
+.spread--lamp::before, html[data-theme='night'] .spread::before {
+  background: linear-gradient(var(--shade-dir, 270deg), color-mix(in srgb, var(--tone-light) 9%, transparent) 0%, transparent 50%, rgba(0, 0, 0, .18) 100%);
+}
+
+/* ---------- The book: two pages, the spine, running heads ---------- */
+.spread__book {
+  position: relative;
+  width: min(1440px, 100% - 2 * var(--gutter)); margin-inline: auto;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas: 'run-l run-r' 'left right';
+  grid-template-rows: auto 1fr;
+  column-gap: calc(2 * var(--page-pad));
+  padding-block: clamp(28px, 3vw, 44px) var(--section);
+}
+.spread__page { min-width: 0; position: relative; }
+.spread__page--l { grid-area: left; }
+.spread__page--r { grid-area: right; }
+/* Running heads: who on the left page, which chapter on the right. Quiet italic, a hairline below. */
+.spread__run {
+  display: flex; align-items: baseline; gap: 14px; margin-bottom: clamp(36px, 4.4vw, 72px); padding-bottom: 12px;
+  border-bottom: 1px solid var(--tone-rule);
+  font-family: var(--serif); font-style: italic; font-size: clamp(16px, .35vw + 14px, 19px); line-height: 1.3; color: var(--tone-run);
+}
+.spread__run--l { grid-area: run-l; }
+.spread__run--r { grid-area: run-r; justify-content: flex-end; text-align: right; }
+.spread__run .icon { width: 16px; height: 16px; color: var(--terracotta-ink); stroke-width: 1.3; flex-shrink: 0; align-self: center; }
+.spread--lamp .spread__run .icon { color: #e2b296; }
+
+/* The spine: a fold line and the soft shade of the gutter on both sides of it. */
+.spread__book::before {
+  content: ''; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: clamp(80px, 9vw, 160px); translate: -50% 0; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--tone-shade) 46%, color-mix(in srgb, var(--tone-shade) 160%, transparent) 50%, var(--tone-shade) 54%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 10%, #000 88%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 10%, #000 88%, transparent);
+}
+.spread__book::after {
+  content: ''; position: absolute; top: clamp(28px, 3vw, 44px); bottom: calc(var(--section) * .6); left: 50%; width: 1px; pointer-events: none;
+  background: linear-gradient(180deg, transparent, var(--spine) 8%, var(--spine) 92%, transparent);
+}
+
+/* Page content helpers: a page can hold its content at the top, the middle or the bottom. */
+.page-stack { display: grid; gap: clamp(20px, 2vw, 28px); align-content: start; }
+.page-stack--center { align-content: center; height: 100%; }
+.page-stack--end { align-content: end; height: 100%; }
+.page-sticky { position: sticky; top: calc(var(--header-h) + 24px); }
+.spread h2 { font-size: var(--h2); }
+.spread .lead { max-width: 30em; }
+
+/* A display quote that fills a page on its own: the typographic «picture» of a spread. */
+.page-quote { position: relative; font-family: var(--serif); font-style: italic; font-size: clamp(30px, 2.4vw + 14px, 52px); line-height: 1.12; letter-spacing: -.015em; color: var(--ink); text-wrap: balance; }
+.page-quote::before { content: '«'; position: absolute; left: -.55em; top: -.08em; color: var(--terracotta); }
+.page-quote::after { content: '»'; color: var(--terracotta); }
+.page-quote__by { display: block; margin-top: 18px; font-family: var(--sans); font-style: normal; font-size: var(--text-small); letter-spacing: 0; color: var(--muted); }
+
+/* ---------- Opening: as a spread arrives, its pages settle open from the spine ---------- */
+/* Transforms only — content stays readable if the class never comes, and sweepSpreads() in
+   motion.js opens everything already on screen or scrolled past. */
+html.spreads-on .spread:not(.is-open) .spread__page--l { transform: perspective(1800px) rotateY(3.5deg) translateX(-14px); }
+html.spreads-on .spread:not(.is-open) .spread__page--r { transform: perspective(1800px) rotateY(-3.5deg) translateX(14px); }
+html.spreads-on .spread .spread__page { transition: transform 1.3s var(--ease-settle); }
+.spread__page--l { transform-origin: 100% 50%; }
+.spread__page--r { transform-origin: 0 50%; }
+html.spreads-on .spread:not(.is-open) .spread__book::after { scale: 1 .2; opacity: 0; }
+html.spreads-on .spread .spread__book::after { transition: scale 1.4s var(--ease-settle), opacity 1s var(--ease-out); }
+html.motion-reduced.spreads-on .spread .spread__page, html.motion-reduced .spread__book::after { transform: none !important; scale: none !important; opacity: 1 !important; }
+@media (prefers-reduced-motion: reduce) {
+  html:not(.motion-allowed).spreads-on .spread .spread__page, html:not(.motion-allowed) .spread__book::after { transform: none !important; scale: none !important; opacity: 1 !important; }
+}
+html.motion-reduced .spread__light { translate: 0 0 !important; }
+
+/* The fold between stacked pages: a hairline, a flower, a hairline. Only on phones. */
+.spread__fold { display: none; align-items: center; gap: 14px; margin-block: clamp(32px, 8vw, 48px); color: var(--tone-rule); }
+.spread__fold::before, .spread__fold::after { content: ''; flex: 1; height: 1px; background: currentColor; }
+.spread__fold .icon { width: 22px; height: 22px; color: var(--terracotta); opacity: .7; stroke-width: 1.2; }
+
+/* ---------- Narrower screens ---------- */
+@media (max-width: 1100px) {
+  .spread { --page-pad: clamp(24px, 3.4vw, 48px); }
+}
+/* Phones and small tablets: one page under the other; the spine lies down between them. */
+@media (max-width: 860px) {
+  /* Plain flow in DOM order: running head, left page, the fold, right page. */
+  .spread__book { display: flex; flex-direction: column; padding-block: 20px var(--section); }
+  .spread__run--l { display: none; }
+  .spread__run--r { justify-content: flex-start; text-align: left; margin-bottom: clamp(24px, 6vw, 36px); }
+  .spread__book::before, .spread__book::after { display: none; }
+  .spread__fold { display: flex; }
+  .page-sticky { position: static; }
+  .page-stack--center, .page-stack--end { height: auto; }
+  .spread__light { width: 120%; height: 70%; top: -10%; }
+  .spread[data-light='right'] .spread__light { right: -40%; }
+  .spread[data-light='left'] .spread__light { left: -40%; }
+  .page-quote::before { position: static; }
+  html.spreads-on .spread:not(.is-open) .spread__page--l, html.spreads-on .spread:not(.is-open) .spread__page--r { transform: translateY(18px); }
+}
+
+/* ---------- Folios: page numbers in the outer corners, like a printed book ---------- */
+main { counter-reset: folio 1; }
+.spread__book > .spread__page { counter-increment: folio; }
+.spread__book > .spread__page::after {
+  content: counter(folio); position: absolute; bottom: calc(var(--section) * -.62); pointer-events: none;
+  font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1; color: var(--tone-run); opacity: .8;
+}
+.spread__book > .spread__page--l::after { left: 0; }
+.spread__book > .spread__page--r::after { right: 0; }
+@media (max-width: 860px) { .spread__book > .spread__page::after { display: none; } }
+
+/* ---------- Bookmarks: quiet full-width bands between spreads ---------- */
+.bookmark { position: relative; border-block: 1px solid var(--line); background: color-mix(in srgb, var(--peach) 80%, var(--paper)); }
+.bookmark__inner { width: min(1440px, 100% - 2 * var(--gutter)); margin-inline: auto; padding-block: clamp(26px, 3vw, 44px); }

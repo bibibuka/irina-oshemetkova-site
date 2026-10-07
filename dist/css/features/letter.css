@@ -1,6 +1,6 @@
 /* «Начнём с разговора?» — how it works on the left, a paper letter on the right. Plus the FAQ. */
-.vstrecha__inner { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(40px, 6vw, 96px); align-items: start; }
-.vstrecha__about { display: grid; gap: 22px; align-content: start; }
+.vstrecha__about { display: grid; gap: 22px; align-content: start; align-self: start; }
+.vstrecha__fallback { margin-top: -10px; }
 .facts { display: flex; flex-wrap: wrap; gap: 6px 0; font-family: var(--serif); font-size: clamp(22px, 1vw + 16px, 28px); line-height: 1.3; color: var(--ink); }
 .facts span:not(:last-child)::after { content: '·'; margin-inline: 12px; color: var(--terracotta); }
 .first-steps { display: grid; gap: 0; margin-top: 8px; position: relative; }
@@ -66,19 +66,17 @@ html[data-theme='night'] .letter__status { color: var(--sage-500); }
 @media (min-width: 961px) {
   html.js .vstrecha__about { position: sticky; top: min(calc(var(--header-h) + 24px), calc(100vh - var(--about-h, 0px) - 24px)); }
 }
-@media (max-width: 960px) {
-  .vstrecha__inner { grid-template-columns: minmax(0, 1fr); }
-}
 
 /* ---------- FAQ ---------- */
-.voprosy__inner { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
-.voprosy__aside { display: grid; gap: 32px; position: sticky; top: calc(var(--header-h) + 24px); }
+.voprosy__aside { gap: 28px; }
+.voprosy__ask { font-family: var(--serif); font-style: italic; font-size: clamp(20px, .5vw + 16px, 23px); color: var(--ink-soft); }
+.voprosy__ask .link { font-family: var(--sans); font-style: normal; font-size: var(--text-small); }
 .voprosy__arch { position: relative; aspect-ratio: 4 / 3; border-radius: var(--arch); overflow: hidden; background: var(--paper-3); max-width: 420px; }
 .voprosy__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: var(--photo-filter); }
 .voprosy__img--child { z-index: 1; object-position: 50% 60%; }
 .voprosy__img--calm { object-position: 50% 55%; }
-.faq { display: grid; border-top: 1px solid var(--line); }
-.faq details { border-bottom: 1px solid var(--line); }
+.faq { display: grid; border-top: 1px solid var(--tone-rule, var(--line)); }
+.faq details { border-bottom: 1px solid var(--tone-rule, var(--line)); }
 .faq summary {
   position: relative; display: block; list-style: none; cursor: pointer; padding: 22px 52px 22px 0;
   font-family: var(--serif); font-size: clamp(22px, 1vw + 16px, 28px); line-height: 1.2; color: var(--ink);
@@ -93,7 +91,5 @@ html[data-theme='night'] .letter__status { color: var(--sage-500); }
 .faq details::details-content { transition: content-visibility var(--t-mid) allow-discrete, opacity var(--t-mid); opacity: 0; }
 .faq details[open]::details-content { opacity: 1; }
 @media (max-width: 860px) {
-  .voprosy__inner { grid-template-columns: minmax(0, 1fr); }
-  .voprosy__aside { position: static; }
   .voprosy__arch { aspect-ratio: 16 / 10; max-width: none; }
 }
