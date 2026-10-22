@@ -1,13 +1,12 @@
 /* «Начнём с разговора?» — how it works on the left, a paper letter on the right. Plus the FAQ. */
 .vstrecha__about { display: grid; gap: 22px; align-content: start; }
-.vstrecha__fallback { margin-top: -10px; }
-.facts { display: flex; flex-wrap: wrap; gap: 6px 24px; font-family: var(--serif); font-size: clamp(22px, 1vw + 16px, 28px); line-height: 1.3; color: var(--ink); }
-.facts span { display: inline-flex; align-items: baseline; gap: 10px; }
-.facts span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--terracotta); align-self: center; }
-.calm-card { display: grid; gap: 10px; justify-items: start; margin-top: 10px; padding: 22px 24px; border-radius: var(--radius); background: var(--peach); max-width: 26rem; box-shadow: var(--shadow-sm); }
-.calm-card__text.is-new { animation: rise-in .6s var(--ease-settle); }
-.calm-card__cap { font-size: var(--text-micro); color: var(--muted); }
-.calm-card__text { font-family: var(--serif); font-style: italic; font-size: clamp(22px, .8vw + 16px, 26px); line-height: 1.3; min-height: 2.6em; }
+/* Who answers, and the price once more for those who came from the header button. The avatar's
+   size is set here, so the column does not grow when the lazy image arrives (--about-h). */
+.vstrecha__sign { display: flex; align-items: center; gap: 14px; line-height: 1.35; }
+.vstrecha__sign b { display: block; font-family: var(--serif); font-size: 22px; font-weight: 500; color: var(--ink); }
+.vstrecha__sign span span { display: block; font-size: var(--text-small); color: var(--ink-soft); }
+.vstrecha__avatar { flex: none; width: 64px; height: 64px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px var(--tone-bg), 0 0 0 4px var(--tone-rule); }
+@media (max-width: 860px) { .vstrecha__avatar { width: 56px; height: 56px; } }
 
 .letter {
   position: relative; display: grid; gap: 24px; padding: 80px clamp(22px, 4vw, 52px) clamp(28px, 4vw, 44px);
@@ -59,7 +58,7 @@ html[data-theme='night'] .letter__status { color: var(--sage-500); }
 
 /* The short column travels beside the long letter instead of leaving a hole under it. letter.js
    measures it into --about-h: if it fits under the header it sticks there; if it is taller than
-   the window it sticks with its lower part (steps, «Перед встречей») in view. Two columns only. */
+   the window it sticks with its lower part (the contacts) in view. Two columns only. */
 @media (min-width: 961px) {
   html.js .vstrecha__about { position: sticky; top: min(calc(var(--header-h) + 24px), calc(100vh - var(--about-h, 0px) - 24px)); }
 }
@@ -71,7 +70,7 @@ html[data-theme='night'] .letter__status { color: var(--sage-500); }
 .voprosy__arch { position: relative; aspect-ratio: 4 / 3; border-radius: var(--arch); overflow: hidden; background: var(--paper-3); max-width: 420px; }
 .voprosy__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: var(--photo-filter); }
 .voprosy__img--child { z-index: 1; object-position: 50% 60%; }
-.voprosy__img--calm { object-position: 50% 55%; }
+.voprosy__img--calm { object-position: 50% 35%; }
 .faq { display: grid; border-top: 1px solid var(--tone-rule, var(--line)); }
 .faq details { border-bottom: 1px solid var(--tone-rule, var(--line)); }
 .faq summary {
@@ -85,6 +84,7 @@ html[data-theme='night'] .letter__status { color: var(--sage-500); }
 .faq details[open] summary::before { transform: rotate(180deg); }
 .faq summary:hover { color: var(--terracotta-ink); }
 .faq details > div { display: grid; gap: 10px; padding: 0 52px 24px 0; color: var(--ink-soft); line-height: 1.65; }
+.faq [data-faq-item='reviews'] .link { display: inline; min-height: 0; } /* a link inside the sentence, not a button-sized row */
 .faq details::details-content { transition: content-visibility var(--t-mid) allow-discrete, opacity var(--t-mid); opacity: 0; }
 .faq details[open]::details-content { opacity: 1; }
 @media (max-width: 860px) {

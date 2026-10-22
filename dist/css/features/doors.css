@@ -47,22 +47,15 @@ html[data-theme='night'] .door[aria-selected='true'] .door__label { color: var(-
 .door-panel + .door-panel { margin-top: 48px; }
 html.js .door-panel + .door-panel { margin-top: 0; }
 .door-panel h3 { font-size: clamp(32px, 1.8vw + 18px, 50px); line-height: 1.04; letter-spacing: -.02em; max-width: 14em; }
-.door-panel__cols { display: grid; gap: 26px; }
-.door-panel__cap { font-family: var(--serif); font-style: italic; font-size: 24px; color: var(--terracotta-ink); margin-bottom: 10px; }
 .door-panel ul { display: grid; gap: 10px; }
 .door-panel li { position: relative; padding-left: 26px; line-height: 1.55; }
-.door-panel__feel li::before { content: ''; position: absolute; left: 4px; top: .62em; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--terracotta); }
 .door-panel__work li::before { content: ''; position: absolute; left: 2px; top: .78em; width: 12px; height: 1px; background: var(--sage-500); }
 .door-panel .btn { justify-self: start; }
 .door-panel__named { max-width: 40em; padding: 4px 0 4px 18px; border-left: 2px solid var(--terracotta-soft); font-family: var(--serif); font-style: italic; font-size: clamp(19px, .4vw + 16px, 22px); line-height: 1.4; color: var(--ink-soft); }
 .door-panel.appear > .door-panel__named { animation: rise-in .7s var(--ease-settle) .3s backwards; }
-@media (min-width: 1240px) {
-  .door-panel__cols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
-}
-/* Opening a door: the room fills in — heading, then the two lists line by line, then the button. */
+/* Opening a door: the room fills in — heading, then the list line by line, then the button. */
 .door-panel.appear { animation: fade-in .35s var(--ease-out) both; }
-.door-panel.appear > h3, .door-panel.appear .door-panel__cap, .door-panel.appear li, .door-panel.appear > .btn { animation: rise-in .7s var(--ease-settle) backwards; }
-.door-panel.appear .door-panel__cols > div:nth-child(2) .door-panel__cap { animation-delay: .1s; }
+.door-panel.appear > h3, .door-panel.appear li, .door-panel.appear > .btn { animation: rise-in .7s var(--ease-settle) backwards; }
 .door-panel.appear li:nth-child(1) { animation-delay: .1s; }
 .door-panel.appear li:nth-child(2) { animation-delay: .16s; }
 .door-panel.appear li:nth-child(3) { animation-delay: .22s; }
@@ -70,12 +63,9 @@ html.js .door-panel + .door-panel { margin-top: 0; }
 .door-panel.appear > .btn { animation-delay: .34s; }
 html.is-quiet .door-panel.appear * { animation-name: fade-in; }
 
-/* The page turn at the foot of a right page */
-.page-turn { text-align: right; }
 @media (max-width: 860px) {
   .door { gap: 14px; }
   .door__frame { width: 40px; height: 50px; }
-  .page-turn { text-align: left; }
 }
 
 /* Each chapter brings its own light to the spread: sage for waiting, rose-apricot for pregnancy, honey
@@ -93,3 +83,12 @@ html[data-theme='night'] .dveri.spread[data-chapter='close'] { --tone-bg: #151a1
 html.js .dveri:not([data-doors-ready]) .door-panel:not(#door-planning) { display: none; }
 /* Short laptop screens: the chapter is taller than the window, so it scrolls with the page instead of sticking. */
 @media (max-height: 820px) { .dveri__chapter.page-sticky { position: static; } }
+
+/* Mother and baby, under «Не уверена, что это ко мне?»: only beside the chapters about a baby —
+   «Жду малыша» and «Малыш родился». Never beside IVF, loss or partners, never without a chosen stage
+   (layout.css, [data-child-photo]). doors.js always sets data-chapter; without JS there is none,
+   so the photo stays hidden. Phones skip it: the chapter opens below and the photo would sit between. */
+.dveri__arch { margin-top: clamp(22px, 2.4vw, 32px); }
+.dveri__arch img { object-position: 50% 20%; }
+.dveri:not([data-chapter='pregnancy']):not([data-chapter='postpartum']) .dveri__arch { display: none !important; }
+@media (max-width: 860px) { .dveri__arch { display: none !important; } }

@@ -1,6 +1,6 @@
 // «Начнём с разговора?» — a letter the visitor sends herself. Nothing is submitted:
 // the text is copied, or put into Telegram / SMS / mail only by her tap.
-// Also the calm card «Перед встречей» and the FAQ order at night.
+// Also the FAQ order at night.
 import { $, $$, h, announce, focusQuietly } from '../core/dom.js';
 import { prefs } from '../core/prefs.js';
 import { store } from '../core/store.js';
@@ -8,15 +8,14 @@ import { registerAction } from '../core/actions.js';
 import { jumpTo } from '../core/motion.js';
 import { closeSheet, openSheets } from '../core/sheets.js';
 import { copyText } from '../core/share.js';
-import { pick } from '../core/phrases.js';
 import { celebrate } from '../core/celebrate.js';
 import { watchField } from '../core/safety.js';
 import { isNightLightHours } from '../core/time.js';
-import { TOPICS, FORMAT_SENTENCE, GREETING, CLOSING, SUBJECT, CALM, SENT } from '../content/letter.js';
+import { TOPICS, FORMAT_SENTENCE, GREETING, CLOSING, SUBJECT, SENT, SOURCES, SOURCE_LINE } from '../content/letter.js';
 
 const PHONE = '+79217557171';
 const MAIL = 'irinaoshemetkova@gmail.com';
-const state = { format: 'online', topics: new Set(), extra: [], days: new Set(), times: new Set(), tried: false };
+const state = { format: 'online', topics: new Set(), extra: [], days: new Set(), times: new Set(), tried: false, source: '' };
 let el = {};
 
 function timeZone() {
@@ -55,6 +54,7 @@ function compose() {
   if (zone) parts.push(`Мой часовой пояс — ${zone}.`);
   const tried = store.temp.get('tried');
   if (state.tried && tried?.size) parts.push(`Практики с сайта, которые я уже пробую: ${[...tried].join(', ')}.`);
+  if (SOURCES[state.source]) parts.push(`${SOURCE_LINE} ${SOURCES[state.source]}.`);
   parts.push(CLOSING);
   return parts.join(' ');
 }
@@ -147,6 +147,13 @@ function bind() {
       update();
     }));
   });
+  // Where she heard of Irina: one answer or none; a second tap takes it back.
+  const sources = $$('[data-letter-source] [data-value]');
+  sources.forEach((chip) => chip.addEventListener('click', () => {
+    state.source = state.source === chip.dataset.value ? '' : chip.dataset.value;
+    sources.forEach((other) => other.setAttribute('aria-pressed', String(other.dataset.value === state.source)));
+    update();
+  }));
   el.name?.addEventListener('input', update);
   el.topic?.addEventListener('input', update);
   el.tried?.addEventListener('click', () => {
@@ -165,19 +172,6 @@ function bind() {
   if (el.topic) watchField(el.topic, el.topic);
   document.addEventListener('stage:change', () => { renderTopics(); update(); });
   document.addEventListener('practice:done', update);
-}
-
-function initCalm() {
-  const text = $('[data-calm-text]');
-  $('[data-calm-next]')?.addEventListener('click', () => {
-    const current = text.textContent;
-    let next = pick(CALM, 'calm');
-    if (next === current) next = pick(CALM, 'calm');
-    text.textContent = next;
-    text.classList.remove('is-new');
-    void text.offsetWidth;
-    text.classList.add('is-new');
-  });
 }
 
 function initFaq() {
@@ -204,7 +198,6 @@ function initAboutColumn() {
 
 export function init() {
   const root = $('[data-letter]');
-  initCalm();
   initFaq();
   initAboutColumn();
   if (!root) return;

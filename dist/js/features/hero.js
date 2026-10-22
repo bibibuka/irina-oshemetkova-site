@@ -1,15 +1,14 @@
-// «Окно»: greeting by part of day, the stage question and its quiet reply, the
-// threshold before the loss pages, the window photo and the rotating badge.
-// The chosen stage also re-orders the middle sections (DOM move keeps tab order).
+// «Окно» on the main page: greeting by part of day, the title by stage, the window photo and the badge.
+// On the practices page: the stage question and its quiet reply, the threshold before the loss pages,
+// and the order of the practice tabs for the chosen stage (DOM move keeps tab order).
 import { $, $$, h, announce } from '../core/dom.js';
 import { prefs, STAGES } from '../core/prefs.js';
-import { store } from '../core/store.js';
 import { registerAction, runAction, goTo } from '../core/actions.js';
 import { openSheet, closeSheet } from '../core/sheets.js';
 import { isNightLightHours } from '../core/time.js';
 import { pick } from '../core/phrases.js';
 import {
-  SALUTES, GREETING_LINES, NIGHT_POSTPARTUM, LOSS_LINES, BADGE, PART_ICON, HERO, STAGE_REPLIES, WELCOME_BACK, COMEBACK,
+  SALUTES, GREETING_LINES, NIGHT_POSTPARTUM, LOSS_LINES, BADGE, PART_ICON, HERO, STAGE_REPLIES,
 } from '../content/greetings.js';
 
 // The practice tabs in the order that suits the stage. «Как ты сейчас?» stays first, the deck last.
@@ -51,15 +50,12 @@ function renderGreeting() {
 
 function renderTitle() {
   const title = $('[data-hero-title]');
-  const lead = $('[data-hero-lead]');
-  if (!title || !lead) return;
+  if (!title) return;
   const variant = heroVariant();
-  const note = $('[data-night-note]');
-  if (note) note.hidden = !isNightLightHours() || variant === 'nightPostpartum';
   if (variant === titleKey) return;
   const first = !titleKey;
   titleKey = variant;
-  const { title: [plain, accent], lead: text } = HERO[variant];
+  const { title: [plain, accent] } = HERO[variant];
   // Display lines carry no end punctuation (it caught the eye); a second sentence still gets
   // its full stop for screen readers, so the two lines are not read as one.
   const stop = /[\p{L}]$/u.test(plain) && /^\p{Lu}/u.test(accent) ? '.' : '';
@@ -68,12 +64,10 @@ function renderTitle() {
       h('span', { class: 'line' }, h('span', { class: 'line__i' }, plain.trim())),
       ...(stop ? [h('span', { class: 'visually-hidden' }, stop)] : []), ' ',
       h('em', { class: 'line' }, h('span', { class: 'line__i' }, accent)));
-    lead.textContent = text;
   };
   if (first) {
     // The page already shows these words and the intro may be animating them: leave them be.
     if (title.textContent.replace(/\s+/g, ' ').trim() !== `${plain.trim()}${stop} ${accent}`) update();
-    else if (lead.textContent !== text) lead.textContent = text;
     return;
   }
   if (prefs.reducedMotion) { update(); return; }
@@ -154,19 +148,6 @@ function showReply(stage) {
   ));
 }
 
-function renderWelcome() {
-  const node = $('[data-welcome]');
-  if (!node || !store.memory) return;
-  const last = Number(store.get('lastVisit', 0));
-  store.set('lastVisit', Date.now());
-  if (!last) return;
-  const days = (Date.now() - last) / 86400000;
-  if (days < 0.25) return;
-  const stage = prefs.stage;
-  const line = days >= 7 ? pick(COMEBACK, 'comeback') : pick([...(WELCOME_BACK[stage] || []), ...WELCOME_BACK.all], 'welcome');
-  node.textContent = line;
-  node.hidden = false;
-}
 
 function renderAll() {
   renderGreeting();
@@ -206,7 +187,6 @@ function initThreshold() {
 export function init() {
   arrangeFlow();
   renderAll();
-  renderWelcome();
   registerAction('stage', chooseStage);
   initThreshold();
   document.addEventListener('prefs:apply', renderAll);

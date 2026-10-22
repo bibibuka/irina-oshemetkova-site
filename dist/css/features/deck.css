@@ -1,7 +1,7 @@
 /* «Колода опор» — a small stack of cards; the top one turns over. */
 .opory__inner { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 8fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
 .opory__arch { position: sticky; top: calc(var(--header-h) + 24px); margin: 0; aspect-ratio: 3 / 5; border-radius: var(--arch); overflow: hidden; background: var(--paper-3); }
-.opory__arch img { width: 100%; height: 100%; object-fit: cover; filter: var(--photo-filter); }
+.opory__arch img { width: 100%; height: 100%; object-fit: cover; object-position: 35% 30%; filter: var(--photo-filter); }
 html[data-part='evening'] .opory__arch::after, html[data-theme='night'] .opory__arch::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(231, 167, 127, .18), rgba(23, 29, 25, .25)); }
 .opory__main { display: grid; gap: 28px; }
 .opory__head { display: grid; gap: 18px; max-width: 40rem; }
@@ -64,7 +64,7 @@ html.motion-reduced .deck-card { transition: none; }
 @media (min-width: 1101px) {
   .opory__inner { grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: clamp(40px, 4.4vw, 72px); align-items: center; }
 }
-/* Narrower: the decorative arch steps aside (the same tulips close the page in «Вопросы»). */
+/* Narrower: the decorative arch (white tulips at the window) steps aside. */
 @media (max-width: 1100px) {
   .opory__inner { grid-template-columns: minmax(0, 1fr); }
   .opory__arch { display: none; }

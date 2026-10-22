@@ -79,16 +79,7 @@ html[data-theme='night'] .spread__light { mix-blend-mode: screen; }
 .spread--lamp[data-light='left'] .spread__light, html[data-theme='night'] .spread[data-light='left'] .spread__light { left: -18%; }
 .spread--lamp[data-light='right'] .spread__light, html[data-theme='night'] .spread[data-light='right'] .spread__light { right: -18%; }
 html[data-theme='night'] .spread--lamp .spread__light { opacity: calc(var(--tone-light-strength) * var(--quiet-k) * 1.2); }
-/* The slow breath of the light, only on the spread in view. */
-.spread.is-lit .spread__light i { animation: light-breathe 10s var(--ease-breath) infinite alternate; }
-.spread.is-lit .spread__light i:nth-child(2) { animation-delay: -2.5s; }
-.spread.is-lit .spread__light i:nth-child(3) { animation-delay: -5s; }
-.spread.is-lit .spread__light i:nth-child(4) { animation-delay: -7.5s; }
-html.is-quiet .spread__light i { animation: none !important; }
-@keyframes light-breathe {
-  from { opacity: .86; transform: translate(0, 0); }
-  to { opacity: 1; transform: translate(-6px, 4px); }
-}
+/* The light holds still once it is on: nothing on the page keeps moving by itself. */
 
 /* Light and shade across the whole spread: the lit page a little brighter, the other a little
    dimmer. Together with the panes this is what makes the light read as coming from one side. */
@@ -223,18 +214,16 @@ main { counter-reset: folio 1; }
 html[data-stage='loss'] [data-not-loss] { display: none !important; }
 html[data-stage='loss'] .thought-card[data-stage='loss'] { order: -1; }
 
-/* ---------- Phones: the double rule after the fold, the «узнаешь себя» answer after the thoughts ---------- */
+/* ---------- Phones: the double rule after the fold, the «узнаешь себя» answer and its photo after the thoughts ---------- */
 @media (max-width: 860px) {
   .spread__fold + .spread__page .pmap, .spread__fold + .spread__page .faq { border-top: 0; }
   .uznaesh .spread__page--l, .uznaesh__aside { display: contents; }
   .uznaesh__answer { order: 3; margin-top: 36px; }
+  .uznaesh__arch { order: 4; margin-top: 28px; }
   .uznaesh h2 { margin-bottom: 18px; }
 }
 
 /* The deeper terracotta also where large accents sit on tinted paper outside a spread. */
 html[data-theme='day'] :is(.bookmark, .praktiki__body) { --terracotta: #a66b51; }
 html[data-theme='day'].is-quiet :is(.bookmark, .praktiki__body) { --terracotta: #94705f; }
-/* On the loss stage the calm row keeps one thought: it sits under the right page, not alone in a corner. */
-html[data-stage='loss'] .uznaesh .calm-row { grid-template-columns: minmax(0, 34rem); justify-content: end; }
-@media (max-width: 860px) { html[data-stage='loss'] .uznaesh .calm-row { justify-content: start; } }
 .nowrap { white-space: nowrap; }

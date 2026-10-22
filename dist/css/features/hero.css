@@ -1,20 +1,26 @@
-/* «Окно» — the title spread: the offer on the left page, the arch window with Irina on the right,
-   the greeting as the left running head. Under the spread — the stage question as a bookmark. */
+/* «Окно» — the title spread: who and with what, why trust, the price and the booking on the left page,
+   the arch window with Irina on the right, the greeting as the left running head.
+   The stage question («Что сейчас про тебя?») lives on the practices page as a bookmark under its title. */
 .okno { padding-top: var(--header-h); }
 .okno__book { min-height: min(calc(100svh - var(--header-h)), 1000px); padding-bottom: clamp(36px, 4vw, 64px); }
 .okno__copy { display: grid; gap: 22px; align-content: center; }
+.okno__who { display: grid; gap: 12px; }
+.okno__topics { display: grid; gap: 4px; max-width: 34em; }
+.okno__topics li { position: relative; padding-left: 22px; font-size: clamp(17px, .3vw + 15px, 19px); line-height: 1.4; color: var(--ink); }
+.okno__topics li::before { content: ''; position: absolute; left: 2px; top: .58em; width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--terracotta); background: color-mix(in srgb, var(--terracotta) 22%, transparent); }
+.okno__topics abbr { text-decoration: none; }
+/* Wide screens: the points run in lines (three at most), so the facts and the button stay on the first screen. */
+@media (min-width: 861px) { .okno__topics { display: flex; flex-wrap: wrap; gap: 4px 24px; } .okno__topics li { white-space: nowrap; font-size: 17px; } }
 .okno__greeting { font-family: var(--serif); font-style: italic; color: var(--ink-soft); }
 .okno__greeting .icon { width: 18px; height: 18px; }
-.okno__title { font-size: clamp(52px, 7vw, 116px); line-height: .95; letter-spacing: -.035em; }
+.okno__title { font-size: clamp(52px, 6.4vw, 104px); line-height: .95; letter-spacing: -.035em; }
 .okno__title em { display: block; padding-left: .5em; }
 .okno__lead { max-width: 30em; }
 .okno__actions .btn--large { padding-inline: 24px 22px; }
 .okno__actions { align-items: center; column-gap: 14px; }
-/* Between phones and wide screens the page is too narrow for two pills: the second becomes a quiet link. */
-@media (min-width: 561px) and (max-width: 1365px) {
-  .okno__actions .btn--ghost { --btn-bd: transparent; min-height: 48px; padding-inline: 4px; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: .32em; }
-  .okno__actions .btn--ghost:hover { --btn-bg: transparent; text-decoration-color: currentColor; color: var(--terracotta-ink); }
-}
+/* One filled button on the page: the second step («Сначала попробовать практики») is a quiet link at every width. */
+.okno__actions .btn--ghost { --btn-bd: transparent; min-height: 48px; padding-inline: 4px; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: .32em; }
+.okno__actions .btn--ghost:hover { --btn-bg: transparent; text-decoration-color: currentColor; color: var(--terracotta-ink); }
 .okno__book { --page-pad: clamp(24px, 3vw, 52px); }
 .okno__night-note, .okno__welcome { display: flex; gap: 10px; align-items: flex-start; max-width: 32em; font-family: var(--serif); font-style: italic; font-size: clamp(19px, .6vw + 15px, 22px); line-height: 1.4; color: var(--ink-soft); }
 .okno__night-note .icon { width: 20px; height: 20px; margin-top: 4px; color: var(--terracotta-ink); }
@@ -47,9 +53,8 @@ html[data-part='evening'] .arch-window::after, html[data-theme='night'] .arch-wi
   background: linear-gradient(200deg, rgba(231, 167, 127, .26), transparent 60%);
   mix-blend-mode: soft-light;
 }
-.okno__caption { margin-top: 28px; font-family: var(--serif); font-style: italic; font-size: clamp(17px, .3vw + 15px, 19px); color: var(--muted); text-align: center; max-width: 24em; }
 
-/* Rotating badge on the right shoulder of the arch */
+/* The badge on the right shoulder of the arch (it does not spin) */
 .orbit-badge {
   position: absolute; z-index: 2; top: 8%; right: -50px; width: 132px; height: 132px;
   display: grid; place-items: center; border-radius: 50%;
@@ -97,16 +102,13 @@ html[data-theme='night'] .stage-pick { background: color-mix(in srgb, var(--pape
   .okno__title { order: 2; margin-bottom: 8px; }
   .okno__window { order: 3; margin-block: 24px 22px; }
   .okno__frame { width: min(100% - 28px, 420px, max(240px, 40svh)); }
-  .okno__lead { order: 4; }
+  .okno__who { order: 4; }
   .okno__actions { order: 5; margin-top: 18px; }
   .okno__terms { order: 6; margin-top: 14px; }
   .okno__proof { order: 7; margin-top: 20px; }
-  .okno__night-note { order: 8; margin-top: 16px; }
-  .okno__welcome { order: 9; margin-top: 16px; }
   .arch-window { aspect-ratio: 4 / 5; }
   .orbit-badge { right: -10px; top: 6%; width: 100px; height: 100px; }
   .orbit-badge__flower { width: 32px; height: 32px; }
-  .okno__caption { margin-top: 20px; }
 }
 @media (max-width: 560px) {
   .okno__title { font-size: clamp(46px, 14vw, 72px); }
@@ -139,13 +141,13 @@ html[data-theme='night'] .sheet--threshold { --sheet-bg: var(--paper-2); }
 .stage-option[aria-pressed='true'] { background: var(--green); color: var(--on-green); border-color: var(--green); }
 .stage-option[aria-pressed='true'] .icon { color: currentColor; }
 
-/* Short laptop screens: the caption would fall under the fold — the arch and the badge say enough. */
-@media (min-width: 861px) and (max-height: 820px) { .okno__caption { display: none; } }
-/* Phones: say what and offer the booking before the photo, so the button is on the first screen. */
+/* Phones: who and with what, the booking, the price and why trust — all before the photo, on the first screen. */
 @media (max-width: 560px) {
-  .okno__lead { order: 3; }
-  .okno__actions { order: 4; }
-  .okno__terms { order: 5; }
-  .okno__window { order: 6; margin-block: 28px 18px; }
-  .okno__proof { order: 7; }
+  .okno__book .spread__run--l { margin-bottom: 12px; }
+  .okno__title { margin-bottom: 4px; }
+  .okno__who { order: 3; }
+  .okno__actions { order: 4; margin-top: 16px; }
+  .okno__terms { order: 5; margin-top: 10px; }
+  .okno__proof { order: 6; margin-top: 16px; }
+  .okno__window { order: 7; margin-block: 32px 8px; }
 }

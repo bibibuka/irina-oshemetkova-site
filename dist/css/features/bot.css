@@ -13,7 +13,6 @@
 .phone__screen {
   width: min(300px, 82vw); min-height: 540px; padding: 14px 12px 12px; border-radius: 44px;
   border: 10px solid #2f3b31; background: #eef2ea; box-shadow: var(--shadow-lg);
-  animation: float 8s var(--ease-breath) infinite;
   display: flex; flex-direction: column; gap: 12px; color: #2f3b31;
 }
 html[data-theme='night'] .phone__screen { border-color: #0d110f; background: #1f2622; color: #e6e4da; }
@@ -38,7 +37,6 @@ html[data-theme='night'] .phone__input { background: #2b342e; color: rgba(230, 2
 .phone.is-animated .bubble.is-waiting { opacity: 0; transform: translateY(8px); }
 .phone__pause { font-size: var(--text-small); }
 
-html.is-quiet .phone__screen { animation: none; }
 @media (max-width: 860px) {
   .phone__screen { min-height: 500px; }
 }

@@ -2,17 +2,39 @@
 // is loaded on its own: one broken feature never takes the others down.
 import { initPrefs } from './core/prefs.js';
 import { initSheets } from './core/sheets.js';
-import { initActions } from './core/actions.js';
+import { initActions, registerAction } from './core/actions.js';
 import { initPanels } from './core/panels.js';
 import {
   initReveals, initSpreads, initHeader, initSectionSpy, initNavPill, initRipples, initJumps, initKeyboardAwareDock, jumpTo,
 } from './core/motion.js';
 import { $$ } from './core/dom.js';
 
-const FEATURES = [
-  'help', 'settings', 'hero', 'checkin', 'doors', 'breath', 'letter', 'irina',
-  'practices', 'thought', 'words', 'deck', 'bot',
-];
+// Two pages share these scripts: the main page (offer, doors, about, price, FAQ, letter) and
+// praktiki.html (the practices). A feature loads only where its markup is.
+const FEATURES = {
+  help: 'body', settings: 'body',
+  hero: '[data-hero-title], [data-stage-pick]',
+  checkin: '[data-weather]', doors: '[data-doors]', breath: '[data-breath]',
+  letter: '[data-letter], [data-faq]', irina: '[data-doc], .irina',
+  practices: '[data-shelf], #sheet-room', thought: '[data-thought], [data-traps]',
+  words: '[data-words]', deck: '[data-deck]', bot: '[data-bot-demo]',
+};
+
+// An action whose feature lives on the other page opens that page there
+// (a «Записаться» inside a practice, «Подышать» from the help sheet on the main page).
+const ELSEWHERE = {
+  write: ['[data-letter]', './#vstrecha'],
+  breathe: ['[data-breath]', 'praktiki.html#dyhanie'],
+  practice: ['#sheet-room', 'praktiki.html#polka'],
+  'choose-practice': ['#sheet-room', 'praktiki.html#polka'],
+  thought: ['[data-thought]', 'praktiki.html#razbor'],
+};
+
+function crossPage() {
+  Object.entries(ELSEWHERE).forEach(([action, [here, there]]) => {
+    if (!document.querySelector(here)) registerAction(action, () => { window.location.href = there; });
+  });
+}
 
 function safely(name, fn) {
   try { fn(); } catch (error) { console.error(`[${name}]`, error); }
@@ -63,7 +85,10 @@ function boot() {
   safely('autosize', autosizeFallback);
   safely('year', () => $$('[data-year]').forEach((el) => { el.textContent = String(new Date().getFullYear()); }));
 
-  const loading = FEATURES.map((name) => import(`./features/${name}.js`)
+  safely('cross-page', crossPage);
+
+  const names = Object.keys(FEATURES).filter((name) => document.querySelector(FEATURES[name]));
+  const loading = names.map((name) => import(`./features/${name}.js`)
     .then((module) => safely(name, () => module.init?.()))
     .catch((error) => console.error(`[${name}] failed to load`, error)));
   Promise.allSettled(loading).then(() => {

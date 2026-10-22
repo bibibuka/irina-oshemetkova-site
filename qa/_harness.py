@@ -45,7 +45,8 @@ class Run:
             print(f"  ok    {title}")
         except Exception as exc:  # noqa: BLE001 — report every failure, keep going
             self.checks.append({"name": title, "passed": False, "error": str(exc)[:600]})
-            print(f"  FAIL  {title}\n        {str(exc).splitlines()[0][:300]}")
+            first = (str(exc).splitlines() or [repr(exc)])[0]
+            print(f"  FAIL  {title}\n        {first[:300]}")
         if page is not None:
             page.evaluate("document.querySelectorAll('dialog[open]').forEach(d => d.close())")
 

@@ -1,5 +1,5 @@
 /* «Я — Ирина» — a spread: the portrait in an arch on the left page (held in view), on the right
-   who I am, where I worked, what I studied and the documents. «Как я говорю» is its own spread. */
+   who I am, where I have worked, the profession and the documents. «Как я говорю» is its own spread. */
 .irina__photo { margin: 0; }
 .irina__photo-in { display: grid; justify-items: center; gap: 22px; margin: 0; }
 .irina__arch { position: relative; width: min(100%, 470px, max(300px, calc((100svh - var(--header-h) - 150px) * 4 / 5.3))); aspect-ratio: 4 / 5.3; border-radius: var(--arch); overflow: hidden; background: var(--paper-3); box-shadow: var(--shadow-md); }
@@ -11,6 +11,8 @@
 .irina__text h2 { margin-bottom: 6px; }
 .irina__text h2 em { display: block; }
 .irina__text > p { font-size: clamp(18px, .3vw + 16px, 19px); line-height: 1.7; color: var(--ink-soft); max-width: 36em; }
+/* How I work, in one line instead of a spread of cards. */
+.irina__text > .irina__way { padding-left: 18px; border-left: 2px solid var(--terracotta); font-family: var(--serif); font-style: italic; font-size: clamp(21px, .6vw + 16px, 25px); line-height: 1.35; color: var(--ink); max-width: 26em; }
 .irina__drop::first-letter { float: left; font-family: var(--serif); font-size: 5.4em; line-height: .78; padding: .06em .1em 0 0; color: var(--terracotta); }
 .irina__facts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px 32px; margin: 6px 0 0; padding-block: 20px; border-block: 1px solid var(--tone-rule); }
 .irina__facts dt { font-family: var(--serif); font-style: italic; font-size: 24px; color: var(--terracotta-ink); margin-bottom: 6px; }
@@ -19,24 +21,20 @@
 @media (max-width: 560px) { .irina__facts { grid-template-columns: minmax(0, 1fr); } }
 
 /* «Как я говорю — и как не говорю» */
-.podhod__never { display: grid; gap: 12px; padding-top: 22px; border-top: 1px solid var(--tone-rule); }
 .podhod__cap { font-family: var(--serif); font-style: italic; font-size: 24px; color: var(--terracotta-ink); }
-.podhod__never ul { display: grid; gap: 8px; }
-.podhod__never li { position: relative; padding-left: 28px; line-height: 1.5; color: var(--ink-soft); }
-.podhod__never li::before { content: ''; position: absolute; left: 2px; top: .72em; width: 14px; height: 1px; background: var(--terracotta); transform: rotate(-12deg); }
-.podhod__hint { margin-bottom: 20px; font-size: var(--text-small); color: var(--muted); }
+/* The greenhouse under the lead: a pause instead of another list (shape in layout.css), fronds under the vault. */
+.podhod__arch img { object-position: 50% 65%; }
+@media (max-width: 860px) { .podhod__arch { aspect-ratio: 2 / 1; } }
 /* Under the spread: what may change (no promises) beside the honest limits — aligned with the two pages. */
 .podhod__foot { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: calc(2 * var(--page-pad)); row-gap: 32px; }
 .podhod__foot ul { display: grid; gap: 10px; margin-top: 12px; }
 .podhod__may li { position: relative; padding-left: 28px; font-family: var(--serif); font-size: clamp(22px, .6vw + 17px, 27px); line-height: 1.2; color: var(--ink); }
 .podhod__may li::before { content: ''; position: absolute; left: 2px; top: .5em; width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--sage-500); background: color-mix(in srgb, var(--sage-300) 40%, transparent); }
-.podhod__turn { grid-column: 1 / -1; margin-top: 8px; }
 .podhod__small { margin-top: 16px; font-size: var(--text-small); color: var(--muted); max-width: 32em; }
 .podhod__limits li { position: relative; padding-left: 28px; line-height: 1.55; color: var(--ink-soft); }
 .podhod__limits li::before { content: ''; position: absolute; left: 2px; top: .78em; width: 12px; height: 1px; background: var(--terracotta); }
 .podhod__limits .link { display: inline; min-height: 0; }
 @media (max-width: 860px) { .podhod__foot { grid-template-columns: minmax(0, 1fr); } }
-.irina__text > p + p { text-indent: 1.6em; }
 
 .docs__title { font-size: clamp(28px, 1.4vw + 16px, 38px); margin-top: clamp(20px, 2.4vw, 36px); }
 .principles > [role='listitem'] { display: grid; }
@@ -79,7 +77,6 @@ html.motion-reduced .principle[aria-pressed='true'] .principle__back { opacity: 
   html:not(.motion-allowed) .principle[aria-pressed='true'] .principle__back { opacity: 1; }
 }
 
-.docs__sub { color: var(--muted); font-size: var(--text-small); margin-top: -10px; }
 ul.docs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 4px 0 0; }
 @media (min-width: 861px) and (max-width: 1180px) { ul.docs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .docs li { min-width: 0; }
