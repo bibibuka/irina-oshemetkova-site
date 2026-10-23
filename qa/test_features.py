@@ -58,7 +58,13 @@ with session("features") as (run, browser):
         # The practices are a page of their own: nothing of them is left on the main page.
         expect(page.locator("#praktiki, [data-tab-panel], .ptabs, #bot, [data-stage-pick], .uznaesh, .podhod, .principle")).to_have_count(0)
         expect(page.locator(".site-nav a[href='praktiki.html']")).to_have_count(1)
+        expect(page.locator(".site-nav a[href='praktiki.html'] .site-nav__tag")).to_have_text("без записи")
         expect(page.locator(".dock a[href='praktiki.html']")).to_have_count(1)
+        # After the booking, the practices are offered as a card the whole of which is a link — still, no motion.
+        card = page.locator("#vstrecha .bonus-card")
+        expect(card).to_have_attribute("href", "praktiki.html")
+        expect(card).to_contain_text("практики без записи")
+        assert card.evaluate("e => getComputedStyle(e).animationName") == "none"
         page.locator("#stoimost .plan:not(.plan--main) [data-action='write']").click()
         expect(page.locator("#letter-name")).to_be_focused(timeout=4000)
         expect(page.locator("[data-letter-preview]")).to_contain_text("встреча вдвоём")

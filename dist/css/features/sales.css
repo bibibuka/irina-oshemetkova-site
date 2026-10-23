@@ -208,9 +208,23 @@ html.js .praktiki:not([data-tabs-ready]) .ptab-panel:not(#pogoda) { display: non
 .contacts span { display: grid; line-height: 1.35; font-size: var(--text-small); color: var(--muted); overflow-wrap: anywhere; }
 .contacts b { color: var(--ink); font-weight: 500; font-size: var(--text); }
 .contacts a:hover b { color: var(--terracotta-ink); }
-/* After the booking, not before it: the practices as a bonus while waiting for the answer. */
-.vstrecha__bonus { margin-top: 18px; max-width: 30em; font-size: var(--text-small); line-height: 1.6; color: var(--muted); }
-.vstrecha__bonus .link { display: inline; min-height: 0; }
+/* After the booking, not before it: the practices as a bonus while waiting for the answer.
+   A card the whole of which is the link — noticeable by colour and shape, never by motion. */
+.bonus-card {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 16px;
+  margin-top: 10px; padding: 18px 20px; max-width: 30rem; border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface) 82%, transparent); border: 1px solid var(--tone-rule);
+  box-shadow: var(--shadow-sm); color: var(--ink); text-decoration: none;
+  transition: border-color var(--t-fast), background-color var(--t-fast);
+}
+.bonus-card:hover { border-color: var(--terracotta); background: var(--surface); }
+.bonus-card__icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--sage-100); color: var(--green); }
+.bonus-card__icon .icon { width: 24px; height: 24px; }
+.bonus-card__text { display: grid; gap: 4px; }
+.bonus-card__text b { font-family: var(--serif); font-size: clamp(20px, .4vw + 16px, 23px); font-weight: 500; line-height: 1.2; }
+.bonus-card__text span { font-size: var(--text-small); line-height: 1.5; color: var(--ink-soft); }
+.bonus-card__arrow { width: 22px; height: 22px; color: var(--terracotta-ink); }
+@media (max-width: 400px) { .bonus-card { gap: 12px; padding: 16px; } .bonus-card__icon { width: 40px; height: 40px; } }
 
 /* ---------- Phone dock: «Запись» is the accent ---------- */
 @media (max-width: 767px) {

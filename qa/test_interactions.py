@@ -265,6 +265,30 @@ with session("interactions") as (run, browser):
 
     run.check("Header: brand, four links, the dark-theme moon, help and the letter — nothing more", header_is_light, lively)
 
+    def header_fits():
+        # Brand, four links, the moon, help and «Записаться» stay inside the bar — at the top and as the
+        # narrower glass bar after scrolling — at every width where the links are shown.
+        bar = open_page(context, run, "/?tod=day")
+        problems = []
+        for width in [1181, 1280, 1366, 1440, 1920]:
+            bar.set_viewport_size({"width": width, "height": 900})
+            for y in [0, 1500]:
+                bar.evaluate(f"window.scrollTo(0, {y})")
+                bar.wait_for_timeout(700)
+                out = bar.evaluate("""() => {
+                    const inner = document.querySelector('.site-header__inner').getBoundingClientRect();
+                    const kids = [...document.querySelectorAll('.site-header__inner > *')].map(e => e.getBoundingClientRect());
+                    const links = [...document.querySelectorAll('.site-nav a')];
+                    return kids.some(r => r.right > inner.right + 1) || kids.some((r, i) => i && r.left < kids[i - 1].right - 1)
+                        || links.some(a => a.getClientRects().length > 1);
+                }""")
+                if out:
+                    problems.append((width, y))
+        bar.close()
+        assert not problems, problems
+
+    run.check("Header fits its bar at 1181–1920 px, at the top and scrolled", header_fits)
+
     def short_pages():
         # Beside a long page the short one holds the middle of the window, then settles at the bottom of
         # its spread and leaves with it — no hole beside it. The title spread keeps its own layout.

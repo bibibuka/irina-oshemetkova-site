@@ -166,7 +166,7 @@
         <a href="#dveri" data-spy>С&nbsp;чем помогаю</a>
         <a href="#irina" data-spy>Обо&nbsp;мне</a>
         <a href="#stoimost" data-spy>Стоимость</a>
-        <a href="praktiki.html">Практики</a>
+        <a class="site-nav__bonus" href="praktiki.html">Практики<span class="site-nav__tag">без&nbsp;записи</span></a>
       </nav>
       <div class="site-header__tools">
         <button class="theme-toggle js-only" type="button" data-action="theme-toggle" aria-pressed="false" title="Тёмная тема">
@@ -453,7 +453,12 @@
             <li><a href="tel:+79217557171"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span><b>Телефон</b>+7 (921) 755-71-71</span></a></li>
             <li><a href="mailto:irinaoshemetkova@gmail.com"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><span><b>Почта</b>irinaoshemetkova@gmail.com</span></a></li>
           </ul>
-          <p class="vstrecha__bonus">Пока ждёшь ответа, можно заглянуть в&nbsp;<a class="link" href="praktiki.html">практики</a>: подышать, разобрать тревожную мысль, найти слова для&nbsp;близких.</p>
+          <!-- После записи, а не до неё: практики — бонус, пока ждёшь ответа. Карточка стоит на месте, без анимации. -->
+          <a class="bonus-card" href="praktiki.html">
+            <span class="bonus-card__icon" aria-hidden="true"><svg class="icon"><use href="#i-leaf"/></svg></span>
+            <span class="bonus-card__text"><b>Пока ждёшь ответа&nbsp;— практики без&nbsp;записи</b><span>Подышать, разобрать тревожную мысль, найти слова для&nbsp;близких.</span></span>
+            <svg class="icon bonus-card__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
           </div>
         </div>
         <div class="spread__fold" aria-hidden="true"><svg class="icon"><use href="#i-flower"/></svg></div>
@@ -555,7 +560,7 @@
         </div>
         <div class="svet__col">
           <h3>Практики</h3>
-          <p>Упражнения без&nbsp;записи и&nbsp;регистрации&nbsp;— работают и&nbsp;ночью.</p>
+          <p>Упражнения на&nbsp;каждый день&nbsp;— работают и&nbsp;ночью.</p>
           <p class="svet__row"><a class="link link--light" href="praktiki.html">Открыть практики</a></p>
         </div>
         <div class="svet__col js-only">

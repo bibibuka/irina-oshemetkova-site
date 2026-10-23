@@ -69,7 +69,7 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
 .brand:hover .brand__flower { transform: rotate(72deg); }
 .brand__text { display: grid; line-height: 1.1; }
 .brand__name { font-family: var(--serif); font-size: 23px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
-.brand__role { font-size: var(--text-micro); color: var(--muted); letter-spacing: .01em; }
+.brand__role { font-size: var(--text-micro); color: var(--muted); letter-spacing: .01em; max-width: 15em; text-wrap: balance; } /* two lines: «репродуктивный и / перинатальный психолог» — the bar stays in its frame */
 
 .site-nav { position: relative; display: flex; gap: 2px; margin-inline: auto; padding: 4px; }
 .site-nav__pill {
@@ -80,6 +80,9 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
 .site-nav.has-pill .site-nav__pill { opacity: 1; }
 .site-nav a { position: relative; z-index: 1; padding: 9px 16px; border-radius: 999px; font-size: 15px; white-space: nowrap; color: var(--ink-soft); text-decoration: none; transition: color .25s var(--ease-out); }
 .site-nav a:hover, .site-nav a[aria-current] { color: var(--ink); }
+/* «Практики» with a quiet «без записи» under the word: no extra width, nothing that moves. */
+.site-nav__bonus { display: inline-grid; justify-items: center; line-height: 1.15; padding-block: 5px !important; }
+.site-nav__tag { font-size: 11px; letter-spacing: .02em; color: var(--terracotta-ink); }
 .site-nav:not(.has-pill) a:hover { background: var(--sage-50); }
 
 .site-header__tools { display: flex; align-items: center; gap: 8px; margin-left: auto; }
@@ -113,6 +116,7 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
 /* ---------- Phone dock ---------- */
 .dock { display: none; }
 
+@media (max-width: 1360px) { .site-nav a { padding-inline: 12px; } }
 @media (max-width: 1180px) {
   .site-nav { display: none; }
   .site-header__tools, .site-nav + .site-header__tools { margin-left: auto; }
