@@ -5,7 +5,7 @@ import { initSheets } from './core/sheets.js';
 import { initActions, registerAction } from './core/actions.js';
 import { initPanels } from './core/panels.js';
 import {
-  initReveals, initSpreads, initHeader, initSectionSpy, initNavPill, initRipples, initJumps, initKeyboardAwareDock, jumpTo,
+  initReveals, initSpreads, initShortPages, initHeader, initSectionSpy, initNavPill, initRipples, initJumps, initKeyboardAwareDock, jumpTo,
 } from './core/motion.js';
 import { $$ } from './core/dom.js';
 
@@ -75,6 +75,7 @@ function boot() {
   safely('header', initHeader);
   safely('reveals', initReveals);
   safely('spreads', initSpreads);
+  safely('short-pages', initShortPages);
   safely('spy', initSectionSpy);
   safely('nav-pill', initNavPill);
   safely('ripples', initRipples);

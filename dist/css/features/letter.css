@@ -1,7 +1,6 @@
 /* «Начнём с разговора?» — how it works on the left, a paper letter on the right. Plus the FAQ. */
 .vstrecha__about { display: grid; gap: 22px; align-content: start; }
-/* Who answers, and the price once more for those who came from the header button. The avatar's
-   size is set here, so the column does not grow when the lazy image arrives (--about-h). */
+/* Who answers. The avatar's size is set here, so the column does not grow when the lazy image arrives. */
 .vstrecha__sign { display: flex; align-items: center; gap: 14px; line-height: 1.35; }
 .vstrecha__sign b { display: block; font-family: var(--serif); font-size: 22px; font-weight: 500; color: var(--ink); }
 .vstrecha__sign span span { display: block; font-size: var(--text-small); color: var(--ink-soft); }
@@ -56,12 +55,6 @@ html.motion-reduced .letter.is-arriving::after { animation: none; box-shadow: 0 
 html[data-theme='night'] .letter__status { color: var(--sage-500); }
 .letter .privacy-line a { color: var(--ink); }
 
-/* The short column travels beside the long letter instead of leaving a hole under it. letter.js
-   measures it into --about-h: if it fits under the header it sticks there; if it is taller than
-   the window it sticks with its lower part (the contacts) in view. Two columns only. */
-@media (min-width: 961px) {
-  html.js .vstrecha__about { position: sticky; top: min(calc(var(--header-h) + 24px), calc(100vh - var(--about-h, 0px) - 24px)); }
-}
 
 /* ---------- FAQ ---------- */
 .voprosy__aside { gap: 28px; }

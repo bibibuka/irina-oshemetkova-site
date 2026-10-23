@@ -265,6 +265,41 @@ with session("interactions") as (run, browser):
 
     run.check("Header: brand, four links, the dark-theme moon, help and the letter — nothing more", header_is_light, lively)
 
+    def short_pages():
+        # Beside a long page the short one holds the middle of the window, then settles at the bottom of
+        # its spread and leaves with it — no hole beside it. The title spread keeps its own layout.
+        wide = open_page(context, run, "/?tod=day")
+        wide.set_viewport_size({"width": 1440, "height": 900})
+        wide.wait_for_timeout(300)
+        middle = (900 + 84) / 2
+        marked = wide.evaluate("() => [...document.querySelectorAll('.spread__page.is-short')].map(p => p.closest('section').id)")
+        assert set(marked) >= {"dveri", "irina", "stoimost", "voprosy", "vstrecha"} and "okno" not in marked, marked
+        for sid in ["stoimost", "irina", "vstrecha"]:
+            top = wide.evaluate(f"document.getElementById('{sid}').getBoundingClientRect().top + scrollY")
+            height = wide.evaluate(f"document.getElementById('{sid}').offsetHeight")
+            wide.evaluate(f"window.scrollTo(0, {top} + {height} * .3)")
+            wide.wait_for_timeout(100)
+            mid = wide.evaluate(f"(() => {{ const r = document.querySelector('#{sid} .is-short').getBoundingClientRect(); return (r.top + r.bottom) / 2; }})()")
+            assert abs(mid - middle) < 6, (sid, mid, middle)
+            wide.evaluate(f"window.scrollTo(0, {top} + {height} - 300)")
+            wide.wait_for_timeout(100)
+            gap = wide.evaluate(f"""(() => {{
+                const book = document.querySelector('#{sid} .spread__book');
+                const long = book.querySelector('.spread__page:not(.is-short)').getBoundingClientRect();
+                const short = book.querySelector('.is-short').getBoundingClientRect();
+                return Math.abs(long.bottom - short.bottom);
+            }})()""")
+            assert gap < 2, (sid, gap)  # at the end both pages end together
+        folios = wide.evaluate("() => [...document.querySelectorAll('#stoimost .spread__run')].map(r => getComputedStyle(r, '::after').content)")
+        assert all(f not in ("none", "normal", "") for f in folios), folios
+        # On a phone the pages stack: nothing sticks.
+        wide.set_viewport_size({"width": 390, "height": 844})
+        wide.wait_for_timeout(300)
+        assert wide.locator(".spread__page.is-short").count() == 0
+        wide.close()
+
+    run.check("Short pages hold the middle of the window beside long ones and settle at the end of the spread", short_pages)
+
     def write_lands_on_letter():
         lively.evaluate("window.scrollTo({ top: 0, behavior: 'instant' })")
         lively.locator(".header-cta").click()

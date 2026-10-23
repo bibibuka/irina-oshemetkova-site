@@ -200,6 +200,63 @@ export function initSpreads() {
   light(spreads.find((spread) => inView(spread)) || spreads[0]);
 }
 
+/**
+ * Two pages of different length leave a hole beside the short one. The short page is marked .is-short
+ * (spreads.css makes it sticky): it is held in the middle of the window — or, if it is taller than the
+ * window, with its lower edge in view — while the long page scrolls, and settles at the bottom of the
+ * spread at its end. Two columns only; the title spread keeps its own centred layout.
+ */
+const SHORT_GAP = 160; // a smaller difference leaves no hole worth filling
+const STICK_MARGIN = 24;
+
+function headerHeight() {
+  return parseFloat(getComputedStyle(root).getPropertyValue('--header-h')) || 84;
+}
+
+function measureBook(book, wide) {
+  const pages = $$(':scope > .spread__page', book);
+  if (pages.length !== 2) return;
+  const was = pages.find((page) => page.classList.contains('is-short'));
+  pages.forEach((page) => page.classList.remove('is-short'));
+  if (!wide) return;
+  book.classList.add('is-measuring');
+  const [left, right] = pages.map((page) => page.offsetHeight);
+  book.classList.remove('is-measuring');
+  if (Math.abs(left - right) < SHORT_GAP) return;
+  const short = left < right ? pages[0] : pages[1];
+  short.classList.add('is-short');
+  const height = short.offsetHeight; // after .is-short: a photo may shrink on low screens
+  const top = headerHeight();
+  const room = window.innerHeight - top;
+  const stick = height <= room - 2 * STICK_MARGIN
+    ? top + (room - height) / 2
+    : window.innerHeight - height - STICK_MARGIN;
+  short.style.setProperty('--stick-top', `${Math.round(stick)}px`);
+  if (was && was !== short) was.style.removeProperty('--stick-top');
+}
+
+export function initShortPages() {
+  const books = $$('.spread__book').filter((book) => !book.closest('.okno'));
+  if (!books.length) return;
+  const wide = window.matchMedia('(min-width: 861px)');
+  let frame = 0;
+  const measure = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => books.forEach((book) => measureBook(book, wide.matches)));
+  };
+  books.forEach((book) => measureBook(book, wide.matches));
+  window.addEventListener('resize', measure);
+  window.addEventListener('load', measure);
+  document.fonts?.ready.then(measure);
+  document.addEventListener('features:ready', measure);
+  document.addEventListener('panel:show', measure);
+  // Content that grows or shrinks (a chapter of the doors, an open answer, a hint in the letter).
+  if ('ResizeObserver' in window) {
+    const watcher = new ResizeObserver(measure);
+    books.forEach((book) => $$(':scope > .spread__page', book).forEach((page) => watcher.observe(page)));
+  }
+}
+
 /* ---------- Header: glass on scroll, reading progress, the window light, hero depth ---------- */
 export function initHeader() {
   const header = $('.site-header');

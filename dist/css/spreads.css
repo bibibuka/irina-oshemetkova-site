@@ -130,9 +130,17 @@ html[data-theme='night'] .spread--lamp .spread__light { opacity: calc(var(--tone
   background: linear-gradient(180deg, transparent, var(--spine) 8%, var(--spine) 92%, transparent);
 }
 
-/* Page content helpers: a page can hold its content at the top, the middle or the bottom. */
+/* Page content helpers. */
 .page-stack { display: grid; gap: clamp(20px, 2vw, 28px); align-content: start; }
-.page-sticky { position: sticky; top: calc(var(--header-h) + 24px); }
+
+/* Two pages of different length: the short one travels beside the long one instead of leaving a hole.
+   initShortPages() in motion.js measures both pages and marks the short one: it is held in the middle
+   of the window (or with its lower edge in view, if it is taller than the window) while the long page
+   scrolls, and settles at the bottom of the spread at its end. Two columns only. */
+.spread__book.is-measuring > .spread__page { align-self: start !important; position: relative !important; }
+@media (min-width: 861px) {
+  .spread__book > .spread__page.is-short { align-self: start; position: sticky; top: var(--stick-top, calc(var(--header-h) + 24px)); }
+}
 .spread .lead { max-width: 30em; }
 
 /* ---------- Opening: as a spread arrives, its pages settle open from the spine ---------- */
@@ -169,24 +177,25 @@ html.motion-reduced .spread__light { translate: 0 0 !important; }
   .spread__run--r { justify-content: flex-start; text-align: left; margin-bottom: clamp(24px, 6vw, 36px); }
   .spread__book::before, .spread__book::after { display: none; }
   .spread__fold { display: flex; }
-  .page-sticky { position: static; }
   .spread__light { width: 120%; height: 70%; top: -10%; }
   .spread[data-light='right'] .spread__light { right: -40%; }
   .spread[data-light='left'] .spread__light { left: -40%; }
   html.spreads-on .spread:not(.is-open) .spread__page--l, html.spreads-on .spread:not(.is-open) .spread__page--r { transform: translateY(18px); }
 }
 
-/* ---------- Folios: page numbers in the outer corners, like a printed book ---------- */
+/* ---------- Folios: page numbers in the outer corners, like a printed book ----------
+   They hang from the running heads (one per page) but are placed against the book itself, at the
+   bottom of the spread, so a short page that travels with the window does not take its number along. */
 main { counter-reset: folio 1; }
-.spread__book > .spread__page { counter-increment: folio; }
-.spread__book > .spread__page::after {
+.spread__book > .spread__run { counter-increment: folio; }
+.spread__book > .spread__run::after {
   content: counter(folio); content: counter(folio) / ''; /* decoration: not read aloud */
-  position: absolute; bottom: calc(var(--section) * -.62); pointer-events: none;
+  position: absolute; bottom: calc(var(--section) * .38); pointer-events: none;
   font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1; color: var(--tone-run); opacity: .8;
 }
-.spread__book > .spread__page--l::after { left: 0; }
-.spread__book > .spread__page--r::after { right: 0; }
-@media (max-width: 860px) { .spread__book > .spread__page::after { display: none; } }
+.spread__book > .spread__run--l::after { left: 0; }
+.spread__book > .spread__run--r::after { right: 0; }
+@media (max-width: 860px) { .spread__book > .spread__run::after { display: none; } }
 
 /* ---------- Bookmarks: quiet full-width bands between spreads ---------- */
 .bookmark { position: relative; border-block: 1px solid var(--line); background: color-mix(in srgb, var(--peach) 80%, var(--paper)); }
@@ -198,8 +207,8 @@ main { counter-reset: folio 1; }
   position: relative; width: min(1440px, 100% - 2 * var(--gutter)); margin-inline: auto; padding: clamp(22px, 2.4vw, 32px) 0 var(--section);
   border-top: 1px solid var(--tone-rule);
 }
-.spread__book:has(+ .spread__foot) > .spread__page { counter-increment: none; }
-.spread__book:has(+ .spread__foot) > .spread__page::after { content: none; }
+.spread__book:has(+ .spread__foot) > .spread__run { counter-increment: none; }
+.spread__book:has(+ .spread__foot) > .spread__run::after { content: none; }
 .spread > .spread__foot::before, .spread > .spread__foot::after {
   counter-increment: folio; content: counter(folio); content: counter(folio) / '';
   position: absolute; bottom: calc(var(--section) * .38); pointer-events: none;

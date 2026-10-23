@@ -82,7 +82,6 @@ html[data-theme='night'] .dveri.spread[data-chapter='close'] { --tone-bg: #151a1
 /* Before doors.js settles, only the first chapter is shown (the others would fold away under the visitor). */
 html.js .dveri:not([data-doors-ready]) .door-panel:not(#door-planning) { display: none; }
 /* Short laptop screens: the chapter is taller than the window, so it scrolls with the page instead of sticking. */
-@media (max-height: 820px) { .dveri__chapter.page-sticky { position: static; } }
 
 /* Mother and baby, under «Не уверена, что это ко мне?»: only beside the chapters about a baby —
    «Жду малыша» and «Малыш родился». Never beside IVF, loss or partners, never without a chosen stage
