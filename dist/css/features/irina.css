@@ -89,6 +89,8 @@ ul.docs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 
 .doc:active { transform: translateY(calc(var(--lift) * 2)) scale(.98); transition-duration: .12s; }
 .doc__img { display: block; overflow: hidden; border-radius: 5px; background: var(--paper-3); }
 .doc img { filter: var(--photo-filter); width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; border-radius: 5px; background: var(--paper-3); transition: transform .9s var(--ease-settle); }
+/* A scanned two-page spread: the thumbnail shows its cover page with the document's title, not the spine. */
+.doc--spread img { object-position: left top; }
 .doc:hover img { transform: scale(1.05); }
 .doc__name { font-size: var(--text-small); font-weight: 500; line-height: 1.3; }
 .doc__where { font-size: var(--text-micro); color: var(--muted); margin-top: -6px; }

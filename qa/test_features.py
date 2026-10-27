@@ -137,9 +137,11 @@ with session("features") as (run, browser):
         expect(page.locator(".irina__facts")).to_contain_text("Первое место")
         page.locator("[data-doc='1']").click()
         expect(page.locator("#sheet-doc")).to_be_visible()
-        expect(page.locator("[data-lightbox-count]")).to_have_text("2 из 6")
+        expect(page.locator("[data-lightbox-count]")).to_have_text("2 из 11")
+        expect(page.locator("[data-lightbox-caption]")).to_contain_text("Перинатальная и репродуктивная психология")
         page.keyboard.press("ArrowRight")
-        expect(page.locator("[data-lightbox-count]")).to_have_text("3 из 6")
+        expect(page.locator("[data-lightbox-count]")).to_have_text("3 из 11")
+        expect(page.locator("[data-lightbox-img]")).to_have_attribute("src", re.compile("education-cbt.jpg"))
         page.keyboard.press("Escape")
         expect(page.locator("[data-doc='2']")).to_be_focused()
 
@@ -651,11 +653,15 @@ with session("features") as (run, browser):
         budget = {
             "#okno .okno__copy": 70,
             "#dveri .spread__page--l": 90,
-            "#irina": 150,
+            "#irina": 120,
             "#stoimost": 130,
             "#vstrecha .spread__page--l": 55,
         }
         counts = {sel: day.evaluate(words_js, sel) for sel in budget}
+        # «Обо мне»: the budget is for the prose; the documents are a list Irina asked for, each with a short label.
+        counts["#irina"] -= day.evaluate(words_js, "#irina .docs")
+        doc_words = day.eval_on_selector_all("#irina .doc", r"els => els.map(e => e.innerText.split(/\s+/).filter(t => /[\p{L}\p{N}]/u.test(t)).length)")
+        assert doc_words and max(doc_words) <= 12, doc_words
         for door in ["self", "planning", "pregnancy", "postpartum", "loss", "close"]:
             day.locator(f"#door-tab-{door}").click()
             expect(day.locator(f"#door-{door}")).to_be_visible()
