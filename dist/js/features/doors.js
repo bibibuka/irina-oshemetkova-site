@@ -51,7 +51,7 @@ export function init() {
   });
 
   const byStage = () => {
-    const key = BY_STAGE[prefs.stage] || 'planning';
+    const key = BY_STAGE[prefs.stage] || 'self';
     const tab = tabs.find((item) => item.dataset.door === key) || tabs[0];
     if (tab) select(tab);
   };

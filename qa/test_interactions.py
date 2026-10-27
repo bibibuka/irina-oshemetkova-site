@@ -113,12 +113,12 @@ with session("interactions") as (run, browser):
 
     def tabs():
         go("/")
-        page.locator("#door-tab-planning").focus()
+        page.locator("#door-tab-self").focus()
         page.keyboard.press("End")
         expect(page.locator("#door-tab-close")).to_be_focused()
         expect(page.locator("#door-close")).to_be_visible()
         page.keyboard.press("Home")
-        expect(page.locator("#door-tab-planning")).to_have_attribute("aria-selected", "true")
+        expect(page.locator("#door-tab-self")).to_have_attribute("aria-selected", "true")
         show_panel(prak, "slova")
         prak.locator("#w-tab-partner").click()
         prak.keyboard.press("ArrowRight")
@@ -342,8 +342,8 @@ with session("interactions") as (run, browser):
         plain.goto(BASE + "/")
         assert plain.evaluate("document.documentElement.className") == "no-js"
         expect(plain.locator("#help-now a[href='tel:112']")).to_be_visible()
-        expect(plain.locator("#help-now a[href='tel:88002000122']")).to_be_visible()
-        expect(plain.locator(".door-panel")).to_have_count(5)
+        expect(plain.locator("#help-now a[href='tel:88006003114']")).to_be_visible()
+        expect(plain.locator(".door-panel")).to_have_count(6)
         for panel in plain.locator(".door-panel").all():
             expect(panel).to_be_visible()
         expect(plain.locator(".contacts a[href^='tel:']")).to_be_visible()

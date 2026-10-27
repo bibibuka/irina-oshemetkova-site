@@ -80,7 +80,7 @@ html[data-theme='night'] .dveri.spread[data-chapter='postpartum'] { --tone-bg: #
 html[data-theme='night'] .dveri.spread[data-chapter='loss'] { --tone-bg: #1a1c1a; --tone-light: #c9c9bf; --tone-rule: #303330; --tone-light-strength: .18; }
 html[data-theme='night'] .dveri.spread[data-chapter='close'] { --tone-bg: #151a17; --tone-light: #e7a77f; --tone-rule: var(--line); }
 /* Before doors.js settles, only the first chapter is shown (the others would fold away under the visitor). */
-html.js .dveri:not([data-doors-ready]) .door-panel:not(#door-planning) { display: none; }
+html.js .dveri:not([data-doors-ready]) .door-panel:not(#door-self) { display: none; }
 /* Short laptop screens: the chapter is taller than the window, so it scrolls with the page instead of sticking. */
 
 /* Mother and baby, under «Не уверена, что это ко мне?»: only beside the chapters about a baby —

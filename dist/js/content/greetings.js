@@ -54,7 +54,7 @@ export const PART_ICON = { morning: 'sunrise', day: 'sun', evening: 'sunset', ni
 /** H1 (with <em> part) for each stage. Default is the brand line. The lead under it — who Irina is — never changes. */
 export const HERO = {
   default: {
-    title: ['Быть мамой', 'Быть собой'],
+    title: ['Быть собой', 'даже когда трудно'],
   },
   planning: {
     title: ['Ждать', 'и оставаться собой'],

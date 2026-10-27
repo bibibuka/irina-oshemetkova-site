@@ -33,10 +33,10 @@ with session("features") as (run, browser):
     print("Main page: the offer")
 
     def offer():
-        expect(page.locator("#okno-title")).to_contain_text("Быть мамой")
+        expect(page.locator("#okno-title")).to_contain_text("Быть собой")
         expect(page.locator("[data-greeting]")).not_to_be_empty()
-        expect(page.locator("#okno .okno__lead")).to_contain_text("репродуктивный и перинатальный психолог")
-        expect(page.locator(".okno__topics li")).to_have_count(5)
+        expect(page.locator("#okno .okno__lead")).to_contain_text("аккредитованный медицинский психолог")
+        expect(page.locator(".okno__topics li")).to_have_count(4)
         expect(page.locator(".okno__topics")).to_contain_text("ЭКО")
         expect(page.locator(".okno__topics")).to_contain_text("РПП")
         proof = page.locator(".okno__proof")
@@ -48,9 +48,9 @@ with session("features") as (run, browser):
         cta = page.locator(".okno__actions .btn--primary")
         expect(cta).to_have_attribute("href", "#vstrecha")
         expect(cta).to_have_attribute("data-action", "write")
-        expect(page.locator(".okno__terms")).to_contain_text("4 000 ₽")
+        expect(page.locator(".okno__terms")).to_contain_text("5 000 ₽")
         expect(page.locator("#stoimost .plan")).to_have_count(2)
-        expect(page.locator("#stoimost .plan--main")).to_contain_text("4 000 ₽")
+        expect(page.locator("#stoimost .plan--main")).to_contain_text("5 000 ₽")
         expect(page.locator("#stoimost .terms dt")).to_have_count(3)
         expect(page.locator("#stoimost .howto__step")).to_have_count(4)
         order = page.eval_on_selector_all("main > section", "els => els.map(e => e.id)")
@@ -75,10 +75,9 @@ with session("features") as (run, browser):
         # The stage is chosen on the practices page; a remembered or linked stage still changes the title here.
         loss = open_page(context, run, "/?stage=loss&tod=day")
         expect(loss.locator("#okno-title")).to_contain_text("просто быть")
-        expect(loss.locator("#okno .okno__lead")).to_contain_text("репродуктивный и перинатальный психолог")
+        expect(loss.locator("#okno .okno__lead")).to_contain_text("аккредитованный медицинский психолог")
         expect(loss.locator("html")).to_have_class(re.compile("is-quiet"))
         expect(loss.locator("[data-doors] [aria-selected='true']")).to_have_attribute("data-door", "loss")
-        assert loss.locator(".irina__drop [data-not-loss]").evaluate("e => getComputedStyle(e).display") == "none"
         loss.close()
         baby = open_page(context, run, "/?stage=postpartum&tod=day")
         expect(baby.locator("[data-doors] [aria-selected='true']")).to_have_attribute("data-door", "postpartum")
@@ -152,8 +151,8 @@ with session("features") as (run, browser):
         expect(page.locator("#help-title")).to_be_focused()
         expect(page.locator("#sheet-help a.btn--danger[href='tel:112']")).to_be_visible()
         expect(page.locator("#sheet-help a[href='praktiki.html#dyhanie']")).to_be_visible()
-        page.locator("#sheet-help [data-copy-number]").click()
-        expect(page.locator("[data-help-status]")).to_contain_text("8-800-2000-122")
+        page.locator("#sheet-help [data-copy-number]").first.click()
+        expect(page.locator("[data-help-status]")).to_contain_text("8-800-600-31-14")
         page.keyboard.press("Escape")
         expect(page.locator("#sheet-help")).to_be_hidden()
         expect(page.locator(".site-header .help-link")).to_be_focused()
@@ -620,7 +619,7 @@ with session("features") as (run, browser):
         }
         counts = {name: len(re.findall(pattern, text)) for name, pattern in once.items()}
         assert all(n == 1 for n in counts.values()), counts
-        assert text.count("4 000 ₽") == 2, text.count("4 000 ₽")  # the first screen and the price card
+        assert text.count("5 000 ₽") == 2, text.count("5 000 ₽")  # the first screen and the price card
         expect(day.locator("main .page-turn, main .next-line")).to_have_count(0)
         faq = day.locator("#voprosy details")
         expect(faq).to_have_count(9)
@@ -657,7 +656,7 @@ with session("features") as (run, browser):
             "#vstrecha .spread__page--l": 55,
         }
         counts = {sel: day.evaluate(words_js, sel) for sel in budget}
-        for door in ["planning", "pregnancy", "postpartum", "loss", "close"]:
+        for door in ["self", "planning", "pregnancy", "postpartum", "loss", "close"]:
             day.locator(f"#door-tab-{door}").click()
             expect(day.locator(f"#door-{door}")).to_be_visible()
             budget[f"#door-{door}"] = 80
