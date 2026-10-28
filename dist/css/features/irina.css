@@ -11,8 +11,6 @@
 .irina__text h2 { margin-bottom: 6px; }
 .irina__text h2 em { display: block; }
 .irina__text > p { font-size: clamp(18px, .3vw + 16px, 19px); line-height: 1.7; color: var(--ink-soft); max-width: 36em; }
-/* How I work, in one line instead of a spread of cards. */
-.irina__text > .irina__way { padding-left: 18px; border-left: 2px solid var(--terracotta); font-family: var(--serif); font-style: italic; font-size: clamp(21px, .6vw + 16px, 25px); line-height: 1.35; color: var(--ink); max-width: 26em; }
 .irina__drop::first-letter { float: left; font-family: var(--serif); font-size: 5.4em; line-height: .78; padding: .06em .1em 0 0; color: var(--terracotta); }
 .irina__facts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px 32px; margin: 6px 0 0; padding-block: 20px; border-block: 1px solid var(--tone-rule); }
 .irina__facts dt { font-family: var(--serif); font-style: italic; font-size: 24px; color: var(--terracotta-ink); margin-bottom: 6px; }
