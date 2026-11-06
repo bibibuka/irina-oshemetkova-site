@@ -19,6 +19,10 @@
     (function () {
       var d = document.documentElement, q = new URLSearchParams(location.search), mem = null;
       d.classList.remove('no-js'); d.classList.add('js');
+      /* A CMS that embeds this page (Tilda drops <body> and its classes) must not lose the page marker
+         or the paper grain: the marker goes on <html>, the grain joins <body> once it exists. */
+      if (/(^|\/)praktiki(?:\.html)?\/?$/.test(location.pathname)) d.classList.add('page-praktiki');
+      document.addEventListener('DOMContentLoaded', function () { if (document.body) document.body.classList.add('grain'); });
       try { if (localStorage.getItem('io.v1.memory') === 'on') mem = localStorage; } catch (e) {}
       function saved(k) { try { var v = mem && mem.getItem('io.v1.' + k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
       var h = new Date().getHours(), tod = { morning: 8, day: 14, evening: 20, night: 3 }[q.get('tod')];
@@ -70,6 +74,8 @@
   <link rel="stylesheet" href="css/features/help.css">
   <link rel="stylesheet" href="css/features/settings.css">
   <link rel="stylesheet" href="css/features/sales.css">
+  <link rel="stylesheet" href="css/features/otzyvy.css">
+  <link rel="stylesheet" href="css/features/programma.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -363,7 +369,52 @@
       </div>
     </section>
 
-    <!-- 4. Стоимость — разворот: слева цена и условия, справа как проходит первая встреча -->
+    <!-- 4. Отзывы — разворот: слева правило публикации и тихая фотография, справа сами слова.
+         ИРИНА: тексты ниже — примеры для макета. Заменить на настоящие отзывы, полученные
+         с разрешения клиенток; публиковать только после их согласия и только в согласованном виде. -->
+    <section class="otzyvy spread spread--sage" id="otzyvy" data-light="left" aria-labelledby="otzyvy-title">
+      <div class="spread__light" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="spread__book">
+        <p class="spread__run spread__run--l" aria-hidden="true">Ирина Ошемёткова</p>
+        <p class="spread__run spread__run--r" aria-hidden="true">Отзывы<svg class="icon"><use href="#i-flower"/></svg></p>
+        <div class="spread__page spread__page--l">
+          <div class="page-stack page-sticky otzyvy__aside">
+            <h2 id="otzyvy-title" data-reveal="words">Слова <em>после встреч</em></h2>
+            <p class="lead">Пять историй, которыми поделились те, кто уже был. Не&nbsp;полные и&nbsp;не&nbsp;про&nbsp;всё&nbsp;— только то, что человек сам выбрал сказать.</p>
+            <figure class="photo-arch otzyvy__arch" aria-hidden="true"><img src="assets/white-tulips.webp" alt="" width="640" height="960" loading="lazy" decoding="async"></figure>
+            <p class="otzyvy__rule"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span>Публикую только с&nbsp;разрешения. Имена и&nbsp;узнаваемые детали меняю&nbsp;— то, что звучит на&nbsp;встрече, остаётся личным.</span></p>
+          </div>
+        </div>
+        <div class="spread__fold" aria-hidden="true"><svg class="icon"><use href="#i-flower"/></svg></div>
+        <div class="spread__page spread__page--r">
+          <ol class="reviews" role="list">
+            <li class="review">
+              <p class="review__quote">Я&nbsp;пришла с&nbsp;тревогой, которая не&nbsp;отпускала месяцами. Мы&nbsp;не&nbsp;искали волшебную кнопку&nbsp;— разбирались, откуда она берётся, и&nbsp;учились с&nbsp;ней жить. Сейчас я&nbsp;засыпаю без&nbsp;телефона в&nbsp;руке и&nbsp;не&nbsp;просыпаюсь от&nbsp;каждого шороха.</p>
+              <p class="review__meta"><span class="review__name">Анна, 34 года</span><span class="review__topic">тревога</span></p>
+            </li>
+            <li class="review">
+              <p class="review__quote">После родов мне казалось, что я&nbsp;одна такая: усталость, слёзы, чувство, что всё делаю не&nbsp;так. Ирина не&nbsp;обещала, что будет легко. Она помогала замечать, что со&nbsp;мной происходит, и&nbsp;просить помощь. Постепенно я&nbsp;снова начала узнавать себя.</p>
+              <p class="review__meta"><span class="review__name">Мария, 29 лет</span><span class="review__topic">после родов</span></p>
+            </li>
+            <li class="review">
+              <p class="review__quote">Мы&nbsp;пришли вдвоём, когда обсуждать уже не&nbsp;получалось&nbsp;— только молчать и&nbsp;обижаться. На&nbsp;встречах оказалось, что можно говорить о&nbsp;больном и&nbsp;не&nbsp;ранить друг друга. Мы&nbsp;всё ещё учимся, но дома стало тише.</p>
+              <p class="review__meta"><span class="review__name">Ольга и&nbsp;Дмитрий</span><span class="review__topic">пара</span></p>
+            </li>
+            <li class="review">
+              <p class="review__quote">Про ЭКО я&nbsp;не&nbsp;могла говорить без&nbsp;слёз. С&nbsp;Ириной оказалось, что можно и&nbsp;плакать, и&nbsp;злиться, и&nbsp;бояться&nbsp;— и&nbsp;всё равно оставаться в&nbsp;контакте с&nbsp;собой. Ожидание стало выносимым.</p>
+              <p class="review__meta"><span class="review__name">К., 38 лет</span><span class="review__topic">ЭКО</span></p>
+            </li>
+            <li class="review">
+              <p class="review__quote">Я&nbsp;боялась, что меня будут оценивать за&nbsp;срывы и&nbsp;лишний вес. Здесь не&nbsp;оценивали. Мы&nbsp;разбирали, что еда пытается сказать, когда словами не&nbsp;получается, и&nbsp;потихоньку я&nbsp;перестала воевать с&nbsp;собой.</p>
+              <p class="review__meta"><span class="review__name">Дарья, 27 лет</span><span class="review__topic">отношения с&nbsp;едой</span></p>
+            </li>
+          </ol>
+          <p class="reviews__ask">Хочешь оставить отзыв? <a class="link" href="https://t.me/irinaoshemetkova" target="_blank" rel="noopener noreferrer">Напиши в&nbsp;Telegram</a>&nbsp;— покажу текст до&nbsp;публикации и&nbsp;уберу всё, что не&nbsp;захочешь.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Стоимость — разворот: слева цена и условия, справа как проходит первая встреча -->
     <section class="stoimost spread spread--dusk" id="stoimost" data-light="left" aria-labelledby="stoimost-title">
       <div class="spread__light" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <div class="spread__book">
@@ -400,6 +451,7 @@
             <div><dt>Перенос</dt><dd>бесплатно, если предупредить за&nbsp;24&nbsp;часа</dd></div> -->
             <div><dt>Оплата и&nbsp;перенос</dt><dd>правила скажу при&nbsp;записи, до&nbsp;первой встречи</dd></div>
           </dl>
+          <p class="stoimost__also">Коллегам: <a class="link" href="#programma">КПТ-протокол психологического сопровождения при&nbsp;ВРТ</a>&nbsp;— 10&nbsp;000&nbsp;₽.</p>
         </div>
         <div class="spread__fold" aria-hidden="true"><svg class="icon"><use href="#i-flower"/></svg></div>
         <div class="spread__page spread__page--r">
@@ -414,7 +466,61 @@
       </div>
     </section>
 
-    <!-- 5. Вопросы — разворот: слева заголовок и окно, справа ответы. Каждая мысль здесь звучит один раз на всю страницу. -->
+    <!-- 6. Программа для специалистов — тёмный разворот: слева настоящая обложка PDF, справа что внутри и цена.
+         Файл PDF в репозиторий не кладём: он продаётся после оплаты, а не раздаётся ссылкой.
+         ИРИНА: заменить ссылку у кнопки на платёжную (ЮKassa / Робокасса) — сейчас она ведёт в Telegram. -->
+    <section class="programma spread spread--lamp" id="programma" data-light="left" aria-labelledby="programma-title">
+      <div class="spread__light" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="spread__book">
+        <p class="spread__run spread__run--l" aria-hidden="true">Ирина Ошемёткова</p>
+        <p class="spread__run spread__run--r" aria-hidden="true">Для специалистов<svg class="icon"><use href="#i-flower"/></svg></p>
+        <div class="spread__page spread__page--l">
+          <figure class="program__figure">
+            <div class="program__book">
+              <img class="program__cover" src="assets/kpt-vrt-cover.webp" alt="Обложка: КПТ-протокол психологического сопровождения при ВРТ, 10 сессий" width="1100" height="1555" decoding="async">
+            </div>
+            <figcaption class="program__caption">79&nbsp;страниц: планы сессий, скрипты интервенций, раздаточные бланки и&nbsp;чеклисты терапевта.</figcaption>
+          </figure>
+        </div>
+        <div class="spread__fold" aria-hidden="true"><svg class="icon"><use href="#i-flower"/></svg></div>
+        <div class="spread__page spread__page--r">
+          <div class="program__head">
+            <p class="kicker">Для специалистов</p>
+            <h2 id="programma-title" data-reveal="words">КПТ-протокол <em>при&nbsp;ВРТ</em></h2>
+            <p class="lead">10-сессионное сопровождение женщин в&nbsp;процессе ВРТ: КПТ второй и&nbsp;третьей волны, элементы схема-терапии и&nbsp;системный подход. Для клинических, перинатальных и&nbsp;репродуктивных психологов, а&nbsp;также врачей, которые работают с&nbsp;ВРТ.</p>
+          </div>
+          <ul class="program__facts" role="list">
+            <li><b>10 сессий</b><span>по 50–60 минут</span></li>
+            <li><b>79 страниц</b><span>PDF для печати</span></li>
+            <li><b>14 диаграмм</b><span>и готовые бланки</span></li>
+          </ul>
+          <details class="program__weeks" open>
+            <summary>Что внутри&nbsp;— по&nbsp;сессиям</summary>
+            <ol>
+              <li>Психообразование и&nbsp;КПТ-модель.</li>
+              <li>Стресс-цикл ВРТ и&nbsp;хроническая неопределённость.</li>
+              <li>Убеждения о&nbsp;теле и&nbsp;вине.</li>
+              <li>Катастрофизация и&nbsp;магическое мышление.</li>
+              <li>Схема-терапия: работа с&nbsp;режимами.</li>
+              <li>Период ожидания.</li>
+              <li>Отношения и&nbsp;коммуникация.</li>
+              <li>Вина и&nbsp;стыд в&nbsp;социальных ситуациях.</li>
+              <li>Смыслы, ценности и&nbsp;неопределённость.</li>
+              <li>Завершение протокола.</li>
+            </ol>
+          </details>
+          <p class="program__extra">Плюс intake-лист, кризисный протокол при&nbsp;отрицательном результате, бланки для&nbsp;клиенток и&nbsp;памятка для&nbsp;пациентки.</p>
+          <div class="program__offer">
+            <p class="program__price"><span class="program__sum">10&nbsp;000&nbsp;₽</span><span class="program__per">PDF · 79 страниц</span></p>
+            <p class="program__terms">Напиши «хочу протокол»&nbsp;— пришлю ссылку на&nbsp;оплату и&nbsp;файл. Оплата картой, обычно отвечаю в&nbsp;течение дня.</p>
+            <a class="btn btn--light program__cta" href="https://t.me/irinaoshemetkova?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C%20%D0%9A%D0%9F%D0%A2-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%20%D0%BF%D1%80%D0%B8%20%D0%92%D0%A0%D0%A2" target="_blank" rel="noopener noreferrer">Купить за&nbsp;10&nbsp;000&nbsp;₽<svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <p class="program__note">Методический материал для&nbsp;специалистов: не&nbsp;заменяет супервизию, личную терапию и&nbsp;клиническое обучение.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Вопросы — разворот: слева заголовок и окно, справа ответы. Каждая мысль здесь звучит один раз на всю страницу. -->
     <section class="voprosy spread spread--milk" id="voprosy" data-light="right" aria-labelledby="voprosy-title">
       <div class="spread__light" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <div class="spread__book">
@@ -436,7 +542,7 @@
             <details open data-faq-item="start"><summary>Я&nbsp;не&nbsp;знаю, с&nbsp;чего начать. Так можно?</summary><div><p>Да. Готовый запрос не&nbsp;нужен: можно начать с&nbsp;«мне трудно об&nbsp;этом говорить»&nbsp;— дальше разберёмся вместе.</p></div></details>
             <details data-faq-item="cry"><summary>А&nbsp;если я&nbsp;буду плакать всю встречу?</summary><div><p>Значит, так сейчас нужно. Слёзы ничего не&nbsp;портят: можно молчать, делать паузы и&nbsp;возвращаться к&nbsp;разговору, когда получится.</p></div></details>
             <details data-faq-item="private"><summary>Это конфиденциально?</summary><div><p>Да. То, что ты&nbsp;рассказываешь, остаётся между нами и&nbsp;не&nbsp;появится ни&nbsp;здесь, ни&nbsp;в&nbsp;моих соцсетях. Исключения&nbsp;— только когда под&nbsp;угрозой чья-то жизнь или здоровье. О&nbsp;них расскажу на&nbsp;первой встрече.</p></div></details>
-            <details data-faq-item="reviews"><summary>Где почитать отзывы?</summary><div><p>Отзывов здесь нет: по&nbsp;профессиональной этике я&nbsp;не&nbsp;прошу клиентов публично рассказывать о&nbsp;встречах&nbsp;— это слишком личное. Где я&nbsp;работаю и&nbsp;чему училась&nbsp;— <a class="link" href="#irina">в&nbsp;разделе «Обо мне»</a>.</p></div></details>
+            <details data-faq-item="reviews"><summary>Где почитать отзывы?</summary><div><p>В&nbsp;<a class="link" href="#otzyvy">разделе «Отзывы»</a>. Публикую только те&nbsp;слова, на&nbsp;которые клиентки дали разрешение, и&nbsp;меняю имена и&nbsp;детали: полные истории остаются между нами.</p></div></details>
             <details data-faq-item="count"><summary>Сколько понадобится встреч?</summary><div><p>Зависит от&nbsp;запроса и&nbsp;твоего темпа: иногда хватает одной-двух, иногда нужна более долгая работа. Ожидания обсудим на&nbsp;первой встрече.</p></div></details>
             <details data-faq-item="pair"><summary>Можно прийти вдвоём? А&nbsp;если партнёр не&nbsp;хочет?</summary><div><p>Можно. Если партнёр пока не&nbsp;готов, можно прийти одной или одному&nbsp;— это тоже работа на&nbsp;двоих.</p></div></details>
             <details data-faq-item="online"><summary>Как проходит онлайн-встреча?</summary><div><p>По&nbsp;удобной видеосвязи. Нужны наушники и&nbsp;место, где можно говорить свободно.<span data-not-loss> Если малыш рядом или на&nbsp;руках&nbsp;— это нормально.</span></p></div></details>
@@ -447,7 +553,7 @@
       </div>
     </section>
 
-    <!-- 6. Запись — последний разворот: слева как связаться, справа письмо Ирине -->
+    <!-- 8. Запись — последний разворот: слева как связаться, справа письмо Ирине -->
     <section class="vstrecha spread spread--peach" id="vstrecha" data-light="left" aria-labelledby="vstrecha-title">
       <div class="spread__light" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <div class="spread__book vstrecha__inner">
@@ -570,9 +676,10 @@
           </ul>
         </div>
         <div class="svet__col">
-          <h3>Практики</h3>
-          <p>Упражнения на&nbsp;каждый день&nbsp;— работают и&nbsp;ночью.</p>
+          <h3>Материалы</h3>
+          <p>Практики для&nbsp;себя и&nbsp;профессиональный протокол для&nbsp;коллег.</p>
           <p class="svet__row"><a class="link link--light" href="praktiki.html">Открыть практики</a></p>
+          <p class="svet__row"><a class="link link--light" href="#programma">КПТ-протокол при&nbsp;ВРТ&nbsp;— 10&nbsp;000&nbsp;₽</a></p>
         </div>
         <div class="svet__col js-only">
           <h3>Как тебе удобнее</h3>

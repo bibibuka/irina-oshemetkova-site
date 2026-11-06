@@ -19,6 +19,10 @@
     (function () {
       var d = document.documentElement, q = new URLSearchParams(location.search), mem = null;
       d.classList.remove('no-js'); d.classList.add('js');
+      /* A CMS that embeds this page (Tilda drops <body> and its classes) must not lose the page marker
+         or the paper grain: the marker goes on <html>, the grain joins <body> once it exists. */
+      if (/(^|\/)praktiki(?:\.html)?\/?$/.test(location.pathname)) d.classList.add('page-praktiki');
+      document.addEventListener('DOMContentLoaded', function () { if (document.body) document.body.classList.add('grain'); });
       try { if (localStorage.getItem('io.v1.memory') === 'on') mem = localStorage; } catch (e) {}
       function saved(k) { try { var v = mem && mem.getItem('io.v1.' + k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
       var h = new Date().getHours(), tod = { morning: 8, day: 14, evening: 20, night: 3 }[q.get('tod')];

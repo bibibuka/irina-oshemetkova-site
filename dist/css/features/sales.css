@@ -114,8 +114,9 @@ html[data-theme='night'] .plan--main { border-color: var(--line); }
 .howto__step .link { display: inline; min-height: 0; }
 
 /* ---------- Practices: one block with tabs ---------- */
-/* The dark chapter opening lands right under the glass bar, with no strip of the spread before it. */
-section.praktiki { position: relative; scroll-margin-top: calc(-1 * var(--header-h)); }
+/* The dark chapter opening lands right under the glass bar, with no strip of the spread before it.
+   The block's own class carries both rules, not the page: an embedding CMS may drop the <body> classes. */
+section.praktiki { position: relative; scroll-margin-top: 0; }
 .praktiki__badge {
   display: inline-flex; align-items: center; gap: 8px; justify-self: start; padding: 7px 14px; border-radius: 999px;
   background: rgba(238, 240, 230, .1); color: var(--on-band-muted); font-size: var(--text-micro);
@@ -127,8 +128,7 @@ section.praktiki { position: relative; scroll-margin-top: calc(-1 * var(--header
 .praktiki__open h1 em { color: #e2b296; }
 html[data-theme='night'] .praktiki__open h1 em { color: var(--terracotta-ink); }
 /* The dark title spread starts under the fixed header, so the glass bar sits on it. */
-.page-praktiki .praktiki__open { padding-top: var(--header-h); }
-.page-praktiki section.praktiki { scroll-margin-top: 0; }
+.praktiki__open { padding-top: var(--header-h); }
 /* Lavender under the lead: a taller, narrower arch with a thin light ring, so the dark title page does not stand empty.
    On a phone it steps aside — the tabs are what matters there. */
 .praktiki__arch { aspect-ratio: 4 / 5; width: clamp(200px, 20vw, 280px); background: rgba(238, 240, 230, .06); box-shadow: 0 0 0 1px rgba(238, 240, 230, .14); }

@@ -58,6 +58,7 @@ const GROUPS = [
   ['.traps__fan', '.trap', true], ['.principles', ':scope > *', true], ['.docs', ':scope > li'],
   ['.faq', ':scope > details'], ['.svet__cols', ':scope > *'], ['.karman__features', ':scope > li', true],
   ['.thoughts', '.thought-card'], ['.podhod__foot', ':scope > div'], ['.pmap', '.pmap__group'], ['.irina__facts', ':scope > div'], ['.plans', '.plan'], ['.howto', '.howto__step', true], ['.ptabs', '.ptab'],
+  ['.reviews', ':scope > .review'], ['.program__facts', ':scope > li', true],
 ];
 
 function columnsOf(box) {
@@ -129,9 +130,12 @@ export function initReveals() {
     $$('[data-reveal]').forEach((el) => el.classList.add('is-in'));
     return;
   }
+  // On a phone the block starts rising only after it has come up a quarter of the screen:
+  // a low threshold made the page feel already finished by the time it was scrolled to.
+  const narrow = window.matchMedia('(max-width: 900px)').matches;
   observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => { if (entry.isIntersecting) show(entry.target); });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
+  }, { rootMargin: narrow ? '0px 0px -14% 0px' : '0px 0px -8% 0px', threshold: 0 });
   root.classList.add('reveals-on');
   tagAll(true);
   // Late content (features render after boot) joins in; a sweep backs the observer up.
@@ -176,7 +180,7 @@ export function initSpreads() {
   const open = (spread) => { spread.classList.add('is-open'); opener.unobserve(spread); };
   const opener = spreadOpener = new IntersectionObserver((entries) => {
     entries.forEach((entry) => { if (entry.isIntersecting) open(entry.target); });
-  }, { rootMargin: '0px 0px -12% 0px' });
+  }, { rootMargin: window.matchMedia('(max-width: 900px)').matches ? '0px 0px -22% 0px' : '0px 0px -12% 0px' });
   spreads.forEach((spread) => {
     if (inView(spread)) spread.classList.add('is-open');
     else opener.observe(spread);
