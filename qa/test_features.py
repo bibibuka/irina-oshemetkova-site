@@ -54,10 +54,9 @@ with session("features") as (run, browser):
         expect(page.locator("#stoimost .terms dt")).to_have_count(3)
         expect(page.locator("#stoimost .howto__step")).to_have_count(4)
         order = page.eval_on_selector_all("main > section", "els => els.map(e => e.id)")
-        assert order == ["okno", "dveri", "irina", "otzyvy", "stoimost", "programma", "voprosy", "vstrecha"], order
-        # Reviews: five words on hairlines, published only with permission, and a way to add one's own.
-        expect(page.locator("#otzyvy .review")).to_have_count(5)
-        expect(page.locator("#otzyvy .reviews__ask a")).to_have_attribute("href", "https://t.me/irinaoshemetkova")
+        assert order == ["okno", "dveri", "irina", "stoimost", "programma", "voprosy", "vstrecha"], order
+        # Reviews are off the site on purpose: publishing client stories is not ethical here.
+        expect(page.locator("#otzyvy, .reviews, .review")).to_have_count(0)
         # The author's program: a PDF with its own price and a direct way to ask for it.
         sum_text = page.locator("#programma .program__sum").inner_text()
         assert "10" in sum_text and "₽" in sum_text, sum_text
@@ -662,7 +661,6 @@ with session("features") as (run, browser):
             "#dveri .spread__page--l": 90,
             "#irina": 120,
             "#stoimost": 130,
-            "#otzyvy": 270,
             "#programma": 180,
             "#vstrecha .spread__page--l": 55,
         }
@@ -678,10 +676,10 @@ with session("features") as (run, browser):
             counts[f"#door-{door}"] = day.evaluate(words_js, f"#door-{door}")
         over = {sel: (counts[sel], limit) for sel, limit in budget.items() if not 0 < counts[sel] <= limit}
         assert not over, (over, counts)
-        # The whole main page stays short: what a visitor reads without opening anything (about 1 200 words
-        # with the reviews and the author's program; before the practices moved out it was about twice as long).
+        # The whole main page stays short: what a visitor reads without opening anything (about 960 words
+        # with the program for specialists; before the practices moved out it was about twice as long).
         total = day.evaluate(words_js, "body")
-        assert total <= 1300, total
+        assert total <= 1000, total
 
     run.check("Copy budget: each message once, short spreads, photos by stage", copy_budget, day)
 

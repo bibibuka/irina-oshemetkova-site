@@ -58,7 +58,7 @@ const GROUPS = [
   ['.traps__fan', '.trap', true], ['.principles', ':scope > *', true], ['.docs', ':scope > li'],
   ['.faq', ':scope > details'], ['.svet__cols', ':scope > *'], ['.karman__features', ':scope > li', true],
   ['.thoughts', '.thought-card'], ['.podhod__foot', ':scope > div'], ['.pmap', '.pmap__group'], ['.irina__facts', ':scope > div'], ['.plans', '.plan'], ['.howto', '.howto__step', true], ['.ptabs', '.ptab'],
-  ['.reviews', ':scope > .review'], ['.program__facts', ':scope > li', true],
+  ['.program__facts', ':scope > li', true],
 ];
 
 function columnsOf(box) {
