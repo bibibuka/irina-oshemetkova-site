@@ -60,7 +60,7 @@ with session("features") as (run, browser):
         # The author's program: a PDF with its own price and a direct way to ask for it.
         sum_text = page.locator("#programma .program__sum").inner_text()
         assert "10" in sum_text and "₽" in sum_text, sum_text
-        assert "t.me/irinaoshemetkova" in page.locator("#programma .program__cta").get_attribute("href")
+        assert "t.me/PerinatMama_bot?start=protocol" in page.locator("#programma .program__cta").get_attribute("href")
         # The practices are a page of their own: nothing of them is left on the main page.
         expect(page.locator("#praktiki, [data-tab-panel], .ptabs, #bot, [data-stage-pick], .uznaesh, .podhod, .principle")).to_have_count(0)
         expect(page.locator(".site-nav a[href='praktiki.html']")).to_have_count(1)
