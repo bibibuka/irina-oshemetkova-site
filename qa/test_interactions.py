@@ -12,7 +12,7 @@ from playwright.sync_api import expect
 from _harness import BASE, new_context, open_page, session, show_panel
 
 WIDTHS = [320, 360, 390, 768, 1024, 1180, 1440]
-PAGES = ["/", "/praktiki.html"]
+PAGES = ["/", "/praktiki.html", "/specialistam.html"]
 
 with session("interactions") as (run, browser):
     print("Layout")
@@ -26,7 +26,8 @@ with session("interactions") as (run, browser):
     def no_overflow():
         problems = []
         for path in ["/", "/?theme=night&stage=postpartum", "/?stage=loss",
-                     "/praktiki.html", "/praktiki.html?theme=night&stage=postpartum", "/praktiki.html?stage=loss"]:
+                     "/praktiki.html", "/praktiki.html?theme=night&stage=postpartum", "/praktiki.html?stage=loss",
+                     "/specialistam.html", "/specialistam.html?theme=night"]:
             go(path)
             for width in WIDTHS:
                 page.set_viewport_size({"width": width, "height": 860})
@@ -64,7 +65,7 @@ with session("interactions") as (run, browser):
             ids[path] = set(page.evaluate("() => [...document.querySelectorAll('[id]')].map(e => e.id)"))
             missing = page.evaluate("""() => [...document.querySelectorAll('a[href^="#"]')].map(a => a.getAttribute('href')).filter(h => h.length > 1 && !document.getElementById(h.slice(1)))""")
             duplicates = page.evaluate("""() => { const seen = {}; document.querySelectorAll('[id]').forEach(e => seen[e.id] = (seen[e.id] || 0) + 1); return Object.keys(seen).filter(k => seen[k] > 1); }""")
-            links = page.evaluate("""() => [...document.querySelectorAll('a[href]')].map(a => a.getAttribute('href')).filter(h => /^(\\.\\/|praktiki\\.html)/.test(h))""")
+            links = page.evaluate("""() => [...document.querySelectorAll('a[href]')].map(a => a.getAttribute('href')).filter(h => /^(\.\/|praktiki\.html|specialistam\.html)/.test(h))""")
             if missing or duplicates:
                 problems[path] = {"missing": missing, "duplicates": duplicates}
             ids[path + ":links"] = links
@@ -72,7 +73,12 @@ with session("interactions") as (run, browser):
         for path in PAGES:
             for href in ids[path + ":links"]:
                 target, _, anchor = href.partition("#")
-                other = "/praktiki.html" if target.startswith("praktiki") else "/"
+                if target.startswith("praktiki"):
+                    other = "/praktiki.html"
+                elif target.startswith("specialistam"):
+                    other = "/specialistam.html"
+                else:
+                    other = "/"
                 if anchor and anchor not in ids[other]:
                     problems.setdefault(path, {}).setdefault("cross", []).append(href)
         assert not problems, problems
@@ -259,14 +265,14 @@ with session("interactions") as (run, browser):
 
     def header_is_light():
         tools = lively.locator(".site-header a, .site-header button").count()
-        assert tools <= 8, tools
+        assert tools <= 9, tools
         expect(lively.locator(".site-header .theme-toggle")).to_have_count(1)
         expect(lively.locator(".site-header .stage-chip")).to_have_count(0)
 
-    run.check("Header: brand, four links, the dark-theme moon, help and the letter — nothing more", header_is_light, lively)
+    run.check("Header: brand, five links, the dark-theme moon, help and the letter — nothing more", header_is_light, lively)
 
     def header_fits():
-        # Brand, four links, the moon, help and «Записаться» stay inside the bar — at the top and as the
+        # Brand, five links, the moon, help and «Записаться» stay inside the bar — at the top and as the
         # narrower glass bar after scrolling — at every width where the links are shown.
         bar = open_page(context, run, "/?tod=day")
         problems = []

@@ -51,8 +51,8 @@ html[data-theme='night'] .site-header.is-scrolled .site-header__inner { box-shad
 /* Without JS the bar never learns it is scrolled: give it the glass from the start, so it never lies over text bare. */
 html.no-js .site-header__inner { padding: 0 8px 0 18px; background: color-mix(in srgb, var(--surface) 88%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border-color: var(--line); }
 /* Day page, dark band under the bar: the same glass, but smoked. */
-/* The practices page opens on its dark title: the bar is light from the very first paint, before JS looks. */
-html[data-theme='day'] .site-header.is-on-dark, html[data-theme='day'] .page-praktiki .site-header:not(.is-scrolled) {
+/* The practices and specialists pages open on a dark band: the bar is light from the very first paint, before JS looks. */
+html[data-theme='day'] .site-header.is-on-dark, html[data-theme='day'] .page-praktiki .site-header:not(.is-scrolled), html[data-theme='day'] .page-specialistam .site-header:not(.is-scrolled) {
   --ink: #ece8dd; --ink-soft: #d9d6cb; --muted: #b5b8ad; --line: #333e36; --line-strong: #4a574d;
   --sage-50: rgba(255, 255, 255, .06); --sage-100: rgba(255, 255, 255, .1); --sage-500: #93aa8e;
   --green: #cfdcc9; --green-deep: #e4ece0; --on-green: #17201a; --terracotta-ink: #e5ad87; --surface: #1b231e;
@@ -78,7 +78,7 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
 }
 .site-nav.pill-ready .site-nav__pill { transition: transform .55s var(--ease-settle), width .55s var(--ease-settle), opacity .3s var(--ease-out); }
 .site-nav.has-pill .site-nav__pill { opacity: 1; }
-.site-nav a { position: relative; z-index: 1; padding: 9px 16px; border-radius: 999px; font-size: 15px; white-space: nowrap; color: var(--ink-soft); text-decoration: none; transition: color .25s var(--ease-out); }
+.site-nav a { position: relative; z-index: 1; padding: 9px 14px; border-radius: 999px; font-size: 15px; white-space: nowrap; color: var(--ink-soft); text-decoration: none; transition: color .25s var(--ease-out); }
 .site-nav a:hover, .site-nav a[aria-current] { color: var(--ink); }
 /* «Практики» with a quiet «без записи» under the word: no extra width, nothing that moves. */
 .site-nav__bonus { display: inline-grid; justify-items: center; line-height: 1.15; padding-block: 5px !important; }
@@ -116,7 +116,14 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
 /* ---------- Phone dock ---------- */
 .dock { display: none; }
 
-@media (max-width: 1360px) { .site-nav a { padding-inline: 12px; } }
+@media (max-width: 1500px) { .site-nav a { padding-inline: 14px; } }
+@media (max-width: 1360px) {
+  .site-nav a { padding-inline: 10px; }
+  .site-nav__tag { display: none; }
+  .site-header__inner { gap: 14px; }
+  .help-link span { display: none; }
+  .help-link { padding-inline: 10px; }
+}
 @media (max-width: 1180px) {
   .site-nav { display: none; }
   .site-header__tools, .site-nav + .site-header__tools { margin-left: auto; }

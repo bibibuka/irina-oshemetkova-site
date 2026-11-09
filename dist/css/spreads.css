@@ -46,8 +46,8 @@ html[data-theme='day'] .spread:not(.spread--lamp) { --terracotta: #a66b51; }
 html[data-theme='day'].is-quiet .spread:not(.spread--lamp) { --terracotta: #94705f; }
 
 /* Text on the lamp-lit spread */
-.spread--lamp h2 em, .spread--lamp h3 em { color: #e2b296; }
-html[data-theme='night'] .spread--lamp h2 em, html[data-theme='night'] .spread--lamp h3 em { color: var(--terracotta-ink); }
+.spread--lamp h1 em, .spread--lamp h2 em, .spread--lamp h3 em { color: #e2b296; }
+html[data-theme='night'] .spread--lamp h1 em, html[data-theme='night'] .spread--lamp h2 em, html[data-theme='night'] .spread--lamp h3 em { color: var(--terracotta-ink); }
 .spread--lamp .lead, .spread--lamp .note { color: var(--on-band-muted); }
 .spread--lamp .link { color: var(--on-band); text-decoration-color: color-mix(in srgb, var(--on-band) 45%, transparent); }
 .spread--lamp :focus-visible { outline-color: var(--lamp); }

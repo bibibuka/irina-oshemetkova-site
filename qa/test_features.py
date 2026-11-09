@@ -4,7 +4,8 @@
     python qa/test_features.py  # in another
 
 The main page (/) sells: who and with what, why trust, price, FAQ, the letter.
-The practices page (/praktiki.html) holds the practices as a bonus.
+The practices page (/praktiki.html) holds the practices as a bonus; the specialists
+page (/specialistam.html) sells the PDF protocol.
 No screenshots. External requests are blocked and reported; nothing may be written to
 localStorage, sessionStorage or cookies until the visitor turns memory on.
 """
@@ -23,12 +24,14 @@ with session("features") as (run, browser):
     context = new_context(browser, run, reduced_motion="reduce")
     page = open_page(context, run)
     prak = open_page(context, run, "/praktiki.html")
+    spec = open_page(context, run, "/specialistam.html")
     html = page.locator("html")
     phtml = prak.locator("html")
 
     def no_storage():
         assert storage(page) == EMPTY, storage(page)
         assert storage(prak) == EMPTY, storage(prak)
+        assert storage(spec) == EMPTY, storage(spec)
 
     print("Main page: the offer")
 
@@ -57,14 +60,18 @@ with session("features") as (run, browser):
         assert order == ["okno", "dveri", "irina", "stoimost", "voprosy", "vstrecha"], order
         # Reviews are off the site on purpose: publishing client stories is not ethical here.
         expect(page.locator("#otzyvy, .reviews, .review")).to_have_count(0)
-        # The author's program: a PDF with its own price and a direct way to ask for it.
-        sum_text = prak.locator("#programma .program__sum").inner_text()
+        # The author's program has a page of its own: the PDF, its price and a way to ask for it.
+        expect(spec.locator("h1#programma-title")).to_contain_text("КПТ-протокол")
+        sum_text = spec.locator("#programma .program__sum").inner_text()
         assert "10" in sum_text and "₽" in sum_text, sum_text
-        assert "t.me/PerinatMama_bot?start=protocol" in prak.locator("#programma .program__cta").get_attribute("href")
+        assert "t.me/PerinatMama_bot?start=protocol" in spec.locator("#programma .program__cta").get_attribute("href")
+        expect(prak.locator("#programma")).to_have_count(0)
+        expect(prak.locator(".praktiki__special a")).to_have_attribute("href", "specialistam.html")
         # The practices are a page of their own: nothing of them is left on the main page.
         expect(page.locator("#praktiki, [data-tab-panel], .ptabs, #bot, [data-stage-pick], .uznaesh, .podhod, .principle")).to_have_count(0)
         expect(page.locator(".site-nav a[href='praktiki.html']")).to_have_count(1)
         expect(page.locator(".site-nav a[href='praktiki.html'] .site-nav__tag")).to_have_text("без записи")
+        expect(page.locator(".site-nav a[href='specialistam.html']")).to_have_count(1)
         expect(page.locator(".dock a[href='praktiki.html']")).to_have_count(1)
         # After the booking, the practices are offered as a card the whole of which is a link — still, no motion.
         card = page.locator("#vstrecha .bonus-card")
@@ -676,7 +683,7 @@ with session("features") as (run, browser):
         over = {sel: (counts[sel], limit) for sel, limit in budget.items() if not 0 < counts[sel] <= limit}
         assert not over, (over, counts)
         # The whole main page stays short: what a visitor reads without opening anything (about 800 words
-        # after the program moved to the practices page; before the practices moved out it was about twice as long).
+        # after the practices and the program moved out; before that it was about twice as long).
         total = day.evaluate(words_js, "body")
         assert total <= 900, total
 
