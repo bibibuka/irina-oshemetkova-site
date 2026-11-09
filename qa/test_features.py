@@ -54,13 +54,13 @@ with session("features") as (run, browser):
         expect(page.locator("#stoimost .terms dt")).to_have_count(3)
         expect(page.locator("#stoimost .howto__step")).to_have_count(4)
         order = page.eval_on_selector_all("main > section", "els => els.map(e => e.id)")
-        assert order == ["okno", "dveri", "irina", "stoimost", "programma", "voprosy", "vstrecha"], order
+        assert order == ["okno", "dveri", "irina", "stoimost", "voprosy", "vstrecha"], order
         # Reviews are off the site on purpose: publishing client stories is not ethical here.
         expect(page.locator("#otzyvy, .reviews, .review")).to_have_count(0)
         # The author's program: a PDF with its own price and a direct way to ask for it.
-        sum_text = page.locator("#programma .program__sum").inner_text()
+        sum_text = prak.locator("#programma .program__sum").inner_text()
         assert "10" in sum_text and "₽" in sum_text, sum_text
-        assert "t.me/PerinatMama_bot?start=protocol" in page.locator("#programma .program__cta").get_attribute("href")
+        assert "t.me/PerinatMama_bot?start=protocol" in prak.locator("#programma .program__cta").get_attribute("href")
         # The practices are a page of their own: nothing of them is left on the main page.
         expect(page.locator("#praktiki, [data-tab-panel], .ptabs, #bot, [data-stage-pick], .uznaesh, .podhod, .principle")).to_have_count(0)
         expect(page.locator(".site-nav a[href='praktiki.html']")).to_have_count(1)
@@ -661,7 +661,6 @@ with session("features") as (run, browser):
             "#dveri .spread__page--l": 90,
             "#irina": 120,
             "#stoimost": 130,
-            "#programma": 180,
             "#vstrecha .spread__page--l": 55,
         }
         counts = {sel: day.evaluate(words_js, sel) for sel in budget}
@@ -676,10 +675,10 @@ with session("features") as (run, browser):
             counts[f"#door-{door}"] = day.evaluate(words_js, f"#door-{door}")
         over = {sel: (counts[sel], limit) for sel, limit in budget.items() if not 0 < counts[sel] <= limit}
         assert not over, (over, counts)
-        # The whole main page stays short: what a visitor reads without opening anything (about 960 words
-        # with the program for specialists; before the practices moved out it was about twice as long).
+        # The whole main page stays short: what a visitor reads without opening anything (about 800 words
+        # after the program moved to the practices page; before the practices moved out it was about twice as long).
         total = day.evaluate(words_js, "body")
-        assert total <= 1000, total
+        assert total <= 900, total
 
     run.check("Copy budget: each message once, short spreads, photos by stage", copy_budget, day)
 
