@@ -41,7 +41,7 @@ html.lamp-on .daylight__lamp { opacity: 1; }
 }
 /* Scrolled: the bar gathers into a floating pane of frosted glass. */
 .site-header.is-scrolled .site-header__inner {
-  width: min(1180px, 100% - 2 * var(--gutter)); padding: 0 8px 0 18px;
+  width: min(1240px, 100% - 2 * var(--gutter)); padding: 0 8px 0 18px;
   background: color-mix(in srgb, var(--surface) 80%, transparent);
   -webkit-backdrop-filter: blur(18px) saturate(1.25); backdrop-filter: blur(18px) saturate(1.25);
   border-color: color-mix(in srgb, var(--line) 85%, transparent);
@@ -120,7 +120,8 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
 @media (max-width: 1360px) {
   .site-nav a { padding-inline: 10px; }
   .site-nav__tag { display: none; }
-  .site-header__inner { gap: 14px; }
+  .site-header__inner { width: calc(100% - 24px); gap: 14px; }
+  .site-header.is-scrolled .site-header__inner { width: min(1240px, 100% - 16px); }
   .help-link span { display: none; }
   .help-link { padding-inline: 10px; }
 }
