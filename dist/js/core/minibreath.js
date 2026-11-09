@@ -18,7 +18,7 @@ export function startMiniBreath(root) {
   if (!root.querySelector('.mini-breath__sr')) {
     const sr = document.createElement('p');
     sr.className = 'visually-hidden mini-breath__sr';
-    sr.textContent = 'Вдох на 3 счёта, медленный выдох на 6. Круг считает за тебя.';
+    sr.textContent = 'Вдох на 3 счёта, медленный выдох на 6. Круг считает за вас.';
     root.append(sr);
   }
   const tick = () => {

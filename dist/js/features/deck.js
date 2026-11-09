@@ -81,9 +81,9 @@ function draw() {
 function keep() {
   if (!state.phrase) return;
   if (!store.memory) {
-    el.note.replaceChildren('Чтобы опора осталась на этом устройстве, включи память — ',
+    el.note.replaceChildren('Чтобы опора осталась на этом устройстве, включите память — ',
       h('button', { type: 'button', class: 'link', dataset: { action: 'settings', focus: 'data' } }, 'в настройках'),
-      '. Или просто скопируй её себе.');
+      '. Или просто скопируйте её себе.');
     return;
   }
   const saved = store.get('opory', []);

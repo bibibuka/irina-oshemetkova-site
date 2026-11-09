@@ -164,7 +164,7 @@ function bind() {
   el.telegram?.addEventListener('click', () => {
     // Copy inside the tap, then let the link open the chat with Irina.
     copyText(update(), el.preview).then((ok) => afterSend(el.telegram, ok
-      ? `Текст скопирован. В Telegram вставь его в чат с Ириной. ${SENT}`
+      ? `Текст скопирован. В Telegram вставьте его в чат с Ириной. ${SENT}`
       : 'Не получилось скопировать — текст письма выделен, его можно скопировать вручную и вставить в чат.'));
   });
   el.sms?.addEventListener('click', () => { update(); afterSend(el.sms, SENT); });
@@ -201,7 +201,7 @@ export function init() {
     status: $('[data-letter-status]'), tried: $('[data-letter-tried]'), tz: $('[data-letter-tz]'),
   };
   const zone = timeZone();
-  if (el.tz) el.tz.textContent = zone ? `Твой часовой пояс — ${zone}. Он попадёт в письмо, чтобы было проще договориться о времени.` : '';
+  if (el.tz) el.tz.textContent = zone ? `Ваш часовой пояс — ${zone}. Он попадёт в письмо, чтобы было проще договориться о времени.` : '';
   renderTopics();
   bind();
   setFormat('online');

@@ -37,7 +37,7 @@ function renderDataList() {
   const list = $('[data-data-list]');
   if (!list) return;
   const rows = known();
-  const caption = store.memory ? 'Хранится в этом браузере:' : 'Только на открытой странице — исчезнет, когда закроешь вкладку:';
+  const caption = store.memory ? 'Хранится в этом браузере:' : 'Только на открытой странице — исчезнет, когда закроете вкладку:';
   if (!rows.length) {
     list.replaceChildren(h('li', { class: 'is-empty' }, store.memory ? 'Пока здесь пусто.' : 'Пока здесь пусто. На устройстве ничего не хранится.'));
     return;

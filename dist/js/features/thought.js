@@ -1,7 +1,7 @@
 // «Мысль не отпускает? Разберём её.» — four steps from the bot's CBT module, computed
 // entirely in the browser. Traps are underlined while typing; strength is a vessel with
 // words, never numbers; «невыносимо» stops the exercise and offers a person and help.
-// Below: twelve trap cards that turn over and the «Найди ловушку» game.
+// Below: twelve trap cards that turn over and the «Найдите ловушку» game.
 import { $, $$, h, icon, announce, focusQuietly } from '../core/dom.js';
 import { prefs } from '../core/prefs.js';
 import { store } from '../core/store.js';
@@ -229,7 +229,7 @@ function stepReframe() {
   area.value = s.answers[index];
   area.addEventListener('input', () => { s.answers[index] = area.value; });
   show(
-    h('p', { class: 'notebook__cloud', 'aria-label': 'Твоя мысль' }, `«${s.thought.trim()}»`),
+    h('p', { class: 'notebook__cloud', 'aria-label': 'Ваша мысль' }, `«${s.thought.trim()}»`),
     h('p', { class: 'notebook__step-cap' }, `${REFRAME.title} · вопрос ${index + 1} из ${REFRAME.questions.length}`),
     h('label', { class: 'notebook__q', for: id }, REFRAME.questions[index]),
     area,
@@ -286,7 +286,7 @@ function stepResult(fromSafety) {
       h('button', { type: 'button', class: 'btn btn--ghost', dataset: { action: 'write', topic: 'хочется разобраться с мыслями, которые не отпускают' } }, 'Обсудить с Ириной'),
       h('button', { type: 'button', class: 'btn btn--ghost', onclick: () => { s = blank(); stepSituation(); focusFirst('textarea'); } }, 'Разобрать другую мысль'),
       h('button', { type: 'button', class: 'link', onclick: () => { s = blank(); stepSituation(); announce('Разбор стёрт.'); goTo('#razbor'); } }, 'Закрыть и стереть')),
-    h('p', { class: 'note' }, 'Ничего не сохраняется: карточка — только если ты сама её скачаешь.'),
+    h('p', { class: 'note' }, 'Ничего не сохраняется: карточка — только если вы сами её скачаете.'),
   );
   const tried = store.temp.get('tried') || new Set();
   tried.add('разбор мысли');

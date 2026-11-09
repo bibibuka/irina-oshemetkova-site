@@ -15,7 +15,7 @@ let builder = null;
 /* ---------- Shared actions ---------- */
 async function copy(text, button, node) {
   const ok = await copyText(text, node);
-  flash(button, ok ? 'Скопировано' : 'Выделено — скопируй вручную');
+  flash(button, ok ? 'Скопировано' : 'Выделено — скопируйте вручную');
   announce(ok ? 'Текст скопирован.' : 'Текст выделен — его можно скопировать вручную.');
 }
 async function send(text) {

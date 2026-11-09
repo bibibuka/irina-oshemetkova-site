@@ -54,12 +54,12 @@ function stepNode(id, topic) {
 function helpBlock() {
   const withBaby = !['loss', 'planning'].includes(prefs.stage);
   return h('div', { class: 'checkin-help' },
-    h('p', {}, 'Если тебе сейчас опасно — ', h('a', { href: 'tel:112' }, '112'), '.'),
+    h('p', {}, 'Если вам сейчас опасно — ', h('a', { href: 'tel:112' }, '112'), '.'),
     h('p', { class: 'checkin-help__row' },
       h('a', { class: 'btn btn--danger btn--small', href: 'tel:112' }, icon('phone'), 'Позвонить 112'),
       h('a', { class: 'btn btn--ghost btn--small', href: 'tel:88006003114' }, icon('phone'), '8-800-600-31-14')),
     h('p', { class: 'note' }, 'Кризисная линия, круглосуточно и бесплатно, — если хочется поговорить с человеком прямо сейчас.'),
-    withBaby ? h('p', {}, 'Если ты с малышом и чувствуешь, что на грани, — ',
+    withBaby ? h('p', {}, 'Если вы с малышом и чувствуете, что на грани, — ',
       h('button', { type: 'button', class: 'link', dataset: { action: 'stop' } }, 'Экстренная остановка, 5 шагов'), '.') : null,
     h('p', { class: 'note' }, 'Этот сайт и я — не экстренная служба: я не на дежурстве и могу ответить не сразу. ',
       h('button', { type: 'button', class: 'link', dataset: { openSheet: 'sheet-help' } }, 'Все номера помощи')),

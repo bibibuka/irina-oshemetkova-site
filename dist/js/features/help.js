@@ -86,7 +86,7 @@ function bindCopyShare() {
       if (result !== 'unsupported') return;
     }
     const ok = await copyText(text, $(button.dataset.shareText));
-    say(button, ok ? 'Текст скопирован — вставь его в мессенджер.' : 'Текст выделен — его можно скопировать вручную.');
+    say(button, ok ? 'Текст скопирован — вставьте его в мессенджер.' : 'Текст выделен — его можно скопировать вручную.');
   });
   // Links get their final href just before the tap is handled, so the text is always current.
   on(document, 'click', '[data-share-telegram]', (event, link) => {

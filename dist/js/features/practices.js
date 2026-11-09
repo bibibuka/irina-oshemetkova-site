@@ -64,7 +64,7 @@ function finish(id, { lead = '', extra = null } = {}) {
 
 /* ---------- 5-4-3-2-1 ---------- */
 function grounding(step = 0) {
-  if (step >= GROUNDING.length) { finish('grounding', { lead: 'Ты здесь.' }); return; }
+  if (step >= GROUNDING.length) { finish('grounding', { lead: 'Вы здесь.' }); return; }
   const item = GROUNDING[step];
   el.room.dataset.sense = item.sense;
   setProgress(`Шаг ${step + 1} из ${GROUNDING.length}`);
@@ -271,7 +271,7 @@ function flashback() {
     timer = setInterval(() => {
       left -= 1;
       if (!el.body.contains(feet)) { clearInterval(timer); return; }
-      feetOut.textContent = left > 0 ? `${FLASHBACK.feet} ${left}` : 'Ты здесь. Стопы на полу.';
+      feetOut.textContent = left > 0 ? `${FLASHBACK.feet} ${left}` : 'Вы здесь. Стопы на полу.';
       if (left <= 0) { clearInterval(timer); feet.disabled = false; }
     }, 1000);
   } }, icon('body'), 'Почувствовать стопы — 30 секунд');
@@ -378,7 +378,7 @@ function renderHelped() {
     : h('button', { type: 'button', class: 'btn btn--soft btn--small', dataset: { action: 'practice', practice: helped } }, 'Повторить');
   box.replaceChildren(
     icon('heart', 'helped-shelf__icon'),
-    h('p', {}, `Тебе помогало: ${PRACTICE_NAMES[helped]}. Повторим?`),
+    h('p', {}, `Вам помогало: ${PRACTICE_NAMES[helped]}. Повторим?`),
     again,
     h('button', { type: 'button', class: 'btn btn--ghost btn--small', onclick: () => { store.set('helped', null); announce('Убрано из сохранённых.'); } }, 'Убрать'),
     h('p', { class: 'helped-shelf__note' }, 'Хранится только в этом браузере.'),
@@ -422,7 +422,7 @@ function helped(button, { practice }) {
     store.set('helped', practice);
     text = `Сохранено на этом устройстве: ${PRACTICE_NAMES[practice]}. Повторить или убрать можно на полке практик.`;
   } else {
-    text = 'Хорошо, что помогло. Чтобы сайт запомнил это на этом устройстве, включи память в настройках — или просто возвращайся сюда.';
+    text = 'Хорошо, что помогло. Чтобы сайт запомнил это на этом устройстве, включите память в настройках — или просто возвращайтесь сюда.';
   }
   if (note) note.textContent = text;
   announce(text);

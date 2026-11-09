@@ -118,7 +118,7 @@ with session("features") as (run, browser):
     run.check("Letter: live preview on «вы», topics from doors, SMS/mail, crisis hint, copy + Telegram", letter, page)
 
     def source():
-        # «Как ты обо мне узнала?» — optional, one answer, it only goes into the letter text.
+        # «Как вы обо мне узнали?» — optional, one answer, it only goes into the letter text.
         chips = page.locator("[data-letter-source] [data-value]")
         expect(chips).to_have_count(4)
         expect(page.locator("[data-letter-preview]")).not_to_contain_text("Откуда я о вас знаю")
@@ -134,7 +134,7 @@ with session("features") as (run, browser):
         expect(page.locator("[data-letter-preview]")).not_to_contain_text("Откуда я о вас знаю")
         no_storage()
 
-    run.check("«Как ты обо мне узнала?»: optional, one answer, goes into the letter, a second tap takes it back", source, page)
+    run.check("«Как вы обо мне узнали?»: optional, one answer, goes into the letter, a second tap takes it back", source, page)
 
     print("About, FAQ, help, settings and memory")
 
@@ -230,7 +230,7 @@ with session("features") as (run, browser):
         expect(prak.locator("h1#praktiki-title")).to_contain_text("Практики")
         prak.locator("[data-stage-pick] [data-stage='postpartum']").click()
         expect(prak.locator("[data-stage-pick] [data-stage='postpartum']")).to_have_attribute("aria-pressed", "true")
-        expect(prak.locator("[data-stage-reply]")).to_contain_text("Начнём с тебя")
+        expect(prak.locator("[data-stage-reply]")).to_contain_text("Начнём с вас")
         expect(prak.locator("#sheet-settings [data-stage='postpartum']")).to_have_attribute("aria-pressed", "true")
         order = prak.eval_on_selector_all("[data-flow-item]", "els => els.map(e => e.dataset.flowItem)")
         assert order[:2] == ["shelf", "words"], order
@@ -270,7 +270,7 @@ with session("features") as (run, browser):
         expect(prak.locator("#sheet-settings [data-stage='pregnancy']")).to_have_attribute("aria-pressed", "true")
         expect(prak.locator("[data-stage-pick] [data-stage='pregnancy']")).to_have_attribute("aria-pressed", "true")
         expect(prak.locator("#sheet-settings")).to_be_visible()
-        expect(prak.locator("[data-breath-safety]")).to_contain_text("Ориентируйся на свой комфорт")
+        expect(prak.locator("[data-breath-safety]")).to_contain_text("Ориентируйтесь на свой комфорт")
         prak.keyboard.press("Escape")
         expect(prak.locator("#sheet-settings")).to_be_hidden()
 
@@ -355,7 +355,7 @@ with session("features") as (run, browser):
         expect(prak.locator("[data-breath-done]")).to_be_visible()
         expect(prak.locator("[data-breath-done-phrase]")).to_contain_text("остановились")
         prak.locator("[data-breath-done] [data-action='helped']").click()
-        expect(prak.locator("[data-helped-note]").first).to_contain_text("включи память")
+        expect(prak.locator("[data-helped-note]").first).to_contain_text("включите память")
         prak.locator("[data-breath-patterns] [data-pattern='custom']").click()
         prak.locator("[data-step='in'][data-delta='1']").click()
         expect(prak.locator("[data-custom-in]")).to_have_text("5 с")
@@ -386,7 +386,7 @@ with session("features") as (run, browser):
         expect(prak.locator(".ground__dot")).to_have_count(4)
         for _ in range(4):
             prak.locator(".room__nav .btn--primary").click()
-        expect(prak.locator("[data-room-body]")).to_contain_text("Ты здесь.")
+        expect(prak.locator("[data-room-body]")).to_contain_text("Вы здесь.")
         prak.locator("[data-room-enough]").click()
         expect(prak.locator("#sheet-room")).to_be_hidden()
 
@@ -411,7 +411,7 @@ with session("features") as (run, browser):
         prak.locator("[data-shelf-item='envelope'] .shelf-item__open").click()
         prak.locator(".envelope__field").fill("не успеваю ничего")
         prak.locator(".room__actions .btn--ghost").click()
-        expect(prak.locator(".room__note")).to_contain_text("включи память")
+        expect(prak.locator(".room__note")).to_contain_text("включите память")
         prak.locator(".room__actions .btn--primary").click()
         expect(prak.locator(".room__lead-big")).to_contain_text("Я вижу эти мысли", timeout=4000)
         prak.locator("[data-room-enough]").click()
@@ -427,7 +427,7 @@ with session("features") as (run, browser):
         if prak.locator("[data-breath-stop]").is_visible():
             prak.locator("[data-breath-stop]").click()
 
-    run.check("«Выбери за меня» opens a practice", choose, prak)
+    run.check("«Выберите за меня» opens a practice", choose, prak)
 
     print("Thought record and traps")
 
@@ -506,7 +506,7 @@ with session("features") as (run, browser):
         prak.wait_for_timeout(500)
         assert prak.locator(".deck-card__text").text_content() != first
         prak.get_by_text("Оставить себе").click()
-        expect(prak.locator(".deck__note")).to_contain_text("включи память")
+        expect(prak.locator(".deck__note")).to_contain_text("включите память")
         no_storage()
 
     run.check("Deck: draw, no immediate repeat, keep needs memory", deck, prak)
@@ -623,7 +623,7 @@ with session("features") as (run, browser):
             "сайт ничего не хранит": r"cookies|ничего не (хранит|сохраня)|на (твоём|этом) устройстве",
             "готовый запрос": r"готовый запрос",
             "конфиденциально": r"конфиденциально(?!сть)",
-            "не уверена — напиши": r"не уверена",
+            "не уверена — напиши": r"не уверен",
         }
         counts = {name: len(re.findall(pattern, text)) for name, pattern in once.items()}
         assert all(n == 1 for n in counts.values()), counts

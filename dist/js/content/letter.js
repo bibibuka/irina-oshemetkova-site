@@ -28,4 +28,4 @@ export const GREETING = 'Ирина, здравствуйте!';
 export const CLOSING = 'Подскажите, пожалуйста, ближайшие свободные даты?';
 export const SUBJECT = 'Запись на консультацию';
 
-export const SENT = 'Хорошо, что ты выбираешь заботу о себе.';
+export const SENT = 'Хорошо, что вы выбираете заботу о себе.';
