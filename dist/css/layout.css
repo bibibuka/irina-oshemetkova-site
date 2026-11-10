@@ -143,10 +143,10 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
   .brand__name { font-size: 20px; }
   .brand__role { display: none; }
   .theme-toggle { width: 42px; height: 42px; }
-  html.js .help-link { display: none; }
+  .help-link { padding-inline: 8px; }
 
   .dock {
-    display: grid; grid-template-columns: repeat(5, 1fr);
+    display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
     padding: 4px 6px env(safe-area-inset-bottom, 0px);
     background: color-mix(in srgb, var(--paper) 94%, transparent);
@@ -155,7 +155,7 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
     transition: transform var(--t-mid) var(--ease-out);
   }
   html.keyboard-open .dock, html.is-locked .dock { transform: translateY(110%); }
-  .dock a { position: relative; display: grid; justify-items: center; align-content: center; gap: 3px; min-height: 58px; padding: 4px 2px; color: var(--muted); font-size: var(--text-micro); line-height: 1.2; text-decoration: none; border-radius: var(--radius-sm); transition: color .25s var(--ease-out); }
+  .dock a { position: relative; display: grid; justify-items: center; align-content: center; gap: 3px; min-height: 58px; padding: 4px 2px; color: var(--muted); font-size: 11px; line-height: 1.2; text-decoration: none; border-radius: var(--radius-sm); transition: color .25s var(--ease-out); }
   .dock a .icon { width: 22px; height: 22px; transition: transform .45s var(--ease-settle); }
   .dock a:active .icon { transform: scale(.88); }
   .dock a[aria-current] { color: var(--green); }
@@ -164,6 +164,11 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
   .dock a[aria-current]::after { opacity: 1; transform: none; }
   .dock .dock__help { color: var(--terracotta-ink); }
   .dock .dock__help .icon { padding: 2px; border: 1px solid currentColor; border-radius: 50%; width: 26px; height: 26px; }
+}
+
+@media (max-width: 360px) {
+  .dock { padding-inline: 3px; }
+  .dock a { font-size: 10px; padding-inline: 0; }
 }
 @media (max-width: 380px) {
   .brand__name { font-size: 17px; }

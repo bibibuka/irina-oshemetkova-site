@@ -196,7 +196,7 @@ with session("interactions") as (run, browser):
     def dock():
         dock_ = mobile.locator(".dock")
         expect(dock_).to_be_visible()
-        expect(dock_.locator("a")).to_have_count(5)
+        expect(dock_.locator("a")).to_have_count(6)
         expect(mobile.locator(".site-nav")).to_be_hidden()
         mobile.locator(".dock__help").click()
         expect(mobile.locator("#sheet-help")).to_be_visible()
@@ -208,11 +208,11 @@ with session("interactions") as (run, browser):
         assert mobile.evaluate("Math.abs(document.getElementById('stoimost').getBoundingClientRect().top)") < 200
         expect(mobile.locator(".dock a[href='praktiki.html']")).to_be_visible()
 
-    run.check("Phone: five-cell dock with the practices page, help as a bottom sheet, dock links scroll", dock, mobile)
+    run.check("Phone: six-cell dock with the practices and protocol pages, help as a bottom sheet, dock links scroll", dock, mobile)
 
     def practices_dock():
         other = open_page(phone, run, "/praktiki.html")
-        expect(other.locator(".dock a")).to_have_count(5)
+        expect(other.locator(".dock a")).to_have_count(6)
         other.locator(".dock a[href='#slova']").click()
         expect(other.locator(".ptab[aria-controls='slova']")).to_have_attribute("aria-selected", "true", timeout=4000)
         expect(other.locator(".dock a[href='./#vstrecha']")).to_be_visible()
