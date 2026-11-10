@@ -196,26 +196,26 @@ with session("interactions") as (run, browser):
     def dock():
         dock_ = mobile.locator(".dock")
         expect(dock_).to_be_visible()
-        expect(dock_.locator("a")).to_have_count(6)
+        expect(dock_.locator("a")).to_have_count(4)
         expect(mobile.locator(".site-nav")).to_be_hidden()
+        for label in ["Главная", "Практики", "Специалистам", "Помощь"]:
+            expect(dock_).to_contain_text(label)
+        expect(dock_.locator("a[aria-current='page']")).to_contain_text("Главная")
+        expect(dock_.locator("a[href='praktiki.html']")).to_be_visible()
+        expect(dock_.locator("a[href='specialistam.html']")).to_be_visible()
         mobile.locator(".dock__help").click()
         expect(mobile.locator("#sheet-help")).to_be_visible()
         box = mobile.locator("#sheet-help").bounding_box()
         assert box and box["y"] > 0 and abs(box["y"] + box["height"] - 844) < 2, box
         mobile.keyboard.press("Escape")
-        mobile.locator(".dock a[href='#stoimost']").click()
-        mobile.wait_for_timeout(400)
-        assert mobile.evaluate("Math.abs(document.getElementById('stoimost').getBoundingClientRect().top)") < 200
-        expect(mobile.locator(".dock a[href='praktiki.html']")).to_be_visible()
 
-    run.check("Phone: six-cell dock with the practices and protocol pages, help as a bottom sheet, dock links scroll", dock, mobile)
+    run.check("Phone: four-cell dock — home, practices, specialists, help as a bottom sheet", dock, mobile)
 
     def practices_dock():
         other = open_page(phone, run, "/praktiki.html")
-        expect(other.locator(".dock a")).to_have_count(6)
-        other.locator(".dock a[href='#slova']").click()
-        expect(other.locator(".ptab[aria-controls='slova']")).to_have_attribute("aria-selected", "true", timeout=4000)
-        expect(other.locator(".dock a[href='./#vstrecha']")).to_be_visible()
+        expect(other.locator(".dock a")).to_have_count(4)
+        expect(other.locator(".dock a[aria-current='page']")).to_contain_text("Практики")
+        expect(other.locator(".dock a[href='specialistam.html']")).to_be_visible()
         show_panel(other, "polka")
         other.locator("[data-shelf-item='grounding'] .shelf-item__open").click()
         box = other.locator("#sheet-room").bounding_box()

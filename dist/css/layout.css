@@ -146,7 +146,7 @@ html[data-theme='day'] .site-header.is-on-dark .site-header__inner { box-shadow:
   .help-link { padding-inline: 8px; }
 
   .dock {
-    display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
     padding: 4px 6px env(safe-area-inset-bottom, 0px);
     background: color-mix(in srgb, var(--paper) 94%, transparent);
