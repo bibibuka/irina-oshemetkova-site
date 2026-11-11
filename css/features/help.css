@@ -1,0 +1,46 @@
+/* «Помощь сейчас» and «Экстренная остановка». No photos, no motion, big targets. */
+.sheet--help { --sheet-bg: var(--paper); }
+html[data-theme='night'] .sheet--help { --sheet-bg: #1d2420; }
+.help__lead { color: var(--ink-soft); font-size: var(--text); line-height: 1.6; margin-bottom: 22px; }
+.help-layers { display: grid; gap: 0; counter-reset: layer; }
+.help-layer { display: grid; gap: 12px; padding: 20px 0; border-top: 1px solid var(--line); }
+.help-layer h3 { font-family: var(--sans); font-size: 18px; font-weight: 600; letter-spacing: 0; line-height: 1.35; }
+.help-layer p { font-size: var(--text-small); color: var(--ink-soft); }
+.help-layer p a { font-weight: 600; color: var(--ink); }
+.help-layer__actions, .number-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.help-layer .btn { min-height: 56px; }
+.help-layer .btn--small { min-height: 48px; }
+.help-layer .note { margin-top: -4px; }
+.help__message { font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.35; color: var(--ink) !important; padding: 14px 18px; border-radius: var(--radius); background: var(--sage-50); }
+.help__irina { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); font-size: var(--text-small); color: var(--muted); }
+.help__irina .link { display: inline-flex; min-height: 44px; }
+
+/* Emergency stop: one step per screen, dark in any theme, nothing moves but the step. */
+.sheet--stop {
+  --sheet-bg: #24302a; background: #24302a; color: #eef0e6;
+  --on-band: #eef0e6; --on-band-muted: #c6d0bd; --ink: #eef0e6; --muted: #c6d0bd; --line: rgba(238, 240, 230, .16);
+}
+.sheet--stop::backdrop { background: #24302a; }
+.stop { display: flex; flex-direction: column; min-height: 100%; padding: 0 clamp(20px, 5vw, 64px) calc(24px + env(safe-area-inset-bottom, 0px)); }
+.stop__bar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 10px; padding: calc(12px + env(safe-area-inset-top, 0px)) 0 12px; background: #24302a; }
+.stop__progress { margin-right: auto; font-size: var(--text-small); color: #c6d0bd; font-variant-numeric: tabular-nums; }
+.stop__steps { flex: 1; display: grid; align-content: center; width: min(760px, 100%); margin-inline: auto; padding-block: 24px; }
+.stop-step { position: relative; display: grid; gap: 18px; }
+.stop-step__num { position: absolute; right: 0; top: -40px; font-family: var(--serif); font-size: clamp(110px, 18vw, 180px); line-height: 1; color: rgba(238, 240, 230, .08); pointer-events: none; }
+.stop-step h3 { position: relative; font-size: clamp(36px, 4vw + 14px, 58px); color: #eef0e6; outline: none; }
+.stop-step p { position: relative; font-size: clamp(20px, .8vw + 16px, 26px); line-height: 1.5; color: #e2e5da; max-width: 30em; }
+.stop-step p a { color: #fff; font-weight: 600; }
+.stop-step__message { font-family: var(--serif); font-style: italic; font-size: clamp(24px, 1.4vw + 16px, 32px) !important; padding: 18px 22px; border-radius: var(--radius); background: rgba(238, 240, 230, .08); }
+.stop-step__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.stop-step__actions .btn { min-height: 56px; }
+.stop .mini-breath__circle { width: 120px; height: 120px; }
+.stop .mini-breath__text { color: #eef0e6; }
+.stop__nav { display: flex; justify-content: space-between; gap: 12px; width: min(760px, 100%); margin: 0 auto; padding-top: 16px; }
+.stop__nav .btn { min-height: 56px; min-width: 140px; }
+.stop__nav [data-stop-next] { margin-left: auto; }
+.sheet--stop .sheet__status { text-align: center; color: #c6d0bd; }
+.sheet--stop :focus-visible { outline-color: #e7a77f; }
+@media (max-width: 560px) {
+  .stop__nav .btn { flex: 1; min-width: 0; }
+  .stop__bar .btn { padding-inline: 12px; }
+}
